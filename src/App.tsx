@@ -43,12 +43,14 @@ export default class App extends React.Component {
 
 }
 
+// TODO: Move this to its own file and flesh it out
 class ProjectList extends React.Component {
   render(): React.ReactElement {
     return <p>Project List!</p>
   }
 }
 
+// TODO: Move this to its own file and flesh it out
 class EventList extends React.Component {
   render(): React.ReactElement {
     return <p>Event List!</p>
