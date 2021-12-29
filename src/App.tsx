@@ -3,7 +3,10 @@ import LoginControl from "./LoginControl"
 import { APIClient } from "@brigadecore/brigade-sdk"
 
 const brigadeAPITokenKey = "brigade-api-token"
+// TODO: Do not hardcode this
 const apiAddress = "https://api.brigade2.io"
+// TODO: Do not hardcode this
+const loginSuccessURL = "http://localhost:3000/"
 
 export default class App extends React.Component {
 
@@ -11,7 +14,7 @@ export default class App extends React.Component {
     const client = new APIClient(apiAddress, "")
     const thirdPartyAuthDetails = await client.authn().sessions().createUserSession(
       {
-        successURL: "http://localhost:3000/"
+        successURL: loginSuccessURL
       }
     )
     localStorage.setItem(brigadeAPITokenKey, thirdPartyAuthDetails.token)
