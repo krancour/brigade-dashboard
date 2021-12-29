@@ -72,7 +72,7 @@ export default class EventList extends React.Component<EventListProps, EventList
       return <p>Log in to view events.</p>
     }
     const events = this.state.events
-    const hasMore = this.state.continueVal != ""
+    const hasMore = this.state.continueVal !== ""
     return (
       <div>
         <InfiniteScroll dataLength={this.state.events.length} next={this.fetch} hasMore={hasMore} loader={<h4>Loading...</h4>}>

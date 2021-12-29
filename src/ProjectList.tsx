@@ -72,7 +72,7 @@ export default class ProjectList extends React.Component<ProjectListProps, Proje
       return <p>Log in to view projects.</p>
     }
     const projects = this.state.projects
-    const hasMore = this.state.continueVal != ""
+    const hasMore = this.state.continueVal !== ""
     return (
       <div>
         <InfiniteScroll dataLength={this.state.projects.length} next={this.fetch} hasMore={hasMore} loader={<h4>Loading...</h4>}>
