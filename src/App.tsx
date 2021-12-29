@@ -5,6 +5,7 @@ import getClient from "./Client"
 import * as config from "./Config"
 import EventList from "./EventList"
 import LoginControl from "./LoginControl"
+import Project from "./Project"
 import ProjectList from "./ProjectList"
 import ServiceAccountList from "./ServiceAccountList"
 import UserList from "./UserList"
@@ -58,11 +59,12 @@ export default class App extends React.Component<AppProps, AppState> {
             <LoginControl loggedIn={loggedIn} onLogin={this.handleLogin} onLogout={this.handleLogout}/>
           </header>
           <Routes>
-            <Route path='/' element={<ProjectList loggedIn={loggedIn}/>}></Route>
-            <Route path='/projects' element={<ProjectList loggedIn={loggedIn}/>}></Route>
-            <Route path='/events' element={<EventList loggedIn={loggedIn}/>}></Route>
-            <Route path='/users' element={<UserList loggedIn={loggedIn}/>}></Route>
-            <Route path='/service-accounts' element={<ServiceAccountList loggedIn={loggedIn}/>}></Route>
+            <Route path='/' element={<ProjectList loggedIn={loggedIn}/>}/>
+            <Route path='/projects' element={<ProjectList loggedIn={loggedIn}/>}/>
+            <Route path="/projects/:id" element={<Project loggedIn={loggedIn}/>}/>
+            <Route path='/events' element={<EventList loggedIn={loggedIn}/>}/>
+            <Route path='/users' element={<UserList loggedIn={loggedIn}/>}/>
+            <Route path='/service-accounts' element={<ServiceAccountList loggedIn={loggedIn}/>}/>
             <Route path="*" element={<h1>404</h1>}/>
           </Routes>
         </div>
