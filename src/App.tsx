@@ -1,12 +1,11 @@
 import React from "react"
 import LoginControl from "./LoginControl"
 import { APIClient } from "@brigadecore/brigade-sdk"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 
 const brigadeAPITokenKey = "brigade-api-token"
 // TODO: Do not hardcode this
 const apiAddress = "https://api.brigade2.io"
-// TODO: Do not hardcode this
-const loginSuccessURL = "http://localhost:3000/"
 
 export default class App extends React.Component {
 
@@ -14,7 +13,7 @@ export default class App extends React.Component {
     const client = new APIClient(apiAddress, "")
     const thirdPartyAuthDetails = await client.authn().sessions().createUserSession(
       {
-        successURL: loginSuccessURL
+        successURL: window.location.href
       }
     )
     localStorage.setItem(brigadeAPITokenKey, thirdPartyAuthDetails.token)
@@ -25,15 +24,33 @@ export default class App extends React.Component {
     localStorage.removeItem(brigadeAPITokenKey)
   }
 
-  render(): JSX.Element {
+  render(): React.ReactElement {
     const loggedIn = localStorage.getItem(brigadeAPITokenKey) ? true : false
     return (
-      <div>
-        <header>
-          <LoginControl loggedIn={loggedIn} onLogin={this.handleLogin} onLogout={this.handleLogout}/>
-        </header>
-      </div>
+      <Router>
+        <div>
+          <header>
+            <LoginControl loggedIn={loggedIn} onLogin={this.handleLogin} onLogout={this.handleLogout}/>
+          </header>
+          <Routes>
+            <Route path='/' element={<ProjectList/>}></Route>
+            <Route path='/events' element={<EventList/>}></Route>
+          </Routes>
+        </div>
+      </Router>
     )
   }
 
+}
+
+class ProjectList extends React.Component {
+  render(): React.ReactElement {
+    return <p>Project List!</p>
+  }
+}
+
+class EventList extends React.Component {
+  render(): React.ReactElement {
+    return <p>Event List!</p>
+  }
 }

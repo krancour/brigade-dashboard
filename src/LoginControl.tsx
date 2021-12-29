@@ -6,7 +6,7 @@ interface LoginButtonProps {
 
 class LoginButton extends React.Component<LoginButtonProps> {
 
-  render(): JSX.Element {
+  render(): React.ReactElement {
     return <button onClick={this.props.onClick}>Login</button>
   }
 
@@ -18,7 +18,7 @@ interface LogoutButtonProps {
 
 class LogoutButton extends React.Component<LogoutButtonProps> {
 
-  render(): JSX.Element {
+  render(): React.ReactElement {
     return <button onClick={this.props.onClick}>Logout</button>
   }
 
@@ -51,7 +51,7 @@ export default class LoginControl extends React.Component<LoginControlProps, Log
     this.props.onLogout()
   }
 
-  render(): JSX.Element {
+  render(): React.ReactElement {
     const loggedIn = this.state.loggedIn
     let button
     if (!loggedIn) {
