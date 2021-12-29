@@ -1,31 +1,47 @@
 import React from "react"
-import LoginControl from "./LoginControl"
-import { APIClient } from "@brigadecore/brigade-sdk"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 
-const brigadeAPITokenKey = "brigade-api-token"
-// TODO: Do not hardcode this
-const apiAddress = "https://api.brigade2.io"
+import getClient from "./Client"
+import * as config from "./Config"
+import EventList from "./EventList"
+import LoginControl from "./LoginControl"
+import ProjectList from "./ProjectList"
 
-export default class App extends React.Component {
+interface AppProps {}
+
+interface AppState {
+  loggedIn: boolean
+}
+
+export default class App extends React.Component<AppProps, AppState> {
+
+  constructor(props: AppProps) {
+    super(props)
+    this.state = {
+      loggedIn: localStorage.getItem(config.brigadeAPITokenKey) ? true : false
+    }
+  }
 
   handleLogin = async () => {
-    const client = new APIClient(apiAddress, "")
-    const thirdPartyAuthDetails = await client.authn().sessions().createUserSession(
+    const sessionsClient = getClient().authn().sessions()
+    const thirdPartyAuthDetails = await sessionsClient.createUserSession(
       {
         successURL: window.location.href
       }
     )
-    localStorage.setItem(brigadeAPITokenKey, thirdPartyAuthDetails.token)
+    localStorage.setItem(config.brigadeAPITokenKey, thirdPartyAuthDetails.token)
     window.location.href = thirdPartyAuthDetails.authURL
   }
 
   handleLogout = () => {
-    localStorage.removeItem(brigadeAPITokenKey)
+    this.setState({
+      loggedIn: false
+    })
+    localStorage.removeItem(config.brigadeAPITokenKey)
   }
 
   render(): React.ReactElement {
-    const loggedIn = localStorage.getItem(brigadeAPITokenKey) ? true : false
+    const loggedIn = this.state.loggedIn
     return (
       <Router>
         <div>
@@ -33,26 +49,12 @@ export default class App extends React.Component {
             <LoginControl loggedIn={loggedIn} onLogin={this.handleLogin} onLogout={this.handleLogout}/>
           </header>
           <Routes>
-            <Route path='/' element={<ProjectList/>}></Route>
-            <Route path='/events' element={<EventList/>}></Route>
+            <Route path='/' element={<ProjectList loggedIn={loggedIn}/>}></Route>
+            <Route path='/events' element={<EventList loggedIn={loggedIn}/>}></Route>
           </Routes>
         </div>
       </Router>
     )
   }
 
-}
-
-// TODO: Move this to its own file and flesh it out
-class ProjectList extends React.Component {
-  render(): React.ReactElement {
-    return <p>Project List!</p>
-  }
-}
-
-// TODO: Move this to its own file and flesh it out
-class EventList extends React.Component {
-  render(): React.ReactElement {
-    return <p>Event List!</p>
-  }
 }
