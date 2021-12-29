@@ -1,5 +1,5 @@
 import React from "react"
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { BrowserRouter as Router, Link, Routes, Route } from "react-router-dom"
 
 import getClient from "./Client"
 import * as config from "./Config"
@@ -46,11 +46,16 @@ export default class App extends React.Component<AppProps, AppState> {
       <Router>
         <div>
           <header>
+            <Link to="/">Home</Link>
+            <Link to="/projects">Projects</Link>
+            <Link to="/events">Events</Link>
             <LoginControl loggedIn={loggedIn} onLogin={this.handleLogin} onLogout={this.handleLogout}/>
           </header>
           <Routes>
             <Route path='/' element={<ProjectList loggedIn={loggedIn}/>}></Route>
+            <Route path='/projects' element={<ProjectList loggedIn={loggedIn}/>}></Route>
             <Route path='/events' element={<EventList loggedIn={loggedIn}/>}></Route>
+            <Route path="*" element={<h1>404</h1>}/>
           </Routes>
         </div>
       </Router>
