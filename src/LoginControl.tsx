@@ -1,29 +1,5 @@
 import React from 'react'
 
-interface LoginButtonProps {
-  onClick: () => void
-}
-
-class LoginButton extends React.Component<LoginButtonProps> {
-
-  render(): React.ReactElement {
-    return <button onClick={this.props.onClick}>Login</button>
-  }
-
-}
-
-interface LogoutButtonProps {
-  onClick: () => void
-}
-
-class LogoutButton extends React.Component<LogoutButtonProps> {
-
-  render(): React.ReactElement {
-    return <button onClick={this.props.onClick}>Logout</button>
-  }
-
-}
-
 interface LoginControlProps {
   loggedIn: boolean
   onLogin: () => void
@@ -55,9 +31,9 @@ export default class LoginControl extends React.Component<LoginControlProps, Log
     const loggedIn = this.state.loggedIn
     let button
     if (!loggedIn) {
-      button = <LoginButton onClick={this.handleLogin}/>
+      button = <button onClick={this.handleLogin}>Login</button>
     } else {
-      button = <LogoutButton onClick={this.handleLogout}/>
+      button = <button onClick={this.handleLogout}>Logout</button>
     }
     return <div>{button}</div>
   }
