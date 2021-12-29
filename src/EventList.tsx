@@ -54,6 +54,8 @@ export default class EventList extends React.Component<EventListProps, EventList
     }
   }
 
+  // TODO: Clear state on unmount?
+
   fetch = async () => {
     const events = this.state.events
     const continueVal = this.state.continueVal

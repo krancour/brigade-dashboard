@@ -54,6 +54,8 @@ export default class ProjectList extends React.Component<ProjectListProps, Proje
     }
   }
 
+  // TODO: Clear state on unmount?
+
   fetch = async () => {
     const projects = this.state.projects
     const continueVal = this.state.continueVal
