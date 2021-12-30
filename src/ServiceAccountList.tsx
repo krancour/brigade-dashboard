@@ -43,8 +43,9 @@ export default class ServiceAccountList extends React.Component<ServiceAccountLi
 
   async componentDidMount(): Promise<void> {
     if (this.props.loggedIn) {
-      // TODO: There's a bug in either the SDK or the API here. When we include
-      // list options, we get no list metadata.
+      // TODO: There's a bug API that manifests when we include list options.
+      // https://github.com/brigadecore/brigade/pull/1773 contains the fix.
+      // That will make Brigade v2.2.0 the minimum version for Kashti TNG.
       const serviceAccounts = await getClient().authn().serviceAccounts().list({}, {
         continue: "",
         limit: 100
