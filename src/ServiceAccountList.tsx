@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from "react-router-dom"
 import { authn } from "@brigadecore/brigade-sdk"
 import InfiniteScroll from "react-infinite-scroll-component"
 
@@ -10,15 +11,12 @@ interface ServiceAccountListItemProps {
 
 class ServiceAccountListItem extends React.Component<ServiceAccountListItemProps> {
   render(): React.ReactElement {
-    // TODO: I don't love embedding this style here, but we NEED this and it
-    // works well enough for now.
-    const style = {
-      height: 30,
-      border: "1px solid green",
-      margin: 6,
-      padding: 8
-    }
-    return <div style={style}>{this.props.serviceAccount.metadata.id}</div>
+    const linkTo = "/service-accounts/" + this.props.serviceAccount.metadata.id
+    return (
+      <div className="box">
+        <Link to={linkTo}>{this.props.serviceAccount.metadata.id}</Link>
+      </div>
+    )
   }
 }
 
@@ -43,9 +41,6 @@ export default class ServiceAccountList extends React.Component<ServiceAccountLi
 
   async componentDidMount(): Promise<void> {
     if (this.props.loggedIn) {
-      // TODO: There's a bug API that manifests when we include list options.
-      // https://github.com/brigadecore/brigade/pull/1773 contains the fix.
-      // That will make Brigade v2.2.0 the minimum version for Kashti TNG.
       const serviceAccounts = await getClient().authn().serviceAccounts().list({}, {
         continue: "",
         limit: 100

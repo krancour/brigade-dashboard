@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from "react-router-dom"
 import { authn } from "@brigadecore/brigade-sdk"
 import InfiniteScroll from "react-infinite-scroll-component"
 
@@ -10,15 +11,12 @@ interface UserListItemProps {
 
 class UserListItem extends React.Component<UserListItemProps> {
   render(): React.ReactElement {
-    // TODO: I don't love embedding this style here, but we NEED this and it
-    // works well enough for now.
-    const style = {
-      height: 30,
-      border: "1px solid green",
-      margin: 6,
-      padding: 8
-    }
-    return <div style={style}>{this.props.user.metadata.id}</div>
+    const linkTo = "/users/" + this.props.user.metadata.id
+    return (
+      <div className="box">
+        <Link to={linkTo}>{this.props.user.metadata.id}</Link>
+      </div>
+    )
   }
 }
 
@@ -43,14 +41,14 @@ export default class UserList extends React.Component<UserListProps, UserListSta
 
   async componentDidMount(): Promise<void> {
     if (this.props.loggedIn) {
-      // TODO: There's a bug in either the SDK or the API here. When we include
-      // list options, we get no list metadata.
-      const users = await getClient().authn().users().list({}, {
-        continue: "",
-        limit: 100
-      })
-      // TODO: This next line demonstrates the error
-      console.log("users: %o", users)
+      // TODO: There's a bug API that manifests when we include list options.
+      // https://github.com/brigadecore/brigade/pull/1773 contains the fix.
+      // That will make Brigade v2.2.0 the minimum version for Kashti TNG.
+      // const users = await getClient().authn().users().list({}, {
+      //   continue: "",
+      //   limit: 100
+      // })
+      const users = await getClient().authn().users().list()
       this.setState({
         users: users.items,
         continueVal: users.metadata.continue || ""

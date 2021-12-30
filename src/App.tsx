@@ -3,12 +3,17 @@ import { BrowserRouter as Router, Link, Routes, Route } from "react-router-dom"
 
 import getClient from "./Client"
 import * as config from "./Config"
+import Event from "./Event"
 import EventList from "./EventList"
 import LoginControl from "./LoginControl"
 import Project from "./Project"
 import ProjectList from "./ProjectList"
+import ServiceAccount from "./ServiceAccount"
 import ServiceAccountList from "./ServiceAccountList"
+import User from "./User"
 import UserList from "./UserList"
+
+import './App.css'
 
 interface AppProps {}
 
@@ -44,6 +49,9 @@ export default class App extends React.Component<AppProps, AppState> {
   }
 
   render(): React.ReactElement {
+    // TODO: This might not be the ideal way to do this. There must be en
+    // established pattern for this and it will probably be discovered as my
+    // knowledge of and experience with React grows.
     const loggedIn = this.state.loggedIn
     return (
       <Router>
@@ -57,14 +65,18 @@ export default class App extends React.Component<AppProps, AppState> {
               <li><Link to="/service-accounts">Service Accounts</Link></li>
             </ul>
             <LoginControl loggedIn={loggedIn} onLogin={this.handleLogin} onLogout={this.handleLogout}/>
+            {/* TODO: Need to put some kind of breadcrumbs here */}
           </header>
           <Routes>
             <Route path='/' element={<ProjectList loggedIn={loggedIn}/>}/>
             <Route path='/projects' element={<ProjectList loggedIn={loggedIn}/>}/>
             <Route path="/projects/:id" element={<Project loggedIn={loggedIn}/>}/>
             <Route path='/events' element={<EventList loggedIn={loggedIn}/>}/>
+            <Route path='/events/:id' element={<Event loggedIn={loggedIn}/>}/>
             <Route path='/users' element={<UserList loggedIn={loggedIn}/>}/>
+            <Route path='/users/:id' element={<User loggedIn={loggedIn}/>}/>
             <Route path='/service-accounts' element={<ServiceAccountList loggedIn={loggedIn}/>}/>
+            <Route path='/service-accounts/:id' element={<ServiceAccount loggedIn={loggedIn}/>}/>
             <Route path="*" element={<h1>404</h1>}/>
           </Routes>
         </div>

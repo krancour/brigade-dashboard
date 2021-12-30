@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from "react-router-dom"
 import { core } from "@brigadecore/brigade-sdk"
 import InfiniteScroll from "react-infinite-scroll-component"
 
@@ -10,15 +11,12 @@ interface EventListItemProps {
 
 class EventListItem extends React.Component<EventListItemProps> {
   render(): React.ReactElement {
-    // TODO: I don't love embedding this style here, but we NEED this and it
-    // works well enough for now.
-    const style = {
-      height: 30,
-      border: "1px solid green",
-      margin: 6,
-      padding: 8
-    }
-    return <div style={style}>{this.props.event.metadata?.id}</div>
+    const linkTo = "/events/" + this.props.event.metadata?.id
+    return (
+      <div className="box">
+        <Link to={linkTo}>{this.props.event.metadata?.id}</Link>
+      </div>
+    )
   }
 }
 

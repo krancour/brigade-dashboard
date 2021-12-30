@@ -26,20 +26,19 @@ class Project extends React.Component<ProjectProps, ProjectState> {
     })
   }
 
+  // TODO: Clear state on unmount?
+
   render(): React.ReactElement {
     if (!this.props.loggedIn) {
       return <p>Log in to view this project.</p>
     }
     const project = this.state.project
-    // TODO: I don't love embedding this style here, but we NEED this and it
-    // works well enough for now.
-    const style = {
-      height: 30,
-      border: "1px solid green",
-      margin: 6,
-      padding: 8
-    }
-    return <div style={style}>{project?.metadata.id}</div>
+    return (
+      <div>
+        <div className="box">{project?.metadata.id}</div>
+        <div className="box">TODO: Add tabs for YAML/JSON representation and events</div>
+      </div>
+    )
   }
 
 }
