@@ -20,9 +20,7 @@ class UserListItem extends React.Component<UserListItemProps> {
   }
 }
 
-interface UserListProps {
-  loggedIn: boolean
-}
+interface UserListProps {}
 
 interface UserListState {
   users: authn.User[]
@@ -40,20 +38,18 @@ export default class UserList extends React.Component<UserListProps, UserListSta
   }
 
   async componentDidMount(): Promise<void> {
-    if (this.props.loggedIn) {
-      // TODO: There's a bug API that manifests when we include list options.
-      // https://github.com/brigadecore/brigade/pull/1773 contains the fix.
-      // That will make Brigade v2.2.0 the minimum version for Kashti TNG.
-      // const users = await getClient().authn().users().list({}, {
-      //   continue: "",
-      //   limit: 100
-      // })
-      const users = await getClient().authn().users().list()
-      this.setState({
-        users: users.items,
-        continueVal: users.metadata.continue || ""
-      })
-    }
+    // TODO: There's a bug API that manifests when we include list options.
+    // https://github.com/brigadecore/brigade/pull/1773 contains the fix.
+    // That will make Brigade v2.2.0 the minimum version for Kashti TNG.
+    // const users = await getClient().authn().users().list({}, {
+    //   continue: "",
+    //   limit: 100
+    // })
+    const users = await getClient().authn().users().list()
+    this.setState({
+      users: users.items,
+      continueVal: users.metadata.continue || ""
+    })
   }
 
   // TODO: Clear state on unmount?
@@ -72,9 +68,6 @@ export default class UserList extends React.Component<UserListProps, UserListSta
   }
 
   render(): React.ReactElement {
-    if (!this.props.loggedIn) {
-      return <p>Log in to view users.</p>
-    }
     const users = this.state.users
     const hasMore = this.state.continueVal !== ""
     return (

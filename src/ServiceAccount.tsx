@@ -5,7 +5,6 @@ import { authn } from "@brigadecore/brigade-sdk"
 import getClient from "./Client"
 
 interface ServiceAccountProps {
-  loggedIn: boolean
   id: string
 }
 
@@ -29,9 +28,6 @@ class ServiceAccount extends React.Component<ServiceAccountProps, ServiceAccount
   // TODO: Clear state on unmount?
 
   render(): React.ReactElement {
-    if (!this.props.loggedIn) {
-      return <p>Log in to view this service account.</p>
-    }
     const serviceAccount = this.state.serviceAccount
     return (
       <div>
@@ -43,11 +39,7 @@ class ServiceAccount extends React.Component<ServiceAccountProps, ServiceAccount
 
 }
 
-interface RoutedServiceAccountProps {
-  loggedIn: boolean  
-}
-
-export default function RoutedServiceAccount(props: RoutedServiceAccountProps): React.ReactElement {
+export default function RoutedServiceAccount(): React.ReactElement {
   const params: any = useParams()
-  return <ServiceAccount id={params.id} loggedIn={props.loggedIn}/>
+  return <ServiceAccount id={params.id}/>
 }

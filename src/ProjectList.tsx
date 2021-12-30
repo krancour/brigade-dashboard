@@ -20,9 +20,7 @@ class ProjectListItem extends React.Component<ProjectListItemProps> {
   }
 }
 
-interface ProjectListProps {
-  loggedIn: boolean
-}
+interface ProjectListProps {}
 
 interface ProjectListState {
   projects: core.Project[]
@@ -40,16 +38,14 @@ export default class ProjectList extends React.Component<ProjectListProps, Proje
   }
 
   async componentDidMount(): Promise<void> {
-    if (this.props.loggedIn) {
-      const projects = await getClient().core().projects().list({}, {
-        continue: "",
-        limit: 100
-      })
-      this.setState({
-        projects: projects.items,
-        continueVal: projects.metadata.continue || ""
-      })
-    }
+    const projects = await getClient().core().projects().list({}, {
+      continue: "",
+      limit: 100
+    })
+    this.setState({
+      projects: projects.items,
+      continueVal: projects.metadata.continue || ""
+    })
   }
 
   // TODO: Clear state on unmount?
@@ -68,9 +64,6 @@ export default class ProjectList extends React.Component<ProjectListProps, Proje
   }
 
   render(): React.ReactElement {
-    if (!this.props.loggedIn) {
-      return <p>Log in to view projects.</p>
-    }
     const projects = this.state.projects
     const hasMore = this.state.continueVal !== ""
     return (

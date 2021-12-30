@@ -5,7 +5,6 @@ import { core } from "@brigadecore/brigade-sdk"
 import getClient from "./Client"
 
 interface ProjectProps {
-  loggedIn: boolean
   id: string
 }
 
@@ -29,9 +28,6 @@ class Project extends React.Component<ProjectProps, ProjectState> {
   // TODO: Clear state on unmount?
 
   render(): React.ReactElement {
-    if (!this.props.loggedIn) {
-      return <p>Log in to view this project.</p>
-    }
     const project = this.state.project
     return (
       <div>
@@ -43,11 +39,7 @@ class Project extends React.Component<ProjectProps, ProjectState> {
 
 }
 
-interface RoutedProjectProps {
-  loggedIn: boolean  
-}
-
-export default function RoutedProject(props: RoutedProjectProps): React.ReactElement {
+export default function RoutedProject(): React.ReactElement {
   const params: any = useParams()
-  return <Project id={params.id} loggedIn={props.loggedIn}/>
+  return <Project id={params.id}/>
 }

@@ -20,9 +20,7 @@ class ServiceAccountListItem extends React.Component<ServiceAccountListItemProps
   }
 }
 
-interface ServiceAccountListProps {
-  loggedIn: boolean
-}
+interface ServiceAccountListProps {}
 
 interface ServiceAccountListState {
   serviceAccounts: authn.ServiceAccount[]
@@ -40,16 +38,14 @@ export default class ServiceAccountList extends React.Component<ServiceAccountLi
   }
 
   async componentDidMount(): Promise<void> {
-    if (this.props.loggedIn) {
-      const serviceAccounts = await getClient().authn().serviceAccounts().list({}, {
-        continue: "",
-        limit: 100
-      })
-      this.setState({
-        serviceAccounts: serviceAccounts.items,
-        continueVal: serviceAccounts.metadata.continue || ""
-      })
-    }
+    const serviceAccounts = await getClient().authn().serviceAccounts().list({}, {
+      continue: "",
+      limit: 100
+    })
+    this.setState({
+      serviceAccounts: serviceAccounts.items,
+      continueVal: serviceAccounts.metadata.continue || ""
+    })
   }
 
   // TODO: Clear state on unmount?
@@ -68,9 +64,6 @@ export default class ServiceAccountList extends React.Component<ServiceAccountLi
   }
 
   render(): React.ReactElement {
-    if (!this.props.loggedIn) {
-      return <p>Log in to view service accounts.</p>
-    }
     const serviceAccounts = this.state.serviceAccounts
     const hasMore = this.state.continueVal !== ""
     return (

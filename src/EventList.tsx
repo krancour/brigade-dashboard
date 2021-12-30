@@ -20,9 +20,7 @@ class EventListItem extends React.Component<EventListItemProps> {
   }
 }
 
-interface EventListProps {
-  loggedIn: boolean
-}
+interface EventListProps {}
 
 interface EventListState {
   events: core.Event[]
@@ -40,16 +38,14 @@ export default class EventList extends React.Component<EventListProps, EventList
   }
 
   async componentDidMount(): Promise<void> {
-    if (this.props.loggedIn) {
-      const events = await getClient().core().events().list({}, {
-        continue: "",
-        limit: 100
-      })
-      this.setState({
-        events: events.items,
-        continueVal: events.metadata.continue || ""
-      })
-    }
+    const events = await getClient().core().events().list({}, {
+      continue: "",
+      limit: 100
+    })
+    this.setState({
+      events: events.items,
+      continueVal: events.metadata.continue || ""
+    })
   }
 
   // TODO: Clear state on unmount?
@@ -68,9 +64,6 @@ export default class EventList extends React.Component<EventListProps, EventList
   }
 
   render(): React.ReactElement {
-    if (!this.props.loggedIn) {
-      return <p>Log in to view events.</p>
-    }
     const events = this.state.events
     const hasMore = this.state.continueVal !== ""
     return (

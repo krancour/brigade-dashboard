@@ -5,7 +5,6 @@ import { core } from "@brigadecore/brigade-sdk"
 import getClient from "./Client"
 
 interface EventProps {
-  loggedIn: boolean
   id: string
 }
 
@@ -29,9 +28,6 @@ class Event extends React.Component<EventProps, EventState> {
   // TODO: Clear state on unmount?
 
   render(): React.ReactElement {
-    if (!this.props.loggedIn) {
-      return <p>Log in to view this event.</p>
-    }
     const event = this.state.event
     return (
       <div>
@@ -43,11 +39,7 @@ class Event extends React.Component<EventProps, EventState> {
 
 }
 
-interface RoutedEventProps {
-  loggedIn: boolean  
-}
-
-export default function RoutedEvent(props: RoutedEventProps): React.ReactElement {
+export default function RoutedEvent(): React.ReactElement {
   const params: any = useParams()
-  return <Event id={params.id} loggedIn={props.loggedIn}/>
+  return <Event id={params.id}/>
 }
