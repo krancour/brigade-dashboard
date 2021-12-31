@@ -25,8 +25,6 @@ class Event extends React.Component<EventProps, EventState> {
     })
   }
 
-  // TODO: Clear state on unmount?
-
   render(): React.ReactElement {
     const event = this.state.event
     return (

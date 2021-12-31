@@ -25,8 +25,6 @@ class Project extends React.Component<ProjectProps, ProjectState> {
     })
   }
 
-  // TODO: Clear state on unmount?
-
   render(): React.ReactElement {
     const project = this.state.project
     return (

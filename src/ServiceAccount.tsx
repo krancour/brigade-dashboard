@@ -25,8 +25,6 @@ class ServiceAccount extends React.Component<ServiceAccountProps, ServiceAccount
     })
   }
 
-  // TODO: Clear state on unmount?
-
   render(): React.ReactElement {
     const serviceAccount = this.state.serviceAccount
     return (

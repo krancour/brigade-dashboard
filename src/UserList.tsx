@@ -52,8 +52,6 @@ export default class UserList extends React.Component<UserListProps, UserListSta
     })
   }
 
-  // TODO: Clear state on unmount?
-
   fetch = async () => {
     const users = this.state.users
     const continueVal = this.state.continueVal

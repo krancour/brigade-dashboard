@@ -1,9 +1,10 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import { core } from "@brigadecore/brigade-sdk"
-import InfiniteScroll from "react-infinite-scroll-component"
 
 import getClient from "./Client"
+
+const eventListPageSize = 10
 
 interface EventListItemProps {
   event: core.Event
@@ -23,56 +24,92 @@ class EventListItem extends React.Component<EventListItemProps> {
 interface EventListProps {}
 
 interface EventListState {
+  prevContinueVals: string[]
+  currentContinueVal: string,
   events: core.Event[]
-  continueVal: string
+  nextContinueVal?: string
 }
 
 export default class EventList extends React.Component<EventListProps, EventListState> {
 
-  constructor(props: EventListProps) {
+  constructor(props: EventListItemProps) {
     super(props)
     this.state = {
-      events: [],
-      continueVal: ""
-    } 
+      prevContinueVals: [],
+      currentContinueVal: "",
+      events: []
+    }
   }
 
   async componentDidMount(): Promise<void> {
     const events = await getClient().core().events().list({}, {
       continue: "",
-      limit: 100
+      limit: eventListPageSize
     })
     this.setState({
       events: events.items,
-      continueVal: events.metadata.continue || ""
+      nextContinueVal: events.metadata.continue === "" ? undefined : events.metadata.continue
     })
   }
 
-  // TODO: Clear state on unmount?
+  // TODO: There might be weird state shenanigans that go on here. Refer back
+  // to the documentation to see how to handle this.
+  fetchPreviousPage = async () => {
+    const prevContinueVals = this.state.prevContinueVals
+    if (prevContinueVals.length > 0) {
+      const currentContinueVal = prevContinueVals.pop() || ""
+      const events = await getClient().core().events().list({}, {
+        continue: currentContinueVal,
+        limit: eventListPageSize
+      })
+      this.setState({
+        prevContinueVals: prevContinueVals,
+        currentContinueVal: currentContinueVal,
+        events: events.items,
+        nextContinueVal: events.metadata.continue === "" ? undefined : events.metadata.continue
+      })
+    }
+  }
 
-  fetch = async () => {
-    const events = this.state.events
-    const continueVal = this.state.continueVal
-    const newEvents = await getClient().core().events().list({}, {
-      continue: continueVal,
-      limit: 20
-    })
-    this.setState({
-      events: events.concat(newEvents.items),
-      continueVal: newEvents.metadata.continue || ""
-    })
+  // TODO: There might be weird state shenanigans that go on here. Refer back
+  // to the documentation to see how to handle this.
+  fetchNextPage = async () => {
+    let nextContinueVal = this.state.nextContinueVal
+    if (nextContinueVal) {
+      const prevContinueVals = this.state.prevContinueVals
+      prevContinueVals.push(this.state.currentContinueVal)
+      const currentContinueVal = nextContinueVal
+      const events = await getClient().core().events().list({}, {
+        continue: currentContinueVal,
+        limit: eventListPageSize
+      })
+      this.setState({
+        prevContinueVals: prevContinueVals,
+        currentContinueVal: currentContinueVal,
+        events: events.items,
+        nextContinueVal: events.metadata.continue === "" ? undefined : events.metadata.continue
+      })
+    }
   }
 
   render(): React.ReactElement {
     const events = this.state.events
-    const hasMore = this.state.continueVal !== ""
+    if (events.length == 0) {
+      return (
+        <div className="box">Stand by...</div>
+      )
+    }
+    const hasPrev = this.state.prevContinueVals.length > 0
+    const hasMore = this.state.nextContinueVal ? true : false
     return (
       <div>
-        <InfiniteScroll dataLength={this.state.events.length} next={this.fetch} hasMore={hasMore} loader={<h4>Loading...</h4>}>
-          {events.map((event: core.Event) => (
+        {
+          events.map((event: core.Event) => (
             <EventListItem key={event.metadata?.id} event={event}/>
-          ))}
-        </InfiniteScroll>
+          ))
+        }
+        { hasPrev && <button onClick={this.fetchPreviousPage}>Previous</button> }
+        { hasMore && <button onClick={this.fetchNextPage}>Next</button> }
       </div>
     )
   }

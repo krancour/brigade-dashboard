@@ -25,8 +25,6 @@ class User extends React.Component<UserProps, UserState> {
     })
   }
 
-  // TODO: Clear state on unmount?
-
   render(): React.ReactElement {
     const user = this.state.user
     return (

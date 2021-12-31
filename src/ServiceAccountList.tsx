@@ -48,8 +48,6 @@ export default class ServiceAccountList extends React.Component<ServiceAccountLi
     })
   }
 
-  // TODO: Clear state on unmount?
-
   fetch = async () => {
     const serviceAccounts = this.state.serviceAccounts
     const continueVal = this.state.continueVal
