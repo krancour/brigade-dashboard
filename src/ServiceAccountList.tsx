@@ -1,9 +1,11 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import { authn } from "@brigadecore/brigade-sdk"
-import InfiniteScroll from "react-infinite-scroll-component"
+import { authn, meta } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
+import withPagingControl from "./PagingControl"
+
+const serviceAccountListPageSize = 10
 
 interface ServiceAccountListItemProps {
   serviceAccount: authn.ServiceAccount
@@ -20,59 +22,30 @@ class ServiceAccountListItem extends React.Component<ServiceAccountListItemProps
   }
 }
 
-interface ServiceAccountListProps {}
-
-interface ServiceAccountListState {
-  serviceAccounts: authn.ServiceAccount[]
-  continueVal: string
+interface ServiceAccountListProps {
+  items: authn.ServiceAccount[]
 }
 
-export default class ServiceAccountList extends React.Component<ServiceAccountListProps, ServiceAccountListState> {
-
-  constructor(props: ServiceAccountListProps) {
-    super(props)
-    this.state = {
-      serviceAccounts: [],
-      continueVal: ""
-    }
-  }
-
-  async componentDidMount(): Promise<void> {
-    const serviceAccounts = await getClient().authn().serviceAccounts().list({}, {
-      continue: "",
-      limit: 100
-    })
-    this.setState({
-      serviceAccounts: serviceAccounts.items,
-      continueVal: serviceAccounts.metadata.continue || ""
-    })
-  }
-
-  fetch = async () => {
-    const serviceAccounts = this.state.serviceAccounts
-    const continueVal = this.state.continueVal
-    const newServiceAccounts = await getClient().authn().serviceAccounts().list({}, {
-      continue: continueVal,
-      limit: 20
-    })
-    this.setState({
-      serviceAccounts: serviceAccounts.concat(newServiceAccounts.items),
-      continueVal: newServiceAccounts.metadata.continue || ""
-    })
-  }
+class ServiceAccountList extends React.Component<ServiceAccountListProps> {
 
   render(): React.ReactElement {
-    const serviceAccounts = this.state.serviceAccounts
-    const hasMore = this.state.continueVal !== ""
+    const serviceAccounts = this.props.items
     return (
       <div>
-        <InfiniteScroll dataLength={this.state.serviceAccounts.length} next={this.fetch} hasMore={hasMore} loader={<h4>Loading...</h4>}>
-          {serviceAccounts.map((serviceAccount: authn.ServiceAccount) => (
+        {
+          serviceAccounts.map((serviceAccount: authn.ServiceAccount) => (
             <ServiceAccountListItem key={serviceAccount.metadata.id} serviceAccount={serviceAccount}/>
-          ))}
-        </InfiniteScroll>
+          ))
+        }
       </div>
     )
   }
 
 }
+
+export default withPagingControl(ServiceAccountList, (continueVal: string): Promise<meta.List<authn.ServiceAccount>>  => {
+  return getClient().authn().serviceAccounts().list({}, {
+    continue: continueVal,
+    limit: serviceAccountListPageSize
+  })
+})

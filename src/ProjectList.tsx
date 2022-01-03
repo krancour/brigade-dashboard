@@ -1,9 +1,11 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import { core } from "@brigadecore/brigade-sdk"
-import InfiniteScroll from "react-infinite-scroll-component"
+import { core, meta } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
+import withPagingControl from "./PagingControl"
+
+const projectListPageSize = 10
 
 interface ProjectListItemProps {
   project: core.Project
@@ -20,59 +22,30 @@ class ProjectListItem extends React.Component<ProjectListItemProps> {
   }
 }
 
-interface ProjectListProps {}
-
-interface ProjectListState {
-  projects: core.Project[]
-  continueVal: string
+interface ProjectListProps {
+  items: core.Project[]
 }
 
-export default class ProjectList extends React.Component<ProjectListProps, ProjectListState> {
-
-  constructor(props: ProjectListProps) {
-    super(props)
-    this.state = {
-      projects: [],
-      continueVal: ""
-    }
-  }
-
-  async componentDidMount(): Promise<void> {
-    const projects = await getClient().core().projects().list({}, {
-      continue: "",
-      limit: 100
-    })
-    this.setState({
-      projects: projects.items,
-      continueVal: projects.metadata.continue || ""
-    })
-  }
-
-  fetch = async () => {
-    const projects = this.state.projects
-    const continueVal = this.state.continueVal
-    const newProjects = await getClient().core().projects().list({}, {
-      continue: continueVal,
-      limit: 20
-    })
-    this.setState({
-      projects: projects.concat(newProjects.items),
-      continueVal: newProjects.metadata.continue || ""
-    })
-  }
+class ProjectList extends React.Component<ProjectListProps> {
 
   render(): React.ReactElement {
-    const projects = this.state.projects
-    const hasMore = this.state.continueVal !== ""
+    const projects = this.props.items
     return (
       <div>
-        <InfiniteScroll dataLength={this.state.projects.length} next={this.fetch} hasMore={hasMore} loader={<h4>Loading...</h4>}>
-          {projects.map((project: core.Project) => (
+        {
+          projects.map((project: core.Project) => (
             <ProjectListItem key={project.metadata.id} project={project}/>
-          ))}
-        </InfiniteScroll>
+          ))
+        }
       </div>
     )
   }
 
 }
+
+export default withPagingControl(ProjectList, (continueVal: string): Promise<meta.List<core.Project>>  => {
+  return getClient().core().projects().list({}, {
+    continue: continueVal,
+    limit: projectListPageSize
+  })
+})
