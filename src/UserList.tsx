@@ -6,17 +6,48 @@ import getClient from "./Client"
 import withPagingControl from "./PagingControl"
 
 const userListPageSize = 10
+const itemRefreshInterval = 5000
 
 interface UserListItemProps {
   user: authn.User
 }
 
-class UserListItem extends React.Component<UserListItemProps> {
+interface UserListItemState {
+  locked: boolean
+}
+
+class UserListItem extends React.Component<UserListItemProps, UserListItemState> {
+
+  timer: any // TODO: This should not be any
+
+  constructor(props: UserListItemProps) {
+    super(props)
+    this.state = {
+      locked: props.user.locked ? true : false
+    }
+  }
+
+  refresh = async () => {
+    this.setState({
+      locked: (await getClient().authn().users().get(this.props.user.metadata.id)).locked ? true : false
+    })
+  }
+
+  componentDidMount(): void {
+    this.refresh()
+    this.timer = setInterval(this.refresh, itemRefreshInterval)
+  }
+
+  componentWillUnmount(): void {
+    clearInterval(this.timer)
+  }
+
   render(): React.ReactElement {
     const linkTo = "/users/" + this.props.user.metadata.id
+    const status = this.state.locked ? "LOCKED" : "UNLOCKED"
     return (
       <div className="box">
-        <Link to={linkTo}>{this.props.user.metadata.id}</Link>
+        {status}&nbsp;&nbsp;<Link to={linkTo}>{this.props.user.metadata.id}</Link>
       </div>
     )
   }

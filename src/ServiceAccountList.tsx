@@ -6,17 +6,48 @@ import getClient from "./Client"
 import withPagingControl from "./PagingControl"
 
 const serviceAccountListPageSize = 10
+const itemRefreshInterval = 5000
 
 interface ServiceAccountListItemProps {
   serviceAccount: authn.ServiceAccount
 }
 
-class ServiceAccountListItem extends React.Component<ServiceAccountListItemProps> {
+interface ServiceAccountListItemState {
+  locked: boolean
+}
+
+class ServiceAccountListItem extends React.Component<ServiceAccountListItemProps, ServiceAccountListItemState> {
+
+  timer: any // TODO: This should not be any
+
+  constructor(props: ServiceAccountListItemProps) {
+    super(props)
+    this.state = {
+      locked: props.serviceAccount.locked ? true : false
+    }
+  }
+
+  refresh = async () => {
+    this.setState({
+      locked: (await getClient().authn().serviceAccounts().get(this.props.serviceAccount.metadata.id)).locked ? true : false
+    })
+  }
+
+  componentDidMount(): void {
+    this.refresh()
+    this.timer = setInterval(this.refresh, itemRefreshInterval)
+  }
+
+  componentWillUnmount(): void {
+    clearInterval(this.timer)
+  }
+
   render(): React.ReactElement {
     const linkTo = "/service-accounts/" + this.props.serviceAccount.metadata.id
+    const status = this.state.locked ? "LOCKED" : "UNLOCKED"
     return (
       <div className="box">
-        <Link to={linkTo}>{this.props.serviceAccount.metadata.id}</Link>
+        {status}&nbsp;&nbsp;<Link to={linkTo}>{this.props.serviceAccount.metadata.id}</Link>
       </div>
     )
   }

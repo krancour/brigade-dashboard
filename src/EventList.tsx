@@ -6,17 +6,48 @@ import getClient from "./Client"
 import withPagingControl from "./PagingControl"
 
 const eventListPageSize = 10
+const itemRefreshInterval = 5000
 
 interface EventListItemProps {
   event: core.Event
 }
 
-class EventListItem extends React.Component<EventListItemProps> {
+interface EventListItemState {
+  workerPhase?: core.WorkerPhase
+}
+
+class EventListItem extends React.Component<EventListItemProps, EventListItemState> {
+
+  timer: any // TODO: This should not be any
+
+  constructor(props: EventListItemProps) {
+    super(props)
+    this.state = {
+      workerPhase: props.event.worker?.status.phase
+    }
+  }
+
+  refresh = async () => {
+    this.setState({
+      workerPhase: await (await getClient().core().events().get(this.props.event.metadata?.id || "")).worker?.status.phase
+    })
+  }
+
+  componentDidMount(): void {
+    this.refresh()
+    this.timer = setInterval(this.refresh, itemRefreshInterval)
+  }
+
+  componentWillUnmount(): void {
+    clearInterval(this.timer)
+  }
+
   render(): React.ReactElement {
     const linkTo = "/events/" + this.props.event.metadata?.id
+    const status = this.state.workerPhase ? this.state.workerPhase : core.WorkerPhase
     return (
       <div className="box">
-        <Link to={linkTo}>{this.props.event.metadata?.id}</Link>
+        {status}&nbsp;&nbsp;<Link to={linkTo}>{this.props.event.metadata?.id}</Link>
       </div>
     )
   }
