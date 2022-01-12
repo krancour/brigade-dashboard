@@ -1,11 +1,12 @@
 import React from "react"
-import { useParams } from "react-router-dom"
+import { useParams, useSearchParams } from "react-router-dom"
 import { core } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
 
 interface ProjectProps {
   id: string
+  activeTab: string
 }
 
 interface ProjectState {
@@ -38,6 +39,7 @@ class Project extends React.Component<ProjectProps, ProjectState> {
 }
 
 export default function RoutedProject(): React.ReactElement {
-  const params: any = useParams()
-  return <Project id={params.id}/>
+  const pathParams = useParams()
+  const [queryParams] = useSearchParams()
+  return <Project id={pathParams.id || ""} activeTab={queryParams.get("tab") || ""}/>
 }
