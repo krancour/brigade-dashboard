@@ -1,5 +1,5 @@
-import React from "react"
-import { Link, Outlet } from "react-router-dom"
+import React, { CSSProperties } from "react"
+import { NavLink, Outlet } from "react-router-dom"
 
 import getClient from "./Client"
 import * as config from "./Config"
@@ -42,15 +42,22 @@ export default class App extends React.Component<AppProps, AppState> {
 
   render(): React.ReactElement {
     const loggedIn = this.state.loggedIn
+    // TODO: This is cute for now, but we should do something nicer based on
+    // a CSS class instead of a hardcoded style.
+    const applyStyle = (props: {isActive: boolean}): CSSProperties => {
+      return { 
+        fontWeight: props.isActive ? "bold" : ""
+      }
+    }
     return (
       <div>
         <header>
           <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/projects">Projects</Link></li>
-            <li><Link to="/events">Events</Link></li>
-            <li><Link to="/users">Users</Link></li>
-            <li><Link to="/service-accounts">Service Accounts</Link></li>
+            <li><NavLink style={applyStyle} to="/">Home</NavLink></li>
+            <li><NavLink style={applyStyle} to="/projects">Projects</NavLink></li>
+            <li><NavLink style={applyStyle} to="/events">Events</NavLink></li>
+            <li><NavLink style={applyStyle} to="/users">Users</NavLink></li>
+            <li><NavLink style={applyStyle} to="/service-accounts">Service Accounts</NavLink></li>
           </ul>
           <LoginControl loggedIn={loggedIn} onLogin={this.handleLogin} onLogout={this.handleLogout}/>
           {/* TODO: Need to put some kind of breadcrumbs here */}
