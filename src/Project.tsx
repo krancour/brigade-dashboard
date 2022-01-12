@@ -1,8 +1,9 @@
 import React from "react"
-import { useParams, useSearchParams } from "react-router-dom"
+import { Link, useParams, useSearchParams } from "react-router-dom"
 import { core } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
+import EventList from "./EventList"
 
 interface ProjectProps {
   id: string
@@ -30,8 +31,26 @@ class Project extends React.Component<ProjectProps, ProjectState> {
     const project = this.state.project
     return (
       <div>
-        <div className="box">{project?.metadata.id}</div>
-        <div className="box">TODO: Add tabs for YAML/JSON representation and events</div>
+        <h1>{project?.metadata.id}</h1>
+        <ul>
+          <li><Link to={"/projects/" + this.props.id + "?tab=summary"}>Summary</Link></li>
+          <li><Link to={"/projects/" + this.props.id + "?tab=yaml"}>YAML</Link></li>
+        </ul>
+        {
+          ((): React.ReactElement => {
+            switch (this.props.activeTab) {
+              case "summary":
+              case "":
+                return <ProjectSummary project={project}>Summary</ProjectSummary>
+              case "yaml":
+                return <ProjectYAML project={project}>YAML</ProjectYAML>
+              default:
+                return <div/>
+            }
+          })()
+        }
+        <h2>Events -- TODO: Filter by project</h2>
+        <EventList/>
       </div>
     )
   }
@@ -42,4 +61,38 @@ export default function RoutedProject(): React.ReactElement {
   const pathParams = useParams()
   const [queryParams] = useSearchParams()
   return <Project id={pathParams.id || ""} activeTab={queryParams.get("tab") || ""}/>
+}
+
+interface ProjectSummaryProps {
+  project?: core.Project
+}
+
+class ProjectSummary extends React.Component<ProjectSummaryProps> {
+
+  constructor(props: ProjectSummaryProps) {
+    super(props)
+  }
+
+  render(): React.ReactElement {
+    const project = this.props.project
+    return <div className="box">{project?.metadata.id} summary</div>
+  }
+
+}
+
+interface ProjectYAMLProps {
+  project?: core.Project
+}
+
+class ProjectYAML extends React.Component<ProjectYAMLProps> {
+
+  constructor(props: ProjectYAMLProps) {
+    super(props)
+  }
+
+  render(): React.ReactElement {
+    const project = this.props.project
+    return <div className="box">{project?.metadata.id} YAML</div>
+  }
+
 }

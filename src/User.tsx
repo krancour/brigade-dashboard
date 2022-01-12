@@ -29,8 +29,9 @@ class User extends React.Component<UserProps, UserState> {
     const user = this.state.user
     return (
       <div>
-        <div className="box">{user?.metadata.id}</div>
-        <div className="box">TODO: Show user permissions</div>
+        <h1>{user?.metadata.id}</h1>
+        <div className="box">{user?.metadata.id} summary</div>
+        <h2>Permissions -- TODO: Show user permissions</h2>
       </div>
     )
   }

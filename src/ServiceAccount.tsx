@@ -29,8 +29,9 @@ class ServiceAccount extends React.Component<ServiceAccountProps, ServiceAccount
     const serviceAccount = this.state.serviceAccount
     return (
       <div>
-        <div className="box">{serviceAccount?.metadata.id}</div>
-        <div className="box">TODO: Show service account permissions</div>
+        <h1>{serviceAccount?.metadata.id}</h1>
+        <div className="box">{serviceAccount?.metadata.id} summary</div>
+        <h2>Permissions -- TODO: Show service account permissions</h2>
       </div>
     )
   }
