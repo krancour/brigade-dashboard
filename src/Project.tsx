@@ -1,6 +1,7 @@
 import React from "react"
 import { Link, useParams, useSearchParams } from "react-router-dom"
 import { core } from "@brigadecore/brigade-sdk"
+import yaml from "js-yaml"
 
 import getClient from "./Client"
 import EventList from "./EventList"
@@ -95,7 +96,13 @@ class ProjectYAML extends React.Component<ProjectYAMLProps> {
 
   render(): React.ReactElement {
     const project = this.props.project
-    return <div className="box">{project?.metadata.id} YAML</div>
+    return (
+      <div className="box">
+        <pre>
+          {yaml.dump(project)}
+        </pre>
+      </div>
+    )
   }
 
 }
