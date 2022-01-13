@@ -7,6 +7,7 @@ import yamlSyntax from "react-syntax-highlighter/dist/esm/languages/hljs/yaml"
 import docco from "react-syntax-highlighter/dist/esm/styles/hljs/docco"
 
 import getClient from "./Client"
+import { LogStreamOptions } from "@brigadecore/brigade-sdk/dist/core"
 
 SyntaxHighlighter.registerLanguage('yaml', yamlSyntax)
 
@@ -56,7 +57,7 @@ class Event extends React.Component<EventProps, EventState> {
               case "yaml":
                 return <EventYAML event={event}/>
               case "logs":
-                return <EventLogs event={event}/>
+                return <WorkerLogs event={event}/>
               default:
                 return <div/>
             }
@@ -116,19 +117,42 @@ class EventYAML extends React.Component<EventYAMLProps> {
 
 }
 
-interface EventLogsProps {
+interface WorkerLogsProps {
   event?: core.Event
 }
 
-class EventLogs extends React.Component<EventLogsProps> {
+class WorkerLogs extends React.Component<WorkerLogsProps> {
 
-  constructor(props: EventLogsProps) {
+  constructor(props: WorkerLogsProps) {
     super(props)
+  }
+
+  async componentDidMount(): Promise<void> {
+    const logsClient = getClient().core().events().logs()
+    const event = this.props.event
+    if (event?.metadata?.id) {
+      const logStream = logsClient.stream(event?.metadata?.id, {}, {follow: true})
+      const logBox = document.getElementById("logBox")
+      // TODO: There could be a memory leak here. Do we need to close the logStream when the component unmounts?
+      if (logBox) {
+        logStream.onData((logEntry: core.LogEntry) => {  
+          logBox.innerHTML += logEntry.message + "<br/>"
+        })
+      }
+    }
   }
 
   render(): React.ReactElement {
     const event = this.props.event
-    return <div className="box">{event?.metadata?.id} logs</div>
+    return (
+      <div>
+        <ul>
+          <li><Link to="#placeholder">Script</Link></li>
+          { event?.git ? <li><Link to="#placeholder">Git Initializer</Link></li> : null }
+        </ul>
+        <div id="logBox" className="box"/>
+      </div>
+    )
   }
 
 }
@@ -140,7 +164,21 @@ interface JobListItemProps {
 class JobListItem extends React.Component<JobListItemProps> {
 
   render(): React.ReactElement {
-    return <div className="box">{this.props.job.name}</div>
+    const job = this.props.job
+    return (
+      <div className="box">
+        <h3>{job.name}</h3>
+        <h4>Containers</h4>
+        <ul>
+          <li><Link to="#placeholder">{job.name}</Link></li>
+          {
+            Object.keys(job.spec.sidecarContainers || {}).map((containerName: string) => (
+              <li><Link to="#placeholder">{containerName}</Link></li>
+            ))
+          }
+        </ul>
+      </div>
+    )
   }
 
 }
