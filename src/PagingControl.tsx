@@ -7,7 +7,9 @@ interface Pageable {
   }
 }
 
-interface PagingControlProps {}
+interface PagingControlProps {
+  selector?: any
+}
 
 interface PagingControlState {
   prevContinueVals: string[]
@@ -16,7 +18,7 @@ interface PagingControlState {
   nextContinueVal?: string
 }
 
-export default function withPagingControl(WrappedComponent: typeof React.Component, fetch: (continueVal: string) => Promise<Pageable>): typeof React.Component {
+export default function withPagingControl(WrappedComponent: typeof React.Component, fetch: (continueVal: string, selector?: any) => Promise<Pageable>): typeof React.Component {
 
   return class extends React.Component<PagingControlProps, PagingControlState> {
     
@@ -30,7 +32,7 @@ export default function withPagingControl(WrappedComponent: typeof React.Compone
     }
 
     async componentDidMount(): Promise<void> {
-      const page = await fetch("")
+      const page = await fetch("", this.props.selector)
       this.setState({
         items: page.items,
         nextContinueVal: page.metadata.continue === "" ? undefined : page.metadata.continue
@@ -43,7 +45,7 @@ export default function withPagingControl(WrappedComponent: typeof React.Compone
       const prevContinueVals = this.state.prevContinueVals
       if (prevContinueVals.length > 0) {
         const currentContinueVal = prevContinueVals.pop() || ""
-        const page = await fetch(currentContinueVal)
+        const page = await fetch(currentContinueVal, this.props.selector)
         this.setState({
           prevContinueVals: prevContinueVals,
           currentContinueVal: currentContinueVal,
@@ -61,7 +63,7 @@ export default function withPagingControl(WrappedComponent: typeof React.Compone
         const prevContinueVals = this.state.prevContinueVals
         prevContinueVals.push(this.state.currentContinueVal)
         const currentContinueVal = nextContinueVal
-        const page = await fetch(currentContinueVal)
+        const page = await fetch(currentContinueVal, this.props.selector)
         this.setState({
           prevContinueVals: prevContinueVals,
           currentContinueVal: currentContinueVal,

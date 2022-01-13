@@ -55,6 +55,7 @@ class EventListItem extends React.Component<EventListItemProps, EventListItemSta
 
 interface EventListProps {
   items: core.Event[]
+  projectID?: string
 }
 
 class EventList extends React.Component<EventListProps> {
@@ -74,8 +75,8 @@ class EventList extends React.Component<EventListProps> {
 
 }
 
-export default withPagingControl(EventList, (continueVal: string): Promise<meta.List<core.Event>>  => {
-  return getClient().core().events().list({}, {
+export default withPagingControl(EventList, (continueVal: string, selector: core.EventsSelector): Promise<meta.List<core.Event>>  => {
+  return getClient().core().events().list(selector, {
     continue: continueVal,
     limit: eventListPageSize
   })

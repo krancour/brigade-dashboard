@@ -58,8 +58,8 @@ class Project extends React.Component<ProjectProps, ProjectState> {
             }
           })()
         }
-        <h2>Events -- TODO: Filter by project</h2>
-        <EventList/>
+        <h2>Events</h2>
+        <EventList selector={{projectID: project.metadata.id}}/>
       </div>
     )
   }
