@@ -29,6 +29,9 @@ class Project extends React.Component<ProjectProps, ProjectState> {
 
   render(): React.ReactElement {
     const project = this.state.project
+    if (!project) {
+      return <div/>
+    }
     return (
       <div>
         <h1>{project?.metadata.id}</h1>

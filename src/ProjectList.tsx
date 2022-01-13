@@ -14,6 +14,7 @@ interface ProjectListItemProps {
 
 interface ProjectListItemState {
   lastEventWorkerPhase?: core.WorkerPhase
+  ready: boolean
 }
 
 class ProjectListItem extends React.Component<ProjectListItemProps, ProjectListItemState> {
@@ -22,7 +23,9 @@ class ProjectListItem extends React.Component<ProjectListItemProps, ProjectListI
 
   constructor(props: ProjectListItemProps) {
     super(props)
-    this.state = {}
+    this.state = {
+      ready: false
+    }
   }
 
   refresh = async () => {
@@ -30,7 +33,8 @@ class ProjectListItem extends React.Component<ProjectListItemProps, ProjectListI
       projectID: this.props.project.metadata.id
     })
     this.setState({
-      lastEventWorkerPhase: events.items?.length > 0 ? events.items[0].worker?.status.phase : undefined
+      lastEventWorkerPhase: events.items?.length > 0 ? events.items[0].worker?.status.phase : undefined,
+      ready: true,
     })
   }
 
@@ -44,6 +48,10 @@ class ProjectListItem extends React.Component<ProjectListItemProps, ProjectListI
   }
 
   render(): React.ReactElement {
+    const ready = this.state.ready
+    if (!ready) {
+      return <div className="box"/>
+    }
     const linkTo = "/projects/" + this.props.project.metadata.id
     const status = this.state.lastEventWorkerPhase ? this.state.lastEventWorkerPhase : "NONE"
     return (

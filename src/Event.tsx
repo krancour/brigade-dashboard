@@ -28,6 +28,9 @@ class Event extends React.Component<EventProps, EventState> {
 
   render(): React.ReactElement {
     const event = this.state.event
+    if (!event) {
+      return <div/>
+    }
     return (
       <div>
         <h1>{event?.metadata?.id}</h1>
