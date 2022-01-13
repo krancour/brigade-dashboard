@@ -43,15 +43,18 @@ class Event extends React.Component<EventProps, EventState> {
         <ul>
           <li><Link to={"/events/" + this.props.id + "?tab=summary"}>Summary</Link></li>
           <li><Link to={"/events/" + this.props.id + "?tab=yaml"}>YAML</Link></li>
+          <li><Link to={"/events/" + this.props.id + "?tab=logs"}>Worker Logs</Link></li>
         </ul>
         {
           ((): React.ReactElement => {
             switch (this.props.activeTab) {
               case "summary":
               case "":
-                return <EventSummary event={event}>Summary</EventSummary>
+                return <EventSummary event={event}/>
               case "yaml":
-                return <EventYAML event={event}>YAML</EventYAML>
+                return <EventYAML event={event}/>
+              case "logs":
+                return <EventLogs event={event}/>
               default:
                 return <div/>
             }
@@ -106,6 +109,23 @@ class EventYAML extends React.Component<EventYAMLProps> {
         </SyntaxHighlighter>
       </div>
     )
+  }
+
+}
+
+interface EventLogsProps {
+  event?: core.Event
+}
+
+class EventLogs extends React.Component<EventLogsProps> {
+
+  constructor(props: EventLogsProps) {
+    super(props)
+  }
+
+  render(): React.ReactElement {
+    const event = this.props.event
+    return <div className="box">{event?.metadata?.id} logs</div>
   }
 
 }

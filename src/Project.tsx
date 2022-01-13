@@ -50,9 +50,9 @@ class Project extends React.Component<ProjectProps, ProjectState> {
             switch (this.props.activeTab) {
               case "summary":
               case "":
-                return <ProjectSummary project={project}>Summary</ProjectSummary>
+                return <ProjectSummary project={project}/>
               case "yaml":
-                return <ProjectYAML project={project}>YAML</ProjectYAML>
+                return <ProjectYAML project={project}/>
               default:
                 return <div/>
             }
