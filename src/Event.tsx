@@ -21,6 +21,8 @@ interface EventState {
 
 class Event extends React.Component<EventProps, EventState> {
 
+  // TODO: Make the event page auto-refresh
+
   constructor(props: EventProps) {
     super(props)
     this.state = {}
@@ -60,7 +62,8 @@ class Event extends React.Component<EventProps, EventState> {
             }
           })()
         }
-        <h2>Jobs -- TODO: List jobs</h2>
+        <h2>Jobs</h2>
+        <JobList event={event}/>
       </div>
     )
   }
@@ -126,6 +129,42 @@ class EventLogs extends React.Component<EventLogsProps> {
   render(): React.ReactElement {
     const event = this.props.event
     return <div className="box">{event?.metadata?.id} logs</div>
+  }
+
+}
+
+interface JobListItemProps {
+  job: core.Job
+}
+
+class JobListItem extends React.Component<JobListItemProps> {
+
+  render(): React.ReactElement {
+    return <div className="box">{this.props.job.name}</div>
+  }
+
+}
+
+interface JobListProps {
+  event: core.Event
+}
+
+class JobList extends React.Component<JobListProps> {
+
+  render(): React.ReactElement {
+    const jobs = this.props.event?.worker?.jobs
+    if (!jobs || jobs.length == 0) {
+      return <div className="box">There are no jobs associated with this event.</div>
+    }
+    return (
+      <div>
+        {
+          jobs.map((job: core.Job) => (
+            <JobListItem key={job.name} job={job}/>
+          ))
+        }
+      </div>
+    )
   }
 
 }
