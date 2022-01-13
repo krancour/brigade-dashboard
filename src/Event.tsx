@@ -123,6 +123,8 @@ interface WorkerLogsProps {
 
 class WorkerLogs extends React.Component<WorkerLogsProps> {
 
+  logStream: any // TODO: https://github.com/brigadecore/brigade-sdk-for-js/issues/55
+
   constructor(props: WorkerLogsProps) {
     super(props)
   }
@@ -131,14 +133,20 @@ class WorkerLogs extends React.Component<WorkerLogsProps> {
     const logsClient = getClient().core().events().logs()
     const event = this.props.event
     if (event?.metadata?.id) {
-      const logStream = logsClient.stream(event?.metadata?.id, {}, {follow: true})
+      this.logStream = logsClient.stream(event?.metadata?.id, {}, {follow: true})
       const logBox = document.getElementById("logBox")
       // TODO: There could be a memory leak here. Do we need to close the logStream when the component unmounts?
       if (logBox) {
-        logStream.onData((logEntry: core.LogEntry) => {  
+        this.logStream.onData((logEntry: core.LogEntry) => {  
           logBox.innerHTML += logEntry.message + "<br/>"
         })
       }
+    }
+  }
+
+  async componentWillUnmount(): Promise<void> {
+    if (this.logStream) {
+      this.logStream.close()
     }
   }
 
