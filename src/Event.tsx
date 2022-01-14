@@ -113,7 +113,6 @@ class WorkerLogs extends React.Component<WorkerLogsProps> {
     if (event?.metadata?.id) {
       this.logStream = logsClient.stream(event?.metadata?.id, {}, {follow: true})
       const logBox = document.getElementById("logBox")
-      // TODO: There could be a memory leak here. Do we need to close the logStream when the component unmounts?
       if (logBox) {
         this.logStream.onData((logEntry: core.LogEntry) => {  
           logBox.innerHTML += logEntry.message + "<br/>"
