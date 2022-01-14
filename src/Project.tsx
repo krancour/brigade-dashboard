@@ -70,10 +70,6 @@ interface ProjectSummaryProps {
 
 class ProjectSummary extends React.Component<ProjectSummaryProps> {
 
-  constructor(props: ProjectSummaryProps) {
-    super(props)
-  }
-
   render(): React.ReactElement {
     return <div className="box">Placeholder</div>
   }
@@ -85,10 +81,6 @@ interface ProjectYAMLProps {
 }
 
 class ProjectYAML extends React.Component<ProjectYAMLProps> {
-
-  constructor(props: ProjectYAMLProps) {
-    super(props)
-  }
 
   render(): React.ReactElement {
     const project = this.props.project
