@@ -69,10 +69,10 @@ export default class App extends React.Component<AppProps, AppState> {
                   <Nav.Link>Service Accounts</Nav.Link>
                 </LinkContainer>
               </Nav>
+              <LoginControl loggedIn={loggedIn} onLogin={this.handleLogin} onLogout={this.handleLogout}/>
             </Navbar.Collapse>
           </Container>
         </Navbar>
-        <LoginControl loggedIn={loggedIn} onLogin={this.handleLogin} onLogout={this.handleLogout}/>
         { loggedIn ? <Outlet/> : <div className="box">Log in to see this content.</div> }
       </div>
     )

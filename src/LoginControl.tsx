@@ -1,4 +1,5 @@
 import React from 'react'
+import Button from "react-bootstrap/Button"
 
 interface LoginControlProps {
   loggedIn: boolean
@@ -31,9 +32,9 @@ export default class LoginControl extends React.Component<LoginControlProps, Log
     const loggedIn = this.state.loggedIn
     let button
     if (!loggedIn) {
-      button = <button onClick={this.handleLogin}>Login</button>
+      button = <Button variant="outline-light" onClick={this.handleLogin}>Login</Button>
     } else {
-      button = <button onClick={this.handleLogout}>Logout</button>
+      button = <Button variant="outline-light" onClick={this.handleLogout}>Logout</Button>
     }
     return <div>{button}</div>
   }
