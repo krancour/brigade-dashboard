@@ -26,6 +26,10 @@ data:
         {{- else }}
         listen                    80;
         {{- end }}
+        location /api/ {
+            proxy_pass {{ .Values.brigade.apiAddress }};
+            rewrite    ^/api/(.*)$ /$1 break;
+        }
         location / {
           root   /usr/share/nginx/kashti;
           index  index.html index.htm;
