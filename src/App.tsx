@@ -1,5 +1,9 @@
-import React, { CSSProperties } from "react"
-import { NavLink, Outlet } from "react-router-dom"
+import React from "react"
+import { Outlet } from "react-router-dom"
+import Navbar from "react-bootstrap/Navbar"
+import Container from "react-bootstrap/Container"
+import Nav from "react-bootstrap/Nav"
+import {LinkContainer} from 'react-router-bootstrap'
 
 import getClient from "./Client"
 import * as config from "./Config"
@@ -42,26 +46,33 @@ export default class App extends React.Component<AppProps, AppState> {
 
   render(): React.ReactElement {
     const loggedIn = this.state.loggedIn
-    // TODO: This is cute for now, but we should do something nicer based on
-    // a CSS class instead of a hardcoded style.
-    const applyStyle = (props: {isActive: boolean}): CSSProperties => {
-      return { 
-        fontWeight: props.isActive ? "bold" : ""
-      }
-    }
     return (
       <div>
-        <header>
-          <ul>
-            <li><NavLink style={applyStyle} to="/">Home</NavLink></li>
-            <li><NavLink style={applyStyle} to="/projects">Projects</NavLink></li>
-            <li><NavLink style={applyStyle} to="/events">Events</NavLink></li>
-            <li><NavLink style={applyStyle} to="/users">Users</NavLink></li>
-            <li><NavLink style={applyStyle} to="/service-accounts">Service Accounts</NavLink></li>
-          </ul>
-          <LoginControl loggedIn={loggedIn} onLogin={this.handleLogin} onLogout={this.handleLogout}/>
-          {/* TODO: Need to put some kind of breadcrumbs here */}
-        </header>
+        <Navbar bg="dark" variant="dark" expand="lg">
+          <Container>
+            <LinkContainer to="/projects">
+              <Navbar.Brand>Brigade Dashboard</Navbar.Brand>
+            </LinkContainer>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav className="me-auto">
+                <LinkContainer to="/projects">
+                  <Nav.Link>Projects</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to="/events">
+                  <Nav.Link>Events</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to="/users">
+                  <Nav.Link>Users</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to="/service-accounts">
+                  <Nav.Link>Service Accounts</Nav.Link>
+                </LinkContainer>
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
+        <LoginControl loggedIn={loggedIn} onLogin={this.handleLogin} onLogout={this.handleLogout}/>
         { loggedIn ? <Outlet/> : <div className="box">Log in to see this content.</div> }
       </div>
     )

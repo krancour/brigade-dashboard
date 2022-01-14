@@ -1,10 +1,12 @@
 import React from "react"
-import { Link, useParams, useSearchParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { core } from "@brigadecore/brigade-sdk"
 import yaml from "js-yaml"
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter"
 import yamlSyntax from "react-syntax-highlighter/dist/esm/languages/hljs/yaml"
 import docco from "react-syntax-highlighter/dist/esm/styles/hljs/docco"
+import Tabs from "react-bootstrap/Tabs"
+import Tab from "react-bootstrap/Tab"
 
 import getClient from "./Client"
 import EventList from "./EventList"
@@ -13,7 +15,6 @@ SyntaxHighlighter.registerLanguage('yaml', yamlSyntax)
 
 interface ProjectProps {
   id: string
-  activeTab: string
 }
 
 interface ProjectState {
@@ -41,25 +42,17 @@ class Project extends React.Component<ProjectProps, ProjectState> {
     return (
       <div>
         <h1>{project?.metadata.id}</h1>
-        <ul>
-          <li><Link to={"/projects/" + this.props.id + "?tab=summary"}>Summary</Link></li>
-          <li><Link to={"/projects/" + this.props.id + "?tab=yaml"}>YAML</Link></li>
-        </ul>
-        {
-          ((): React.ReactElement => {
-            switch (this.props.activeTab) {
-              case "summary":
-              case "":
-                return <ProjectSummary project={project}/>
-              case "yaml":
-                return <ProjectYAML project={project}/>
-              default:
-                return <div/>
-            }
-          })()
-        }
-        <h2>Events</h2>
-        <EventList selector={{projectID: project.metadata.id}}/>
+        <Tabs defaultActiveKey="summary" className="mb-3">
+          <Tab eventKey="summary" title="Summary">
+            <ProjectSummary project={project}/>
+          </Tab>
+          <Tab eventKey="yaml" title="YAML">
+            <ProjectYAML project={project}/>
+          </Tab>
+          <Tab eventKey="events" title="Events">
+            <EventList selector={{projectID: project.metadata.id}}/>
+          </Tab>
+        </Tabs>
       </div>
     )
   }
@@ -68,8 +61,7 @@ class Project extends React.Component<ProjectProps, ProjectState> {
 
 export default function RoutedProject(): React.ReactElement {
   const pathParams = useParams()
-  const [queryParams] = useSearchParams()
-  return <Project id={pathParams.id || ""} activeTab={queryParams.get("tab") || ""}/>
+  return <Project id={pathParams.id || ""}/>
 }
 
 interface ProjectSummaryProps {
@@ -83,8 +75,7 @@ class ProjectSummary extends React.Component<ProjectSummaryProps> {
   }
 
   render(): React.ReactElement {
-    const project = this.props.project
-    return <div className="box">{project?.metadata.id} summary</div>
+    return <div className="box">Placeholder</div>
   }
 
 }

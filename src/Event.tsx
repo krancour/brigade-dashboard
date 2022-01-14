@@ -1,19 +1,19 @@
 import React from "react"
-import { Link, useParams, useSearchParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { core } from "@brigadecore/brigade-sdk"
 import yaml from "js-yaml"
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter"
 import yamlSyntax from "react-syntax-highlighter/dist/esm/languages/hljs/yaml"
 import docco from "react-syntax-highlighter/dist/esm/styles/hljs/docco"
+import Tabs from "react-bootstrap/Tabs"
+import Tab from "react-bootstrap/Tab"
 
 import getClient from "./Client"
-import { LogStreamOptions } from "@brigadecore/brigade-sdk/dist/core"
 
 SyntaxHighlighter.registerLanguage('yaml', yamlSyntax)
 
 interface EventProps {
   id: string
-  activeTab: string
 }
 
 interface EventState {
@@ -43,28 +43,20 @@ class Event extends React.Component<EventProps, EventState> {
     return (
       <div>
         <h1>{event?.metadata?.id}</h1>
-        <ul>
-          <li><Link to={"/events/" + this.props.id + "?tab=summary"}>Summary</Link></li>
-          <li><Link to={"/events/" + this.props.id + "?tab=yaml"}>YAML</Link></li>
-          <li><Link to={"/events/" + this.props.id + "?tab=logs"}>Worker Logs</Link></li>
-        </ul>
-        {
-          ((): React.ReactElement => {
-            switch (this.props.activeTab) {
-              case "summary":
-              case "":
-                return <EventSummary event={event}/>
-              case "yaml":
-                return <EventYAML event={event}/>
-              case "logs":
-                return <WorkerLogs event={event}/>
-              default:
-                return <div/>
-            }
-          })()
-        }
-        <h2>Jobs</h2>
-        <JobList event={event}/>
+        <Tabs defaultActiveKey="summary" className="mb-3">
+          <Tab eventKey="summary" title="Summary">
+            <EventSummary event={event}/>
+          </Tab>
+          <Tab eventKey="yaml" title="YAML">
+            <EventYAML event={event}/>
+          </Tab>
+          <Tab eventKey="logs" title="Logs">
+            <WorkerLogs event={event}/>
+          </Tab>
+          <Tab eventKey="jobs" title="Jobs">
+            <JobList event={event}/>
+          </Tab>
+        </Tabs>
       </div>
     )
   }
@@ -73,8 +65,7 @@ class Event extends React.Component<EventProps, EventState> {
 
 export default function RoutedEvent(): React.ReactElement {
   const pathParams = useParams()
-  const [queryParams] = useSearchParams()
-  return <Event id={pathParams.id || ""} activeTab={queryParams.get("tab") || ""}/>
+  return <Event id={pathParams.id || ""}/>
 }
 
 interface EventSummaryProps {
@@ -83,13 +74,8 @@ interface EventSummaryProps {
 
 class EventSummary extends React.Component<EventSummaryProps> {
 
-  constructor(props: EventSummaryProps) {
-    super(props)
-  }
-
   render(): React.ReactElement {
-    const event = this.props.event
-    return <div className="box">{event?.metadata?.id} summary</div>
+    return <div className="box">Placeholder</div>
   }
 
 }
@@ -99,10 +85,6 @@ interface EventYAMLProps {
 }
 
 class EventYAML extends React.Component<EventYAMLProps> {
-
-  constructor(props: EventYAMLProps) {
-    super(props)
-  }
 
   render(): React.ReactElement {
     const event = this.props.event
@@ -124,10 +106,6 @@ interface WorkerLogsProps {
 class WorkerLogs extends React.Component<WorkerLogsProps> {
 
   logStream: any // TODO: https://github.com/brigadecore/brigade-sdk-for-js/issues/55
-
-  constructor(props: WorkerLogsProps) {
-    super(props)
-  }
 
   async componentDidMount(): Promise<void> {
     const logsClient = getClient().core().events().logs()
@@ -154,11 +132,12 @@ class WorkerLogs extends React.Component<WorkerLogsProps> {
     const event = this.props.event
     return (
       <div>
-        <ul>
-          <li><Link to="#placeholder">Script</Link></li>
-          { event?.git ? <li><Link to="#placeholder">Git Initializer</Link></li> : null }
-        </ul>
-        <div id="logBox" className="box"/>
+        <Tabs defaultActiveKey="script" className="mb-3">
+          { event?.git ? <Tab eventKey="gitInitializer" title="Git Initializer"><div className="box">Placeholder</div></Tab> : null }
+          <Tab eventKey="script" title="Script">
+            <div id="logBox" className="box"/>
+          </Tab>
+        </Tabs>
       </div>
     )
   }
@@ -176,15 +155,19 @@ class JobListItem extends React.Component<JobListItemProps> {
     return (
       <div className="box">
         <h3>{job.name}</h3>
-        <h4>Containers</h4>
-        <ul>
-          <li><Link to="#placeholder">{job.name}</Link></li>
+
+        <Tabs defaultActiveKey={job.name} className="mb-3">
+          <Tab eventKey={job.name} title={job.name}>
+            Placeholder
+          </Tab>
           {
             Object.keys(job.spec.sidecarContainers || {}).map((containerName: string) => (
-              <li><Link to="#placeholder">{containerName}</Link></li>
+              <Tab eventKey={containerName} title={containerName}>
+                Placeholder
+              </Tab>
             ))
           }
-        </ul>
+        </Tabs>
       </div>
     )
   }
@@ -199,7 +182,7 @@ class JobList extends React.Component<JobListProps> {
 
   render(): React.ReactElement {
     const jobs = this.props.event?.worker?.jobs
-    if (!jobs || jobs.length == 0) {
+    if (!jobs || jobs.length === 0) {
       return <div className="box">There are no jobs associated with this event.</div>
     }
     return (

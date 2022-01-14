@@ -1,6 +1,8 @@
 import React from "react"
 import { useParams } from "react-router-dom"
 import { authn } from "@brigadecore/brigade-sdk"
+import Tabs from "react-bootstrap/Tabs"
+import Tab from "react-bootstrap/Tab"
 
 import getClient from "./Client"
 
@@ -30,8 +32,14 @@ class User extends React.Component<UserProps, UserState> {
     return (
       <div>
         <h1>{user?.metadata.id}</h1>
-        <div className="box">{user?.metadata.id} summary</div>
-        <h2>Permissions -- TODO: Show user permissions</h2>
+        <Tabs defaultActiveKey="summary" className="mb-3">
+          <Tab eventKey="summary" title="Summary">
+            <UserSummary user={user}/>
+          </Tab>
+          <Tab eventKey="permissions" title="Permissions">
+            <div className="box">Placeholder</div>
+          </Tab>
+        </Tabs>
       </div>
     )
   }
@@ -41,4 +49,16 @@ class User extends React.Component<UserProps, UserState> {
 export default function RoutedUser(): React.ReactElement {
   const params: any = useParams()
   return <User id={params.id}/>
+}
+
+interface UserSummaryProps {
+  user?: authn.User
+}
+
+class UserSummary extends React.Component<UserSummaryProps> {
+
+  render(): React.ReactElement {
+    return <div className="box">Placeholder</div>
+  }
+
 }
