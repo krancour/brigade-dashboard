@@ -19,7 +19,7 @@ interface ProjectListItemState {
 
 class ProjectListItem extends React.Component<ProjectListItemProps, ProjectListItemState> {
 
-  timer: any // TODO: This should not be any
+  timer?: NodeJS.Timer
 
   constructor(props: ProjectListItemProps) {
     super(props)
@@ -44,7 +44,9 @@ class ProjectListItem extends React.Component<ProjectListItemProps, ProjectListI
   }
 
   componentWillUnmount(): void {
-    clearInterval(this.timer)
+    if (this.timer) {
+      clearInterval(this.timer)
+    }
   }
 
   render(): React.ReactElement {

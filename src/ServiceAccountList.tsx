@@ -18,7 +18,7 @@ interface ServiceAccountListItemState {
 
 class ServiceAccountListItem extends React.Component<ServiceAccountListItemProps, ServiceAccountListItemState> {
 
-  timer: any // TODO: This should not be any
+  timer?: NodeJS.Timer
 
   constructor(props: ServiceAccountListItemProps) {
     super(props)
@@ -39,7 +39,9 @@ class ServiceAccountListItem extends React.Component<ServiceAccountListItemProps
   }
 
   componentWillUnmount(): void {
-    clearInterval(this.timer)
+    if (this.timer) {
+      clearInterval(this.timer)
+    }
   }
 
   render(): React.ReactElement {

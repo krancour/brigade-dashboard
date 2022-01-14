@@ -18,7 +18,7 @@ interface EventListItemState {
 
 class EventListItem extends React.Component<EventListItemProps, EventListItemState> {
 
-  timer: any // TODO: This should not be any
+  timer?: NodeJS.Timer
 
   constructor(props: EventListItemProps) {
     super(props)
@@ -39,7 +39,9 @@ class EventListItem extends React.Component<EventListItemProps, EventListItemSta
   }
 
   componentWillUnmount(): void {
-    clearInterval(this.timer)
+    if (this.timer) {
+      clearInterval(this.timer)
+    }
   }
 
   render(): React.ReactElement {
