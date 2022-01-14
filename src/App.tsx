@@ -6,7 +6,7 @@ import Nav from "react-bootstrap/Nav"
 import {LinkContainer} from 'react-router-bootstrap'
 
 import getClient from "./Client"
-import * as config from "./Config"
+import * as consts from "./Consts"
 import LoginControl from "./LoginControl"
 
 import './App.css'
@@ -22,7 +22,7 @@ export default class App extends React.Component<AppProps, AppState> {
   constructor(props: AppProps) {
     super(props)
     this.state = {
-      loggedIn: localStorage.getItem(config.brigadeAPITokenKey) ? true : false
+      loggedIn: localStorage.getItem(consts.brigadeAPITokenKey) ? true : false
     }
   }
 
@@ -33,7 +33,7 @@ export default class App extends React.Component<AppProps, AppState> {
         successURL: window.location.href
       }
     )
-    localStorage.setItem(config.brigadeAPITokenKey, thirdPartyAuthDetails.token)
+    localStorage.setItem(consts.brigadeAPITokenKey, thirdPartyAuthDetails.token)
     window.location.href = thirdPartyAuthDetails.authURL
   }
 
@@ -41,7 +41,7 @@ export default class App extends React.Component<AppProps, AppState> {
     this.setState({
       loggedIn: false
     })
-    localStorage.removeItem(config.brigadeAPITokenKey)
+    localStorage.removeItem(consts.brigadeAPITokenKey)
   }
 
   render(): React.ReactElement {
