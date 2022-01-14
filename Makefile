@@ -11,7 +11,7 @@ SHELL ?= /bin/bash
 GIT_VERSION = $(shell git describe --always --abbrev=7 --dirty --match=NeVeRmAtCh)
 
 ################################################################################
-# Build
+# Config                                                                       #
 ################################################################################
 
 ifdef DOCKER_REGISTRY
@@ -32,6 +32,32 @@ else
 endif
 
 IMMUTABLE_DOCKER_TAG := $(VERSION)
+
+ifdef HELM_REGISTRY
+	HELM_REGISTRY := $(HELM_REGISTRY)/
+endif
+
+ifdef HELM_ORG
+	HELM_ORG := $(HELM_ORG)/
+endif
+
+HELM_CHART_NAME := $(HELM_REGISTRY)$(HELM_ORG)kashti
+
+################################################################################
+# Tests                                                                        #
+################################################################################
+
+.PHONY: lint-chart
+lint-chart:
+	$(HELM_DOCKER_CMD) sh -c ' \
+		cd charts/kashti && \
+		helm dep up && \
+		helm lint . \
+	'
+
+################################################################################
+# Build
+################################################################################
 
 .PHONY: build
 build:
@@ -55,6 +81,16 @@ push:
 		--push \
 		.
 
+.PHONY: publish-chart
+publish-chart:
+	$(HELM_DOCKER_CMD) sh	-c ' \
+		helm registry login $(HELM_REGISTRY) -u $(HELM_USERNAME) -p $${HELM_PASSWORD} && \
+		cd charts/kashti && \
+		helm dep up && \
+		helm package . --version $(VERSION) --app-version $(VERSION) && \
+		helm push kashti-$(VERSION).tgz oci://$(HELM_REGISTRY)$(HELM_ORG) \
+	'
+
 ################################################################################
 # Targets to facilitate hacking                                                #
 ################################################################################
@@ -72,3 +108,20 @@ hack-build:
 hack-push: hack-build
 	docker push $(DOCKER_IMAGE_NAME):$(IMMUTABLE_DOCKER_TAG)
 	docker push $(DOCKER_IMAGE_NAME):$(MUTABLE_DOCKER_TAG)
+
+IMAGE_PULL_POLICY ?= Always
+
+.PHONY: hack-deploy
+hack-deploy:
+	helm dep up charts/kashti && \
+	helm upgrade kashti charts/kashti \
+		--install \
+		--create-namespace \
+		--namespace kashti \
+		--timeout 60s \
+		--set image.repository=$(DOCKER_IMAGE_NAME) \
+		--set image.tag=$(IMMUTABLE_DOCKER_TAG) \
+		--set image.pullPolicy=$(IMAGE_PULL_POLICY)
+
+.PHONY: hack
+hack: hack-push hack-deploy

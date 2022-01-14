@@ -1,0 +1,12 @@
+apiVersion: v2
+name: kashti
+description: Kashti
+type: application
+version: 0.1.0
+appVersion: v0.1.0
+icon: https://raw.githubusercontent.com/brigadecore/kashti/main/logo.png
+sources:
+- https://github.com/brigadecore/kashti
+maintainers:
+- name: The Brigade Maintainers
+  email: cncf-brigade-maintainers@lists.cncf.io
