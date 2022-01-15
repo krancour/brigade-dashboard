@@ -1,9 +1,9 @@
-import React from "react"
+import React, { Fragment } from "react"
 import { Outlet } from "react-router-dom"
 import Navbar from "react-bootstrap/Navbar"
 import Container from "react-bootstrap/Container"
 import Nav from "react-bootstrap/Nav"
-import {LinkContainer} from 'react-router-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap'
 
 import getClient from "./Client"
 import * as consts from "./Consts"
@@ -47,34 +47,40 @@ export default class App extends React.Component<AppProps, AppState> {
   render(): React.ReactElement {
     const loggedIn = this.state.loggedIn
     return (
-      <div>
-        <Navbar bg="dark" variant="dark" expand="lg">
+      <Fragment>
+        <header>
+          <Navbar bg="dark" variant="dark" expand="lg">
+            <Container>
+              <LinkContainer to="/projects">
+                <Navbar.Brand>Brigade Dashboard</Navbar.Brand>
+              </LinkContainer>
+              <Navbar.Toggle aria-controls="basic-navbar-nav" />
+              <Navbar.Collapse id="basic-navbar-nav">
+                <Nav className="me-auto">
+                  <LinkContainer to="/projects">
+                    <Nav.Link>Projects</Nav.Link>
+                  </LinkContainer>
+                  <LinkContainer to="/events">
+                    <Nav.Link>Events</Nav.Link>
+                  </LinkContainer>
+                  <LinkContainer to="/users">
+                    <Nav.Link>Users</Nav.Link>
+                  </LinkContainer>
+                  <LinkContainer to="/service-accounts">
+                    <Nav.Link>Service Accounts</Nav.Link>
+                  </LinkContainer>
+                </Nav>
+                <LoginControl loggedIn={loggedIn} onLogin={this.handleLogin} onLogout={this.handleLogout}/>
+              </Navbar.Collapse>
+            </Container>
+          </Navbar>
+        </header>
+        <main>
           <Container>
-            <LinkContainer to="/projects">
-              <Navbar.Brand>Brigade Dashboard</Navbar.Brand>
-            </LinkContainer>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-              <Nav className="me-auto">
-                <LinkContainer to="/projects">
-                  <Nav.Link>Projects</Nav.Link>
-                </LinkContainer>
-                <LinkContainer to="/events">
-                  <Nav.Link>Events</Nav.Link>
-                </LinkContainer>
-                <LinkContainer to="/users">
-                  <Nav.Link>Users</Nav.Link>
-                </LinkContainer>
-                <LinkContainer to="/service-accounts">
-                  <Nav.Link>Service Accounts</Nav.Link>
-                </LinkContainer>
-              </Nav>
-              <LoginControl loggedIn={loggedIn} onLogin={this.handleLogin} onLogout={this.handleLogout}/>
-            </Navbar.Collapse>
+            { loggedIn ? <Outlet/> : <div className="box">Log in to see this content.</div> }
           </Container>
-        </Navbar>
-        { loggedIn ? <Outlet/> : <div className="box">Log in to see this content.</div> }
-      </div>
+        </main>
+      </Fragment>
     )
   }
 
