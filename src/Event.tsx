@@ -7,6 +7,9 @@ import yamlSyntax from "react-syntax-highlighter/dist/esm/languages/hljs/yaml"
 import docco from "react-syntax-highlighter/dist/esm/styles/hljs/docco"
 import Tabs from "react-bootstrap/Tabs"
 import Tab from "react-bootstrap/Tab"
+import Row from "react-bootstrap/Row"
+import Col from "react-bootstrap/Col"
+import Nav from "react-bootstrap/Nav"
 
 import getClient from "./Client"
 import LogStreamer from "./LogStreamer"
@@ -44,7 +47,7 @@ class Event extends React.Component<EventProps, EventState> {
     return (
       <div>
         <h1>{event?.metadata?.id}</h1>
-        <Tabs defaultActiveKey="summary" className="mb-3">
+        <Tabs defaultActiveKey="summary" className="mb-3" mountOnEnter={true}>
           <Tab eventKey="summary" title="Summary">
             <EventSummary event={event}/>
           </Tab>
@@ -52,12 +55,26 @@ class Event extends React.Component<EventProps, EventState> {
             <EventYAML event={event}/>
           </Tab>
           <Tab eventKey="logs" title="Logs">
-            <Tabs defaultActiveKey="script" className="mb-3">
-              { event.git ? <Tab eventKey="gitInitializer" title="Git Initializer"><LogStreamer event={event} containerName="vcs" logKey="vcs"/></Tab> : null }
-              <Tab eventKey="script" title="Script">
-                <LogStreamer event={event} logKey={event?.metadata?.id || ""}/>
-              </Tab>
-            </Tabs>
+            <Tab.Container defaultActiveKey="script">
+              <Row>
+                <Col sm={3}>
+                  <Nav variant="pills" className="flex-column">
+                    { event.git ? <Nav.Item><Nav.Link eventKey="gitInitializer">Git Initializer</Nav.Link></Nav.Item> : null }
+                    <Nav.Item>
+                      <Nav.Link eventKey="script">Script</Nav.Link>
+                    </Nav.Item>
+                  </Nav>
+                </Col>
+                <Col sm={9}>
+                  <Tab.Content>
+                    { event.git ? <Tab.Pane eventKey="gitInitializer" mountOnEnter><LogStreamer event={event} containerName="vcs" logKey="vcs"/></Tab.Pane> : null }
+                    <Tab.Pane eventKey="script" mountOnEnter>
+                      <LogStreamer event={event} logKey={event?.metadata?.id || ""}/>
+                    </Tab.Pane>
+                  </Tab.Content>
+                </Col>
+              </Row>
+            </Tab.Container>
           </Tab>
           <Tab eventKey="jobs" title="Jobs">
             <JobList event={event}/>
@@ -116,22 +133,18 @@ class JobListItem extends React.Component<JobListItemProps> {
     const event = this.props.event
     const job = this.props.job
     return (
-      <div className="box">
-        <h3>{job.name}</h3>
-
-        <Tabs defaultActiveKey={job.name} className="mb-3">
-          <Tab eventKey={job.name} title={job.name}>
-            <LogStreamer event={event} jobName={job.name} logKey={job.name}/>
-          </Tab>
-          {
-            Object.keys(job.spec.sidecarContainers || {}).map((containerName: string) => (
-              <Tab eventKey={containerName} title={containerName}>
-                <LogStreamer event={event} jobName={job.name} containerName={containerName} logKey={`${job.name}-${containerName}`}/>
-              </Tab>
-            ))
-          }
-        </Tabs>
-      </div>
+      <Tabs defaultActiveKey={job.name} className="mb-3" mountOnEnter={true}>
+        <Tab eventKey={job.name} title="Primary Container">
+          <LogStreamer event={event} jobName={job.name} logKey={job.name}/>
+        </Tab>
+        {
+          Object.keys(job.spec.sidecarContainers || {}).map((containerName: string) => (
+            <Tab eventKey={containerName} title={containerName}>
+              <LogStreamer event={event} jobName={job.name} containerName={containerName} logKey={`${job.name}-${containerName}`}/>
+            </Tab>
+          ))
+        }
+      </Tabs>
     )
   }
 
@@ -149,14 +162,34 @@ class JobList extends React.Component<JobListProps> {
     if (!jobs || jobs.length === 0) {
       return <div className="box">There are no jobs associated with this event.</div>
     }
+    const defaultJobName = jobs[0].name
     return (
-      <div>
-        {
-          jobs.map((job: core.Job) => (
-            <JobListItem key={job.name} event={event} job={job}/>
-          ))
-        }
-      </div>
+      <Tab.Container defaultActiveKey={defaultJobName}>
+        <Row>
+          <Col sm={3}>
+            <Nav variant="pills" className="flex-column">
+              {
+                jobs.map((job: core.Job) => (
+                  <Nav.Item>
+                    <Nav.Link eventKey={job.name}>{job.name}</Nav.Link>
+                  </Nav.Item>
+                ))
+              }
+            </Nav>
+          </Col>
+          <Col sm={9}>
+            <Tab.Content>
+              {
+                jobs.map((job: core.Job) => (
+                  <Tab.Pane eventKey={job.name} mountOnEnter>
+                    <JobListItem key={job.name} event={event} job={job}/>
+                  </Tab.Pane>
+                ))
+              }
+            </Tab.Content>
+          </Col>
+        </Row>
+      </Tab.Container>
     )
   }
 
