@@ -106,12 +106,14 @@ class EventYAML extends React.Component<EventYAMLProps> {
 }
 
 interface JobListItemProps {
+  event: core.Event
   job: core.Job
 }
 
 class JobListItem extends React.Component<JobListItemProps> {
 
   render(): React.ReactElement {
+    const event = this.props.event
     const job = this.props.job
     return (
       <div className="box">
@@ -119,12 +121,12 @@ class JobListItem extends React.Component<JobListItemProps> {
 
         <Tabs defaultActiveKey={job.name} className="mb-3">
           <Tab eventKey={job.name} title={job.name}>
-            Placeholder
+            <LogStreamer event={event} jobName={job.name} logKey={job.name}/>
           </Tab>
           {
             Object.keys(job.spec.sidecarContainers || {}).map((containerName: string) => (
               <Tab eventKey={containerName} title={containerName}>
-                Placeholder
+                <LogStreamer event={event} jobName={job.name} containerName={containerName} logKey={`${job.name}-${containerName}`}/>
               </Tab>
             ))
           }
@@ -142,7 +144,8 @@ interface JobListProps {
 class JobList extends React.Component<JobListProps> {
 
   render(): React.ReactElement {
-    const jobs = this.props.event?.worker?.jobs
+    const event = this.props.event
+    const jobs = event.worker?.jobs
     if (!jobs || jobs.length === 0) {
       return <div className="box">There are no jobs associated with this event.</div>
     }
@@ -150,7 +153,7 @@ class JobList extends React.Component<JobListProps> {
       <div>
         {
           jobs.map((job: core.Job) => (
-            <JobListItem key={job.name} job={job}/>
+            <JobListItem key={job.name} event={event} job={job}/>
           ))
         }
       </div>

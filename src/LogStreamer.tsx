@@ -24,7 +24,6 @@ export default class LogStreamer extends React.Component<LogStreamerProps> {
     const logsClient = getClient().core().events().logs()
     const event = this.props.event
     if (event.metadata?.id) {
-      alert("Getting log stream")
       this.logStream = logsClient.stream(
         event.metadata?.id, {
           job: this.props.jobName,
