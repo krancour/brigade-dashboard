@@ -9,6 +9,7 @@ import Tabs from "react-bootstrap/Tabs"
 import Tab from "react-bootstrap/Tab"
 
 import getClient from "./Client"
+import LogStreamer from "./LogStreamer"
 
 SyntaxHighlighter.registerLanguage('yaml', yamlSyntax)
 
@@ -51,7 +52,12 @@ class Event extends React.Component<EventProps, EventState> {
             <EventYAML event={event}/>
           </Tab>
           <Tab eventKey="logs" title="Logs">
-            <WorkerLogs event={event}/>
+            <Tabs defaultActiveKey="script" className="mb-3">
+              { event.git ? <Tab eventKey="gitInitializer" title="Git Initializer"><LogStreamer event={event} containerName="vcs" logKey="vcs"/></Tab> : null }
+              <Tab eventKey="script" title="Script">
+                <LogStreamer event={event} logKey={event?.metadata?.id || ""}/>
+              </Tab>
+            </Tabs>
           </Tab>
           <Tab eventKey="jobs" title="Jobs">
             <JobList event={event}/>
@@ -93,50 +99,6 @@ class EventYAML extends React.Component<EventYAMLProps> {
         <SyntaxHighlighter language="yaml" style={docco}>
           {yaml.dump(event)}
         </SyntaxHighlighter>
-      </div>
-    )
-  }
-
-}
-
-interface WorkerLogsProps {
-  event?: core.Event
-}
-
-class WorkerLogs extends React.Component<WorkerLogsProps> {
-
-  logStream: any // TODO: https://github.com/brigadecore/brigade-sdk-for-js/issues/55
-
-  async componentDidMount(): Promise<void> {
-    const logsClient = getClient().core().events().logs()
-    const event = this.props.event
-    if (event?.metadata?.id) {
-      this.logStream = logsClient.stream(event?.metadata?.id, {}, {follow: true})
-      const logBox = document.getElementById("logBox")
-      if (logBox) {
-        this.logStream.onData((logEntry: core.LogEntry) => {  
-          logBox.innerHTML += logEntry.message + "<br/>"
-        })
-      }
-    }
-  }
-
-  async componentWillUnmount(): Promise<void> {
-    if (this.logStream) {
-      this.logStream.close()
-    }
-  }
-
-  render(): React.ReactElement {
-    const event = this.props.event
-    return (
-      <div>
-        <Tabs defaultActiveKey="script" className="mb-3">
-          { event?.git ? <Tab eventKey="gitInitializer" title="Git Initializer"><div className="box">Placeholder</div></Tab> : null }
-          <Tab eventKey="script" title="Script">
-            <div id="logBox" className="box"/>
-          </Tab>
-        </Tabs>
       </div>
     )
   }
