@@ -13,7 +13,6 @@ import Nav from "react-bootstrap/Nav"
 
 import getClient from "./Client"
 import LogStreamer from "./LogStreamer"
-import WorkerPhaseIcon from "./WorkerPhaseIcon"
 import JobPhaseIcon from "./JobPhaseIcon"
 
 SyntaxHighlighter.registerLanguage('yaml', yamlSyntax)
@@ -56,27 +55,9 @@ class Event extends React.Component<EventProps, EventState> {
           <Tab eventKey="yaml" title="YAML">
             <EventYAML event={event}/>
           </Tab>
-          <Tab eventKey="logs" title="Logs">
-            <Tab.Container defaultActiveKey="script">
-              <Row>
-                <Col sm={3}>
-                  <Nav variant="pills" className="flex-column">
-                    { event.git ? <Nav.Item><Nav.Link eventKey="gitInitializer"><WorkerPhaseIcon phase={event.worker?.status.phase}/> Git Initializer</Nav.Link></Nav.Item> : null }
-                    <Nav.Item>
-                      <Nav.Link eventKey="script"><WorkerPhaseIcon phase={event.worker?.status.phase}/> Script</Nav.Link>
-                    </Nav.Item>
-                  </Nav>
-                </Col>
-                <Col sm={9}>
-                  <Tab.Content>
-                    { event.git ? <Tab.Pane eventKey="gitInitializer" mountOnEnter><LogStreamer event={event} containerName="vcs" logKey="vcs"/></Tab.Pane> : null }
-                    <Tab.Pane eventKey="script" mountOnEnter>
-                      <LogStreamer event={event} logKey={event?.metadata?.id || ""}/>
-                    </Tab.Pane>
-                  </Tab.Content>
-                </Col>
-              </Row>
-            </Tab.Container>
+          { event.git ? <Tab eventKey="git-initializer-logs" title="Git Initializer Logs"><LogStreamer event={event} containerName="vcs" logKey="vcs"/></Tab> : null }
+          <Tab eventKey="worker-logs" title="Worker Logs">
+            <LogStreamer event={event} logKey={event?.metadata?.id || ""}/>
           </Tab>
           <Tab eventKey="jobs" title="Jobs">
             <JobList event={event}/>
@@ -135,13 +116,19 @@ class JobListItem extends React.Component<JobListItemProps> {
     const event = this.props.event
     const job = this.props.job
     return (
-      <Tabs defaultActiveKey={job.name} className="mb-3" mountOnEnter={true}>
-        <Tab eventKey={job.name} title="Primary Container">
+      <Tabs defaultActiveKey="summary" className="mb-3" mountOnEnter={true}>
+        <Tab eventKey="summary" title="Summary">
+          <div className="box">Placeholder</div>
+        </Tab>
+        <Tab eventKey="yaml" title="YAML">
+          <div className="box">Placeholder</div>
+        </Tab>
+        <Tab eventKey={job.name} title="Primary Container Logs">
           <LogStreamer event={event} jobName={job.name} logKey={job.name}/>
         </Tab>
         {
           Object.keys(job.spec.sidecarContainers || {}).map((containerName: string) => (
-            <Tab eventKey={containerName} title={containerName}>
+            <Tab eventKey={containerName} title={`${containerName} logs`}>
               <LogStreamer event={event} jobName={job.name} containerName={containerName} logKey={`${job.name}-${containerName}`}/>
             </Tab>
           ))

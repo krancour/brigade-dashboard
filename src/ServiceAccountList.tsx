@@ -4,6 +4,7 @@ import { authn, meta } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
 import withPagingControl from "./PagingControl"
+import LockIcon from "./LockIcon"
 
 const serviceAccountListPageSize = 10
 const itemRefreshInterval = 5000
@@ -46,10 +47,9 @@ class ServiceAccountListItem extends React.Component<ServiceAccountListItemProps
 
   render(): React.ReactElement {
     const linkTo = "/service-accounts/" + this.props.serviceAccount.metadata.id
-    const status = this.state.locked ? "LOCKED" : "UNLOCKED"
     return (
       <div className="box">
-        {status}&nbsp;&nbsp;<Link to={linkTo}>{this.props.serviceAccount.metadata.id}</Link>
+        <LockIcon locked={this.state.locked}/>&nbsp;&nbsp;<Link to={linkTo}>{this.props.serviceAccount.metadata.id}</Link>
       </div>
     )
   }

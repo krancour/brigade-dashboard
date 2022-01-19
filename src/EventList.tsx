@@ -4,6 +4,7 @@ import { core, meta } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
 import withPagingControl from "./PagingControl"
+import WorkerPhaseIcon from "./WorkerPhaseIcon"
 
 const eventListPageSize = 10
 const itemRefreshInterval = 5000
@@ -46,10 +47,10 @@ class EventListItem extends React.Component<EventListItemProps, EventListItemSta
 
   render(): React.ReactElement {
     const linkTo = "/events/" + this.props.event.metadata?.id
-    const status = this.state.workerPhase ? this.state.workerPhase : core.WorkerPhase
     return (
       <div className="box">
-        {status}&nbsp;&nbsp;<Link to={linkTo}>{this.props.event.metadata?.id}</Link>
+        <WorkerPhaseIcon phase={this.state.workerPhase}/>&nbsp;&nbsp;
+        <Link to={linkTo}>{this.props.event.metadata?.id}</Link>
       </div>
     )
   }

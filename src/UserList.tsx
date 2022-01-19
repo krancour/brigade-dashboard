@@ -4,6 +4,7 @@ import { authn, meta } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
 import withPagingControl from "./PagingControl"
+import LockIcon from "./LockIcon"
 
 const userListPageSize = 10
 const itemRefreshInterval = 5000
@@ -46,10 +47,9 @@ class UserListItem extends React.Component<UserListItemProps, UserListItemState>
 
   render(): React.ReactElement {
     const linkTo = "/users/" + this.props.user.metadata.id
-    const status = this.state.locked ? "LOCKED" : "UNLOCKED"
     return (
       <div className="box">
-        {status}&nbsp;&nbsp;<Link to={linkTo}>{this.props.user.metadata.id}</Link>
+        <LockIcon locked={this.state.locked}/>&nbsp;&nbsp;<Link to={linkTo}>{this.props.user.metadata.id}</Link>
       </div>
     )
   }
