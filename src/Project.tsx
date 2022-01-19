@@ -1,17 +1,14 @@
 import React from "react"
 import { useParams } from "react-router-dom"
 import { core } from "@brigadecore/brigade-sdk"
-import yaml from "js-yaml"
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter"
-import yamlSyntax from "react-syntax-highlighter/dist/esm/languages/hljs/yaml"
 import docco from "react-syntax-highlighter/dist/esm/styles/hljs/docco"
 import Tabs from "react-bootstrap/Tabs"
 import Tab from "react-bootstrap/Tab"
 
 import getClient from "./Client"
 import EventList from "./EventList"
-
-SyntaxHighlighter.registerLanguage('yaml', yamlSyntax)
+import YAMLViewer from "./YAMLViewer"
 
 interface ProjectProps {
   id: string
@@ -47,7 +44,7 @@ class Project extends React.Component<ProjectProps, ProjectState> {
             <ProjectSummary project={project}/>
           </Tab>
           <Tab eventKey="yaml" title="YAML">
-            <ProjectYAML project={project}/>
+            <YAMLViewer object={project}/>
           </Tab>
           <Tab eventKey="events" title="Events">
             <EventList selector={{projectID: project.metadata.id}}/>
@@ -72,25 +69,6 @@ class ProjectSummary extends React.Component<ProjectSummaryProps> {
 
   render(): React.ReactElement {
     return <div className="box">Placeholder</div>
-  }
-
-}
-
-interface ProjectYAMLProps {
-  project?: core.Project
-}
-
-class ProjectYAML extends React.Component<ProjectYAMLProps> {
-
-  render(): React.ReactElement {
-    const project = this.props.project
-    return (
-      <div className="box">
-        <SyntaxHighlighter language="yaml" style={docco}>
-          {yaml.dump(project)}
-        </SyntaxHighlighter>
-      </div>
-    )
   }
 
 }

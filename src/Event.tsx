@@ -1,10 +1,6 @@
 import React from "react"
 import { useParams } from "react-router-dom"
 import { core } from "@brigadecore/brigade-sdk"
-import yaml from "js-yaml"
-import { Light as SyntaxHighlighter } from "react-syntax-highlighter"
-import yamlSyntax from "react-syntax-highlighter/dist/esm/languages/hljs/yaml"
-import docco from "react-syntax-highlighter/dist/esm/styles/hljs/docco"
 import Tabs from "react-bootstrap/Tabs"
 import Tab from "react-bootstrap/Tab"
 import Row from "react-bootstrap/Row"
@@ -14,8 +10,7 @@ import Nav from "react-bootstrap/Nav"
 import getClient from "./Client"
 import LogStreamer from "./LogStreamer"
 import JobPhaseIcon from "./JobPhaseIcon"
-
-SyntaxHighlighter.registerLanguage('yaml', yamlSyntax)
+import YAMLViewer from "./YAMLViewer"
 
 interface EventProps {
   id: string
@@ -53,7 +48,7 @@ class Event extends React.Component<EventProps, EventState> {
             <EventSummary event={event}/>
           </Tab>
           <Tab eventKey="yaml" title="YAML">
-            <EventYAML event={event}/>
+            <YAMLViewer object={event}/>
           </Tab>
           { event.git ? <Tab eventKey="git-initializer-logs" title="Git Initializer Logs"><LogStreamer event={event} containerName="vcs" logKey="vcs"/></Tab> : null }
           <Tab eventKey="worker-logs" title="Worker Logs">
@@ -82,25 +77,6 @@ class EventSummary extends React.Component<EventSummaryProps> {
 
   render(): React.ReactElement {
     return <div className="box">Placeholder</div>
-  }
-
-}
-
-interface EventYAMLProps {
-  event?: core.Event
-}
-
-class EventYAML extends React.Component<EventYAMLProps> {
-
-  render(): React.ReactElement {
-    const event = this.props.event
-    return (
-      <div className="box">
-        <SyntaxHighlighter language="yaml" style={docco}>
-          {yaml.dump(event)}
-        </SyntaxHighlighter>
-      </div>
-    )
   }
 
 }
