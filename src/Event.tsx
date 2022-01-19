@@ -13,6 +13,8 @@ import Nav from "react-bootstrap/Nav"
 
 import getClient from "./Client"
 import LogStreamer from "./LogStreamer"
+import WorkerPhaseIcon from "./WorkerPhaseIcon"
+import JobPhaseIcon from "./JobPhaseIcon"
 
 SyntaxHighlighter.registerLanguage('yaml', yamlSyntax)
 
@@ -59,9 +61,9 @@ class Event extends React.Component<EventProps, EventState> {
               <Row>
                 <Col sm={3}>
                   <Nav variant="pills" className="flex-column">
-                    { event.git ? <Nav.Item><Nav.Link eventKey="gitInitializer">Git Initializer</Nav.Link></Nav.Item> : null }
+                    { event.git ? <Nav.Item><Nav.Link eventKey="gitInitializer"><WorkerPhaseIcon phase={event.worker?.status.phase}/> Git Initializer</Nav.Link></Nav.Item> : null }
                     <Nav.Item>
-                      <Nav.Link eventKey="script">Script</Nav.Link>
+                      <Nav.Link eventKey="script"><WorkerPhaseIcon phase={event.worker?.status.phase}/> Script</Nav.Link>
                     </Nav.Item>
                   </Nav>
                 </Col>
@@ -171,7 +173,8 @@ class JobList extends React.Component<JobListProps> {
               {
                 jobs.map((job: core.Job) => (
                   <Nav.Item>
-                    <Nav.Link eventKey={job.name}>{job.name}</Nav.Link>
+                    {/* TODO: Fix use of any below after https://github.com/brigadecore/brigade-sdk-for-js/pull/59 is taken care of and SDK v2.1.0 is released. */}
+                    <Nav.Link eventKey={job.name}><JobPhaseIcon phase={(job as any).status?.phase}/> {job.name}</Nav.Link>
                   </Nav.Item>
                 ))
               }
