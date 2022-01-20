@@ -19,6 +19,9 @@ interface EventListItemState {
 
 class EventListItem extends React.Component<EventListItemProps, EventListItemState> {
 
+  // TODO: Let's not have every list item refresh itself. That creates problems
+  // if/when one of the items in the list is deleted. Instead, let's make the
+  // PagingControl automatically refresh the current page periodically.
   timer?: NodeJS.Timer
 
   constructor(props: EventListItemProps) {
