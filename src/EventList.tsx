@@ -5,56 +5,24 @@ import { core, meta } from "@brigadecore/brigade-sdk"
 import getClient from "./Client"
 import withPagingControl from "./PagingControl"
 import WorkerPhaseIcon from "./WorkerPhaseIcon"
+import Box from "./Box"
 
 const eventListPageSize = 10
-const itemRefreshInterval = 5000
 
 interface EventListItemProps {
   event: core.Event
 }
 
-interface EventListItemState {
-  workerPhase?: core.WorkerPhase
-}
-
-class EventListItem extends React.Component<EventListItemProps, EventListItemState> {
-
-  // TODO: Let's not have every list item refresh itself. That creates problems
-  // if/when one of the items in the list is deleted. Instead, let's make the
-  // PagingControl automatically refresh the current page periodically.
-  timer?: NodeJS.Timer
-
-  constructor(props: EventListItemProps) {
-    super(props)
-    this.state = {
-      workerPhase: props.event.worker?.status.phase
-    }
-  }
-
-  refresh = async () => {
-    this.setState({
-      workerPhase: await (await getClient().core().events().get(this.props.event.metadata?.id || "")).worker?.status.phase
-    })
-  }
-
-  componentDidMount(): void {
-    this.refresh()
-    this.timer = setInterval(this.refresh, itemRefreshInterval)
-  }
-
-  componentWillUnmount(): void {
-    if (this.timer) {
-      clearInterval(this.timer)
-    }
-  }
+class EventListItem extends React.Component<EventListItemProps> {
 
   render(): React.ReactElement {
-    const linkTo = "/events/" + this.props.event.metadata?.id
+    const event = this.props.event
+    const linkTo = "/events/" + event.metadata?.id
     return (
-      <div className="box">
-        <WorkerPhaseIcon phase={this.state.workerPhase}/>&nbsp;&nbsp;
+      <Box>
+        <WorkerPhaseIcon phase={event.worker?.status.phase}/>&nbsp;&nbsp;
         <Link to={linkTo}>{this.props.event.metadata?.id}</Link>
-      </div>
+      </Box>
     )
   }
 }

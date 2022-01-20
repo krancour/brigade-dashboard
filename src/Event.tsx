@@ -6,11 +6,13 @@ import Tab from "react-bootstrap/Tab"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Nav from "react-bootstrap/Nav"
+import Alert from "react-bootstrap/Alert"
 
 import getClient from "./Client"
 import LogStreamer from "./LogStreamer"
 import JobPhaseIcon from "./JobPhaseIcon"
 import YAMLViewer from "./YAMLViewer"
+import Placeholder from "./Placeholder"
 
 interface EventProps {
   id: string
@@ -20,9 +22,8 @@ interface EventState {
   event?: core.Event
 }
 
+// TODO: Need to make this component auto-refresh
 class Event extends React.Component<EventProps, EventState> {
-
-  // TODO: Make the event page auto-refresh
 
   constructor(props: EventProps) {
     super(props)
@@ -40,7 +41,6 @@ class Event extends React.Component<EventProps, EventState> {
     if (!event) {
       return <div/>
     }
-    // TODO: Break these tabs up into two sections
     return (
       <div>
         <h1>{event?.metadata?.id}</h1>
@@ -51,12 +51,14 @@ class Event extends React.Component<EventProps, EventState> {
           <Tab eventKey="yaml" title="YAML">
             <YAMLViewer object={event}/>
           </Tab>
+        </Tabs>
+        <Tabs defaultActiveKey="worker-logs" className="mb-3" mountOnEnter={true}>
           { event.git ? <Tab eventKey="git-initializer-logs" title="Git Initializer Logs"><LogStreamer event={event} containerName="vcs" logKey="vcs"/></Tab> : null }
           <Tab eventKey="worker-logs" title="Worker Logs">
             <LogStreamer event={event} logKey={event?.metadata?.id || ""}/>
           </Tab>
           <Tab eventKey="jobs" title="Jobs">
-            <JobList event={event}/>
+            <JobsTabPane event={event}/>
           </Tab>
         </Tabs>
       </div>
@@ -77,63 +79,60 @@ interface EventSummaryProps {
 class EventSummary extends React.Component<EventSummaryProps> {
 
   render(): React.ReactElement {
-    // TODO: Create a placeholder component that uses an alert box
-    // https://react-bootstrap.github.io/components/alerts/
-    return <div className="box">Placeholder</div>
+    return <Placeholder/>
   }
 
 }
 
-// TODO: This might be easier to mentally map to the UI if it is renamed to JobTabPaneProps.
-interface JobListItemProps {
+interface JobTabPaneProps {
   event: core.Event
   job: core.Job
 }
 
-// TODO: This might be easier to mentally map to the UI if it is renamed to JobTabPane.
-class JobListItem extends React.Component<JobListItemProps> {
+class JobTabPane extends React.Component<JobTabPaneProps> {
 
   render(): React.ReactElement {
     const event = this.props.event
     const job = this.props.job
-    // TODO: Break these tabs up into two sections
     return (
-      <Tabs defaultActiveKey="summary" className="mb-3" mountOnEnter={true}>
-        <Tab eventKey="summary" title="Summary">
-          <div className="box">Placeholder</div>
-        </Tab>
-        <Tab eventKey="yaml" title="YAML">
-          <YAMLViewer object={job}/>
-        </Tab>
-        <Tab eventKey={job.name} title="Primary Container Logs">
-          <LogStreamer event={event} jobName={job.name} logKey={job.name}/>
-        </Tab>
-        {
-          Object.keys(job.spec.sidecarContainers || {}).map((containerName: string) => (
-            <Tab eventKey={containerName} title={`${containerName} logs`}>
-              <LogStreamer event={event} jobName={job.name} containerName={containerName} logKey={`${job.name}-${containerName}`}/>
-            </Tab>
-          ))
-        }
-      </Tabs>
+      <div>
+        <Tabs defaultActiveKey="summary" className="mb-3" mountOnEnter={true}>
+          <Tab eventKey="summary" title="Summary">
+            <Placeholder/>
+          </Tab>
+          <Tab eventKey="yaml" title="YAML">
+            <YAMLViewer object={job}/>
+          </Tab>
+        </Tabs>
+        <Tabs defaultActiveKey={job.name} className="mb-3" mountOnEnter={true}>
+          <Tab eventKey={job.name} title="Primary Container Logs">
+            <LogStreamer event={event} jobName={job.name} logKey={job.name}/>
+          </Tab>
+          {
+            Object.keys(job.spec.sidecarContainers || {}).map((containerName: string) => (
+              <Tab eventKey={containerName} title={`${containerName} logs`}>
+                <LogStreamer event={event} jobName={job.name} containerName={containerName} logKey={`${job.name}-${containerName}`}/>
+              </Tab>
+            ))
+          }
+        </Tabs>
+      </div>
     )
   }
 
 }
 
-// TODO: This might be easier to mentally map to the UI if it is renamed to JobTabsProps.
-interface JobListProps {
+interface JobsTabPaneProps {
   event: core.Event
 }
 
-// TODO: This might be easier to mentally map to the UI if it is renamed to JobTabs.
-class JobList extends React.Component<JobListProps> {
+class JobsTabPane extends React.Component<JobsTabPaneProps> {
 
   render(): React.ReactElement {
     const event = this.props.event
     const jobs = event.worker?.jobs
     if (!jobs || jobs.length === 0) {
-      return <div className="box">There are no jobs associated with this event.</div>
+      return <Alert variant="primary">There are no jobs associated with this event.</Alert>
     }
     const defaultJobName = jobs[0].name
     return (
@@ -156,7 +155,7 @@ class JobList extends React.Component<JobListProps> {
               {
                 jobs.map((job: core.Job) => (
                   <Tab.Pane eventKey={job.name} mountOnEnter>
-                    <JobListItem key={job.name} event={event} job={job}/>
+                    <JobTabPane key={job.name} event={event} job={job}/>
                   </Tab.Pane>
                 ))
               }

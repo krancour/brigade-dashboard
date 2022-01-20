@@ -5,55 +5,23 @@ import { authn, meta } from "@brigadecore/brigade-sdk"
 import getClient from "./Client"
 import withPagingControl from "./PagingControl"
 import LockIcon from "./LockIcon"
+import Box from "./Box"
 
 const userListPageSize = 10
-const itemRefreshInterval = 5000
 
 interface UserListItemProps {
   user: authn.User
 }
 
-interface UserListItemState {
-  locked: boolean
-}
-
-class UserListItem extends React.Component<UserListItemProps, UserListItemState> {
-
-  // TODO: Let's not have every list item refresh itself. That creates problems
-  // if/when one of the items in the list is deleted. Instead, let's make the
-  // PagingControl automatically refresh the current page periodically.
-  timer?: NodeJS.Timer
-
-  constructor(props: UserListItemProps) {
-    super(props)
-    this.state = {
-      locked: props.user.locked ? true : false
-    }
-  }
-
-  refresh = async () => {
-    this.setState({
-      locked: (await getClient().authn().users().get(this.props.user.metadata.id)).locked ? true : false
-    })
-  }
-
-  componentDidMount(): void {
-    this.refresh()
-    this.timer = setInterval(this.refresh, itemRefreshInterval)
-  }
-
-  componentWillUnmount(): void {
-    if (this.timer) {
-      clearInterval(this.timer)
-    }
-  }
+class UserListItem extends React.Component<UserListItemProps> {
 
   render(): React.ReactElement {
+    const user = this.props.user
     const linkTo = "/users/" + this.props.user.metadata.id
     return (
-      <div className="box">
-        <LockIcon locked={this.state.locked}/>&nbsp;&nbsp;<Link to={linkTo}>{this.props.user.metadata.id}</Link>
-      </div>
+      <Box>
+        <LockIcon locked={user.locked ? true : false}/>&nbsp;&nbsp;<Link to={linkTo}>{this.props.user.metadata.id}</Link>
+      </Box>
     )
   }
 }

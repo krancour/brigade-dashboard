@@ -5,31 +5,15 @@ import { authn, meta } from "@brigadecore/brigade-sdk"
 import getClient from "./Client"
 import withPagingControl from "./PagingControl"
 import LockIcon from "./LockIcon"
+import Box from "./Box"
 
 const serviceAccountListPageSize = 10
-const itemRefreshInterval = 5000
 
 interface ServiceAccountListItemProps {
   serviceAccount: authn.ServiceAccount
 }
 
-interface ServiceAccountListItemState {
-  locked: boolean
-}
-
-class ServiceAccountListItem extends React.Component<ServiceAccountListItemProps, ServiceAccountListItemState> {
-
-  // TODO: Let's not have every list item refresh itself. That creates problems
-  // if/when one of the items in the list is deleted. Instead, let's make the
-  // PagingControl automatically refresh the current page periodically.
-  timer?: NodeJS.Timer
-
-  constructor(props: ServiceAccountListItemProps) {
-    super(props)
-    this.state = {
-      locked: props.serviceAccount.locked ? true : false
-    }
-  }
+class ServiceAccountListItem extends React.Component<ServiceAccountListItemProps> {
 
   refresh = async () => {
     this.setState({
@@ -39,21 +23,15 @@ class ServiceAccountListItem extends React.Component<ServiceAccountListItemProps
 
   componentDidMount(): void {
     this.refresh()
-    this.timer = setInterval(this.refresh, itemRefreshInterval)
-  }
-
-  componentWillUnmount(): void {
-    if (this.timer) {
-      clearInterval(this.timer)
-    }
   }
 
   render(): React.ReactElement {
-    const linkTo = "/service-accounts/" + this.props.serviceAccount.metadata.id
+    const serviceAccount = this.props.serviceAccount
+    const linkTo = "/service-accounts/" + serviceAccount.metadata.id
     return (
-      <div className="box">
-        <LockIcon locked={this.state.locked}/>&nbsp;&nbsp;<Link to={linkTo}>{this.props.serviceAccount.metadata.id}</Link>
-      </div>
+      <Box>
+        <LockIcon locked={serviceAccount.locked ? true : false}/>&nbsp;&nbsp;<Link to={linkTo}>{this.props.serviceAccount.metadata.id}</Link>
+      </Box>
     )
   }
 }

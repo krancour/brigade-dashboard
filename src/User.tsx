@@ -5,6 +5,7 @@ import Tabs from "react-bootstrap/Tabs"
 import Tab from "react-bootstrap/Tab"
 
 import getClient from "./Client"
+import Placeholder from "./Placeholder"
 
 interface UserProps {
   id: string
@@ -14,6 +15,7 @@ interface UserState {
   user?: authn.User
 }
 
+// TODO: Need to make this component auto-refresh
 class User extends React.Component<UserProps, UserState> {
 
   constructor(props: UserProps) {
@@ -37,7 +39,7 @@ class User extends React.Component<UserProps, UserState> {
             <UserSummary user={user}/>
           </Tab>
           <Tab eventKey="permissions" title="Permissions">
-            <div className="box">Placeholder</div>
+            <Placeholder/>
           </Tab>
         </Tabs>
       </div>
@@ -58,7 +60,7 @@ interface UserSummaryProps {
 class UserSummary extends React.Component<UserSummaryProps> {
 
   render(): React.ReactElement {
-    return <div className="box">Placeholder</div>
+    return <Placeholder/>
   }
 
 }

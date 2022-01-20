@@ -21,8 +21,6 @@ export default class LogStreamer extends React.Component<LogStreamerProps> {
   }
 
   async componentDidMount(): Promise<void> {
-    // TODO: Delete this next line
-    // alert("getting log stream")
     const logsClient = getClient().core().events().logs()
     const event = this.props.event
     if (event.metadata?.id) {

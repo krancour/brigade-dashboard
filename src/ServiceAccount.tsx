@@ -5,6 +5,7 @@ import Tabs from "react-bootstrap/Tabs"
 import Tab from "react-bootstrap/Tab"
 
 import getClient from "./Client"
+import Placeholder from "./Placeholder"
 
 interface ServiceAccountProps {
   id: string
@@ -14,6 +15,7 @@ interface ServiceAccountState {
   serviceAccount?: authn.ServiceAccount
 }
 
+// TODO: Need to make this component auto-refresh
 class ServiceAccount extends React.Component<ServiceAccountProps, ServiceAccountState> {
 
   constructor(props: ServiceAccountProps) {
@@ -37,7 +39,7 @@ class ServiceAccount extends React.Component<ServiceAccountProps, ServiceAccount
             <ServiceAccountSummary serviceAccount={serviceAccount}/>
           </Tab>
           <Tab eventKey="permissions" title="Permissions">
-            <div className="box">Placeholder</div>
+            <Placeholder/>
           </Tab>
         </Tabs>
       </div>
@@ -58,7 +60,7 @@ interface ServiceAccountSummaryProps {
 class ServiceAccountSummary extends React.Component<ServiceAccountSummaryProps> {
 
   render(): React.ReactElement {
-    return <div className="box">Placeholder</div>
+    return <Placeholder/>
   }
 
 }

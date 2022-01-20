@@ -2,6 +2,7 @@ import React from "react"
 import Button from "react-bootstrap/Button"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
+import Alert from "react-bootstrap/Alert"
 
 interface Pageable {
   items: unknown[]
@@ -21,6 +22,7 @@ interface PagingControlState {
   nextContinueVal?: string
 }
 
+// TODO: Need to make this thing auto-refresh
 export default function withPagingControl(WrappedComponent: typeof React.Component, fetch: (continueVal: string, selector?: any) => Promise<Pageable>): typeof React.Component {
 
   return class extends React.Component<PagingControlProps, PagingControlState> {
@@ -79,9 +81,7 @@ export default function withPagingControl(WrappedComponent: typeof React.Compone
     render(): React.ReactElement {
       const items = this.state.items
       if (items.length == 0) {
-        return (
-          <div className="box">Stand by...</div>
-        )
+        return <Alert variant="primary">Stand by...</Alert>
       }
       const hasPrev = this.state.prevContinueVals.length > 0
       const hasMore = this.state.nextContinueVal ? true : false

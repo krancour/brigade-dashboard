@@ -3,7 +3,8 @@ import { Outlet } from "react-router-dom"
 import Navbar from "react-bootstrap/Navbar"
 import Container from "react-bootstrap/Container"
 import Nav from "react-bootstrap/Nav"
-import { LinkContainer } from 'react-router-bootstrap'
+import { LinkContainer } from "react-router-bootstrap"
+import Alert from "react-bootstrap/Alert"
 
 import getClient from "./Client"
 import * as consts from "./Consts"
@@ -77,9 +78,7 @@ export default class App extends React.Component<AppProps, AppState> {
         </header>
         <main>
           <Container>
-            {/* TODO: Use an alert box here */}
-            {/* https://react-bootstrap.github.io/components/alerts/ */}
-            { loggedIn ? <Outlet/> : <div className="box">Log in to see this content.</div> }
+            { loggedIn ? <Outlet/> : <Alert variant="primary">Log in to see this content.</Alert> }
           </Container>
         </main>
       </Fragment>

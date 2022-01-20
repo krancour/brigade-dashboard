@@ -9,6 +9,7 @@ import Tab from "react-bootstrap/Tab"
 import getClient from "./Client"
 import EventList from "./EventList"
 import YAMLViewer from "./YAMLViewer"
+import Placeholder from "./Placeholder"
 
 interface ProjectProps {
   id: string
@@ -18,6 +19,7 @@ interface ProjectState {
   project?: core.Project
 }
 
+// TODO: Need to make this component auto-refresh
 class Project extends React.Component<ProjectProps, ProjectState> {
 
   constructor(props: ProjectProps) {
@@ -68,7 +70,7 @@ interface ProjectSummaryProps {
 class ProjectSummary extends React.Component<ProjectSummaryProps> {
 
   render(): React.ReactElement {
-    return <div className="box">Placeholder</div>
+    return <Placeholder/>
   }
 
 }
