@@ -77,6 +77,8 @@ export default class App extends React.Component<AppProps, AppState> {
         </header>
         <main>
           <Container>
+            {/* TODO: Use an alert box here */}
+            {/* https://react-bootstrap.github.io/components/alerts/ */}
             { loggedIn ? <Outlet/> : <div className="box">Log in to see this content.</div> }
           </Container>
         </main>

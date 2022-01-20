@@ -62,6 +62,7 @@ interface ServiceAccountListProps {
   items: authn.ServiceAccount[]
 }
 
+// TODO: Make this use a table
 class ServiceAccountList extends React.Component<ServiceAccountListProps> {
 
   render(): React.ReactElement {

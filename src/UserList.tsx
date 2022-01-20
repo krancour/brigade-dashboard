@@ -62,6 +62,7 @@ interface UserListProps {
   items: authn.User[]
 }
 
+// TODO: Make this use a table
 class UserList extends React.Component<UserListProps> {
 
   render(): React.ReactElement {

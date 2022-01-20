@@ -64,6 +64,7 @@ interface EventListProps {
   projectID?: string
 }
 
+// TODO: Make this use a table
 class EventList extends React.Component<EventListProps> {
 
   render(): React.ReactElement {

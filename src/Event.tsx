@@ -40,6 +40,7 @@ class Event extends React.Component<EventProps, EventState> {
     if (!event) {
       return <div/>
     }
+    // TODO: Break these tabs up into two sections
     return (
       <div>
         <h1>{event?.metadata?.id}</h1>
@@ -76,21 +77,26 @@ interface EventSummaryProps {
 class EventSummary extends React.Component<EventSummaryProps> {
 
   render(): React.ReactElement {
+    // TODO: Create a placeholder component that uses an alert box
+    // https://react-bootstrap.github.io/components/alerts/
     return <div className="box">Placeholder</div>
   }
 
 }
 
+// TODO: This might be easier to mentally map to the UI if it is renamed to JobTabPaneProps.
 interface JobListItemProps {
   event: core.Event
   job: core.Job
 }
 
+// TODO: This might be easier to mentally map to the UI if it is renamed to JobTabPane.
 class JobListItem extends React.Component<JobListItemProps> {
 
   render(): React.ReactElement {
     const event = this.props.event
     const job = this.props.job
+    // TODO: Break these tabs up into two sections
     return (
       <Tabs defaultActiveKey="summary" className="mb-3" mountOnEnter={true}>
         <Tab eventKey="summary" title="Summary">
@@ -115,10 +121,12 @@ class JobListItem extends React.Component<JobListItemProps> {
 
 }
 
+// TODO: This might be easier to mentally map to the UI if it is renamed to JobTabsProps.
 interface JobListProps {
   event: core.Event
 }
 
+// TODO: This might be easier to mentally map to the UI if it is renamed to JobTabs.
 class JobList extends React.Component<JobListProps> {
 
   render(): React.ReactElement {

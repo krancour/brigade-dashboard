@@ -73,6 +73,7 @@ interface ProjectListProps {
   items: core.Project[]
 }
 
+// TODO: Make this use a table
 class ProjectList extends React.Component<ProjectListProps> {
 
   render(): React.ReactElement {
