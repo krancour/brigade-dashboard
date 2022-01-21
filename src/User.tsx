@@ -1,6 +1,5 @@
 import React from "react"
 
-import Spinner from "react-bootstrap/Spinner"
 import Tab from "react-bootstrap/Tab"
 import Tabs from "react-bootstrap/Tabs"
 
@@ -10,6 +9,7 @@ import { authn } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
 import Placeholder from "./Placeholder"
+import Spinner from "./Spinner"
 
 interface UserProps {
   id: string
@@ -36,7 +36,7 @@ class User extends React.Component<UserProps, UserState> {
   render(): React.ReactElement {
     const user = this.state.user
     if (!user) {
-      return <Spinner animation="border"/>
+      return <Spinner/>
     }
     return (
       <div>

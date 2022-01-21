@@ -4,7 +4,6 @@ import Alert from "react-bootstrap/Alert"
 import Col from "react-bootstrap/Col"
 import Nav from "react-bootstrap/Nav"
 import Row from "react-bootstrap/Row"
-import Spinner from "react-bootstrap/Spinner"
 import Tab from "react-bootstrap/Tab"
 import Tabs from "react-bootstrap/Tabs"
 
@@ -16,6 +15,7 @@ import getClient from "./Client"
 import JobPhaseIcon from "./JobPhaseIcon"
 import LogStreamer from "./LogStreamer"
 import Placeholder from "./Placeholder"
+import Spinner from "./Spinner"
 import YAMLViewer from "./YAMLViewer"
 
 interface EventProps {
@@ -43,7 +43,7 @@ class Event extends React.Component<EventProps, EventState> {
   render(): React.ReactElement {
     const event = this.state.event
     if (!event) {
-      return <Spinner animation="border"/>
+      return <Spinner/>
     }
     return (
       <div>

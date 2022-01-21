@@ -1,6 +1,5 @@
 import React from "react"
 
-import Spinner from "react-bootstrap/Spinner"
 import Tab from "react-bootstrap/Tab"
 import Tabs from "react-bootstrap/Tabs"
 
@@ -10,6 +9,7 @@ import { authn } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
 import Placeholder from "./Placeholder"
+import Spinner from "./Spinner"
 
 interface ServiceAccountProps {
   id: string
@@ -36,7 +36,7 @@ class ServiceAccount extends React.Component<ServiceAccountProps, ServiceAccount
   render(): React.ReactElement {
     const serviceAccount = this.state.serviceAccount
     if (!serviceAccount) {
-      return <Spinner animation="border"/>
+      return <Spinner/>
     }
     return (
       <div>

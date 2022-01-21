@@ -4,7 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React from "react"
 
 import Button from "react-bootstrap/Button"
-import Spinner from "react-bootstrap/Spinner"
+
+import Spinner from "./Spinner"
 
 interface Pageable {
   items: unknown[]
@@ -83,7 +84,7 @@ export default function withPagingControl(WrappedComponent: typeof React.Compone
     render(): React.ReactElement {
       const items = this.state.items
       if (items.length == 0) {
-        return <Spinner animation="border"/>
+        return <Spinner/>
       }
       const hasPrev = this.state.prevContinueVals.length > 0
       const hasMore = this.state.nextContinueVal ? true : false
