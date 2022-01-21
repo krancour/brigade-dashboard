@@ -141,6 +141,14 @@ class JobTabPane extends React.Component<JobTabPaneProps> {
   render(): React.ReactElement {
     const event = this.props.event
     const job = this.props.job
+    let usesSource = job.spec.primaryContainer.sourceMountPath ? true : false
+    if (!usesSource && job.spec.sidecarContainers) {
+      Object.keys(job.spec.sidecarContainers).forEach((containerName: string) => {
+        if (job.spec.sidecarContainers && job.spec.sidecarContainers[containerName] && job.spec.sidecarContainers[containerName].sourceMountPath) {
+          usesSource = true
+        }
+      })
+    }
     return (
       <div>
         <h3>{job.name}</h3>
@@ -151,6 +159,13 @@ class JobTabPane extends React.Component<JobTabPaneProps> {
           <Tab eventKey="yaml" title="YAML">
             <YAMLViewer object={job}/>
           </Tab>
+          { 
+            usesSource ? (
+              <Tab eventKey="git-initializer-logs" title="Git Initializer Logs">
+                <LogStreamer event={event} jobName={job.name} containerName="vcs" logKey="vcs"/>
+              </Tab>
+            ) : null
+          }
           <Tab eventKey={job.name} title="Primary Container Logs">
             <LogStreamer event={event} jobName={job.name} logKey={job.name}/>
           </Tab>
