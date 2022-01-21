@@ -1,10 +1,12 @@
 import React, { Fragment } from "react"
-import { Outlet } from "react-router-dom"
-import Navbar from "react-bootstrap/Navbar"
+
+import Alert from "react-bootstrap/Alert"
 import Container from "react-bootstrap/Container"
 import Nav from "react-bootstrap/Nav"
+import Navbar from "react-bootstrap/Navbar"
+
 import { LinkContainer } from "react-router-bootstrap"
-import Alert from "react-bootstrap/Alert"
+import { Outlet } from "react-router-dom"
 
 import getClient from "./Client"
 import * as consts from "./Consts"

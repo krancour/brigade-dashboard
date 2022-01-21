@@ -1,7 +1,8 @@
 import React from "react"
+
 import ReactDOM from "react-dom"
+
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import "bootstrap/dist/css/bootstrap.min.css"
 
 import App from './App'
 import Event from "./Event"
@@ -12,6 +13,8 @@ import ServiceAccount from "./ServiceAccount"
 import ServiceAccountList from "./ServiceAccountList"
 import User from "./User"
 import UserList from "./UserList"
+
+import "bootstrap/dist/css/bootstrap.min.css"
 
 ReactDOM.render(
   <React.StrictMode>

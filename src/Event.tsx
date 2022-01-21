@@ -1,19 +1,22 @@
 import React from "react"
-import { useParams } from "react-router-dom"
-import { core } from "@brigadecore/brigade-sdk"
-import Tabs from "react-bootstrap/Tabs"
-import Tab from "react-bootstrap/Tab"
-import Row from "react-bootstrap/Row"
+
+import Alert from "react-bootstrap/Alert"
 import Col from "react-bootstrap/Col"
 import Nav from "react-bootstrap/Nav"
-import Alert from "react-bootstrap/Alert"
+import Row from "react-bootstrap/Row"
 import Spinner from "react-bootstrap/Spinner"
+import Tab from "react-bootstrap/Tab"
+import Tabs from "react-bootstrap/Tabs"
+
+import { useParams } from "react-router-dom"
+
+import { core } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
-import LogStreamer from "./LogStreamer"
 import JobPhaseIcon from "./JobPhaseIcon"
-import YAMLViewer from "./YAMLViewer"
+import LogStreamer from "./LogStreamer"
 import Placeholder from "./Placeholder"
+import YAMLViewer from "./YAMLViewer"
 
 interface EventProps {
   id: string

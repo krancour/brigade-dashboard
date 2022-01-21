@@ -1,14 +1,17 @@
 import React from "react"
-import { useParams } from "react-router-dom"
-import { core } from "@brigadecore/brigade-sdk"
-import Tabs from "react-bootstrap/Tabs"
-import Tab from "react-bootstrap/Tab"
+
 import Spinner from "react-bootstrap/Spinner"
+import Tab from "react-bootstrap/Tab"
+import Tabs from "react-bootstrap/Tabs"
+
+import { useParams } from "react-router-dom"
+
+import { core } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
 import EventList from "./EventList"
-import YAMLViewer from "./YAMLViewer"
 import Placeholder from "./Placeholder"
+import YAMLViewer from "./YAMLViewer"
 
 interface ProjectProps {
   id: string

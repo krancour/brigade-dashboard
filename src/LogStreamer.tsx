@@ -1,4 +1,5 @@
 import React from "react"
+
 import { core } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"

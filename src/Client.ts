@@ -1,7 +1,7 @@
 import { APIClient } from "@brigadecore/brigade-sdk"
 
-import * as consts from "./Consts"
 import * as config from "./Config"
+import * as consts from "./Consts"
 
 export default function getClient(): APIClient {
   const token = localStorage.getItem(consts.brigadeAPITokenKey) || ""

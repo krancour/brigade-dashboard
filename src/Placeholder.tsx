@@ -1,4 +1,5 @@
 import React from "react"
+
 import Alert from "react-bootstrap/Alert"
 
 export default class Placeholder extends React.Component {

@@ -1,7 +1,9 @@
-import React from "react"
-import { core } from "@brigadecore/brigade-sdk"
+import { faCheck } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCheck, faClock, faPlay, faQuestion, faTimes } from "@fortawesome/free-solid-svg-icons"
+
+import React from "react"
+
+import { core } from "@brigadecore/brigade-sdk"
 
 interface WorkerPhaseIconProps {
   phase?: core.WorkerPhase

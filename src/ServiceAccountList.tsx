@@ -1,11 +1,13 @@
 import React from "react"
+
 import { Link } from "react-router-dom"
+
 import { authn, meta } from "@brigadecore/brigade-sdk"
 
-import getClient from "./Client"
-import withPagingControl from "./PagingControl"
-import LockIcon from "./LockIcon"
 import Box from "./Box"
+import getClient from "./Client"
+import LockIcon from "./LockIcon"
+import withPagingControl from "./PagingControl"
 
 const serviceAccountListPageSize = 10
 

@@ -1,9 +1,12 @@
 import React from "react"
-import { useParams } from "react-router-dom"
-import { authn } from "@brigadecore/brigade-sdk"
-import Tabs from "react-bootstrap/Tabs"
-import Tab from "react-bootstrap/Tab"
+
 import Spinner from "react-bootstrap/Spinner"
+import Tab from "react-bootstrap/Tab"
+import Tabs from "react-bootstrap/Tabs"
+
+import { useParams } from "react-router-dom"
+
+import { authn } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
 import Placeholder from "./Placeholder"

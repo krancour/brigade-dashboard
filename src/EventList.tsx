@@ -1,11 +1,13 @@
 import React from "react"
+
 import { Link } from "react-router-dom"
+
 import { core, meta } from "@brigadecore/brigade-sdk"
 
+import Box from "./Box"
 import getClient from "./Client"
 import withPagingControl from "./PagingControl"
 import WorkerPhaseIcon from "./WorkerPhaseIcon"
-import Box from "./Box"
 
 const eventListPageSize = 10
 
