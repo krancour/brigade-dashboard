@@ -48,7 +48,9 @@ export default class LogStreamer extends React.Component<LogStreamerProps> {
   }
 
   render(): React.ReactElement {
-    return <div id={this.logBoxID} className="box"/>
+    return (
+      <pre id={this.logBoxID} className="log-box"/>
+    )
   }
 
 }
