@@ -83,6 +83,13 @@ export default class App extends React.Component<AppProps, AppState> {
             { loggedIn ? <Outlet/> : <Alert variant="primary">Log in to see this content.</Alert> }
           </Container>
         </main>
+        <footer>
+          <Navbar bg="dark" variant="dark" expand="lg" fixed="bottom">
+            <Container>
+              <span className="text-muted">&copy; 2022 The Brigade Authors</span>
+            </Container>
+          </Navbar>
+        </footer>
       </Fragment>
     )
   }
