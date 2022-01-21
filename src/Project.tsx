@@ -1,10 +1,9 @@
 import React from "react"
 import { useParams } from "react-router-dom"
 import { core } from "@brigadecore/brigade-sdk"
-import { Light as SyntaxHighlighter } from "react-syntax-highlighter"
-import docco from "react-syntax-highlighter/dist/esm/styles/hljs/docco"
 import Tabs from "react-bootstrap/Tabs"
 import Tab from "react-bootstrap/Tab"
+import Spinner from "react-bootstrap/Spinner"
 
 import getClient from "./Client"
 import EventList from "./EventList"
@@ -36,7 +35,7 @@ class Project extends React.Component<ProjectProps, ProjectState> {
   render(): React.ReactElement {
     const project = this.state.project
     if (!project) {
-      return <div/>
+      return <Spinner animation="border"/>
     }
     return (
       <div>

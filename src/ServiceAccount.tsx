@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"
 import { authn } from "@brigadecore/brigade-sdk"
 import Tabs from "react-bootstrap/Tabs"
 import Tab from "react-bootstrap/Tab"
+import Spinner from "react-bootstrap/Spinner"
 
 import getClient from "./Client"
 import Placeholder from "./Placeholder"
@@ -31,6 +32,9 @@ class ServiceAccount extends React.Component<ServiceAccountProps, ServiceAccount
 
   render(): React.ReactElement {
     const serviceAccount = this.state.serviceAccount
+    if (!serviceAccount) {
+      return <Spinner animation="border"/>
+    }
     return (
       <div>
         <h1>{serviceAccount?.metadata.id}</h1>

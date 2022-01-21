@@ -7,6 +7,7 @@ import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Nav from "react-bootstrap/Nav"
 import Alert from "react-bootstrap/Alert"
+import Spinner from "react-bootstrap/Spinner"
 
 import getClient from "./Client"
 import LogStreamer from "./LogStreamer"
@@ -39,7 +40,7 @@ class Event extends React.Component<EventProps, EventState> {
   render(): React.ReactElement {
     const event = this.state.event
     if (!event) {
-      return <div/>
+      return <Spinner animation="border"/>
     }
     return (
       <div>

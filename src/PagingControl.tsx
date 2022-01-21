@@ -2,7 +2,7 @@ import React from "react"
 import Button from "react-bootstrap/Button"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
-import Alert from "react-bootstrap/Alert"
+import Spinner from "react-bootstrap/Spinner"
 
 interface Pageable {
   items: unknown[]
@@ -81,7 +81,7 @@ export default function withPagingControl(WrappedComponent: typeof React.Compone
     render(): React.ReactElement {
       const items = this.state.items
       if (items.length == 0) {
-        return <Alert variant="primary">Stand by...</Alert>
+        return <Spinner animation="border"/>
       }
       const hasPrev = this.state.prevContinueVals.length > 0
       const hasMore = this.state.nextContinueVal ? true : false
