@@ -31,7 +31,6 @@ class EventListItem extends React.Component<EventListItemProps> {
 
 interface EventListProps {
   items: core.Event[]
-  projectID?: string
 }
 
 // TODO: Make this use a table

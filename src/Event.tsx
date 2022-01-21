@@ -51,18 +51,15 @@ class Event extends React.Component<EventProps, EventState> {
         <Tabs defaultActiveKey="summary" className="mb-3" mountOnEnter={true}>
           <Tab eventKey="summary" title="Summary">
             <EventSummary event={event}/>
+            <h2>Jobs</h2>
+            <JobTabs event={event}/>
           </Tab>
           <Tab eventKey="yaml" title="YAML">
             <YAMLViewer object={event}/>
           </Tab>
-        </Tabs>
-        <Tabs defaultActiveKey="worker-logs" className="mb-3" mountOnEnter={true}>
           { event.git ? <Tab eventKey="git-initializer-logs" title="Git Initializer Logs"><LogStreamer event={event} containerName="vcs" logKey="vcs"/></Tab> : null }
           <Tab eventKey="worker-logs" title="Worker Logs">
             <LogStreamer event={event} logKey={event?.metadata?.id || ""}/>
-          </Tab>
-          <Tab eventKey="jobs" title="Jobs">
-            <JobsTabPane event={event}/>
           </Tab>
         </Tabs>
       </div>
@@ -88,49 +85,11 @@ class EventSummary extends React.Component<EventSummaryProps> {
 
 }
 
-interface JobTabPaneProps {
-  event: core.Event
-  job: core.Job
-}
-
-class JobTabPane extends React.Component<JobTabPaneProps> {
-
-  render(): React.ReactElement {
-    const event = this.props.event
-    const job = this.props.job
-    return (
-      <div>
-        <Tabs defaultActiveKey="summary" className="mb-3" mountOnEnter={true}>
-          <Tab eventKey="summary" title="Summary">
-            <Placeholder/>
-          </Tab>
-          <Tab eventKey="yaml" title="YAML">
-            <YAMLViewer object={job}/>
-          </Tab>
-        </Tabs>
-        <Tabs defaultActiveKey={job.name} className="mb-3" mountOnEnter={true}>
-          <Tab eventKey={job.name} title="Primary Container Logs">
-            <LogStreamer event={event} jobName={job.name} logKey={job.name}/>
-          </Tab>
-          {
-            Object.keys(job.spec.sidecarContainers || {}).map((containerName: string) => (
-              <Tab eventKey={containerName} title={`${containerName} logs`}>
-                <LogStreamer event={event} jobName={job.name} containerName={containerName} logKey={`${job.name}-${containerName}`}/>
-              </Tab>
-            ))
-          }
-        </Tabs>
-      </div>
-    )
-  }
-
-}
-
-interface JobsTabPaneProps {
+interface JobTabsProps {
   event: core.Event
 }
 
-class JobsTabPane extends React.Component<JobsTabPaneProps> {
+class JobTabs extends React.Component<JobTabsProps> {
 
   render(): React.ReactElement {
     const event = this.props.event
@@ -171,3 +130,42 @@ class JobsTabPane extends React.Component<JobsTabPaneProps> {
   }
 
 }
+
+interface JobTabPaneProps {
+  event: core.Event
+  job: core.Job
+}
+
+class JobTabPane extends React.Component<JobTabPaneProps> {
+
+  render(): React.ReactElement {
+    const event = this.props.event
+    const job = this.props.job
+    return (
+      <div>
+        <h3>{job.name}</h3>
+        <Tabs defaultActiveKey="summary" className="mb-3" mountOnEnter={true}>
+          <Tab eventKey="summary" title="Summary">
+            <Placeholder/>
+          </Tab>
+          <Tab eventKey="yaml" title="YAML">
+            <YAMLViewer object={job}/>
+          </Tab>
+          <Tab eventKey={job.name} title="Primary Container Logs">
+            <LogStreamer event={event} jobName={job.name} logKey={job.name}/>
+          </Tab>
+          {
+            Object.keys(job.spec.sidecarContainers || {}).map((containerName: string) => (
+              <Tab eventKey={containerName} title={`${containerName} logs`}>
+                <LogStreamer event={event} jobName={job.name} containerName={containerName} logKey={`${job.name}-${containerName}`}/>
+              </Tab>
+            ))
+          }
+        </Tabs>
+      </div>
+    )
+  }
+
+}
+
+

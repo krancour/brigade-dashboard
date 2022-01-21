@@ -46,12 +46,11 @@ class Project extends React.Component<ProjectProps, ProjectState> {
         <Tabs defaultActiveKey="summary" className="mb-3">
           <Tab eventKey="summary" title="Summary">
             <ProjectSummary project={project}/>
+            <h2>Events</h2>
+            <EventList selector={{projectID: project.metadata.id}}/>
           </Tab>
           <Tab eventKey="yaml" title="YAML">
             <YAMLViewer object={project}/>
-          </Tab>
-          <Tab eventKey="events" title="Events">
-            <EventList selector={{projectID: project.metadata.id}}/>
           </Tab>
         </Tabs>
       </div>
