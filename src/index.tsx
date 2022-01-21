@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import App from './App'
 import Event from "./Event"
 import Events from "./Events"
+import Home from "./Home"
 import Project from "./Project"
 import Projects from "./Projects"
 import ServiceAccount from "./ServiceAccount"
@@ -21,7 +22,7 @@ ReactDOM.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App/>}>
-          <Route index element={<Projects/>}/>
+          <Route index element={<Home/>}/>
           <Route path="projects" element={<Projects/>}/>
           <Route path="projects/:id" element={<Project/>}/>
           <Route path="events" element={<Events/>}/>

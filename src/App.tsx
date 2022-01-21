@@ -10,6 +10,7 @@ import { Outlet } from "react-router-dom"
 
 import getClient from "./Client"
 import * as consts from "./Consts"
+import Home from "./Home"
 import LoginControl from "./LoginControl"
 
 import './App.css'
@@ -54,7 +55,7 @@ export default class App extends React.Component<AppProps, AppState> {
         <header>
           <Navbar bg="dark" variant="dark" expand="lg">
             <Container>
-              <LinkContainer to="/projects">
+              <LinkContainer to="/">
                 <Navbar.Brand>Brigade Dashboard</Navbar.Brand>
               </LinkContainer>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -80,7 +81,16 @@ export default class App extends React.Component<AppProps, AppState> {
         </header>
         <main>
           <Container>
-            { loggedIn ? <Outlet/> : <Alert variant="primary">Log in to see this content.</Alert> }
+            {
+              loggedIn ? (
+                <Outlet/>
+              ) : (
+                <div>
+                  <Alert variant="primary">Log in to see this content.</Alert>
+                  <Home/>
+                </div>
+              )
+            }
           </Container>
         </main>
         <footer>
