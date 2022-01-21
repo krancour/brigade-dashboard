@@ -7,8 +7,8 @@ import { core, meta } from "@brigadecore/brigade-sdk"
 import Box from "./Box"
 import getClient from "./Client"
 import withPagingControl from "./PagingControl"
+import Spinner from "./Spinner"
 import WorkerPhaseIcon from "./WorkerPhaseIcon"
-
 
 const projectListPageSize = 10
 
@@ -43,7 +43,7 @@ class ProjectListItem extends React.Component<ProjectListItemProps, ProjectListI
   render(): React.ReactElement {
     const ready = this.state.ready
     if (!ready) {
-      return <Box/>
+      return <Box><Spinner/></Box>
     }
     const linkTo = "/projects/" + this.props.project.metadata.id
     return (
