@@ -6,13 +6,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 import App from './App'
 import Event from "./Event"
-import EventList from "./EventList"
+import Events from "./Events"
 import Project from "./Project"
-import ProjectList from "./ProjectList"
+import Projects from "./Projects"
 import ServiceAccount from "./ServiceAccount"
-import ServiceAccountList from "./ServiceAccountList"
+import ServiceAccounts from "./ServiceAccounts"
 import User from "./User"
-import UserList from "./UserList"
+import Users from "./Users"
 
 import "bootstrap/dist/css/bootstrap.min.css"
 
@@ -21,14 +21,14 @@ ReactDOM.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App/>}>
-          <Route index element={<ProjectList/>}/>
-          <Route path="projects" element={<ProjectList/>}/>
+          <Route index element={<Projects/>}/>
+          <Route path="projects" element={<Projects/>}/>
           <Route path="projects/:id" element={<Project/>}/>
-          <Route path="events" element={<EventList/>}/>
+          <Route path="events" element={<Events/>}/>
           <Route path="events/:id" element={<Event/>}/>
-          <Route path="users" element={<UserList/>}/>
+          <Route path="users" element={<Users/>}/>
           <Route path="users/:id" element={<User/>}/>
-          <Route path="service-accounts" element={<ServiceAccountList/>}/>
+          <Route path="service-accounts" element={<ServiceAccounts/>}/>
           <Route path="service-accounts/:id" element={<ServiceAccount/>}/>
           <Route path="*" element={<h1>404</h1>}/>
         </Route>
