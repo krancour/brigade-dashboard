@@ -51,8 +51,6 @@ class Event extends React.Component<EventProps, EventState> {
         <Tabs defaultActiveKey="summary" className="mb-3" mountOnEnter={true}>
           <Tab eventKey="summary" title="Summary">
             <EventSummary event={event}/>
-            <h2>Jobs</h2>
-            <JobTabs event={event}/>
           </Tab>
           <Tab eventKey="yaml" title="YAML">
             <YAMLViewer object={event}/>
@@ -60,6 +58,9 @@ class Event extends React.Component<EventProps, EventState> {
           { event.git ? <Tab eventKey="git-initializer-logs" title="Git Initializer Logs"><LogStreamer event={event} containerName="vcs" logKey="vcs"/></Tab> : null }
           <Tab eventKey="worker-logs" title="Worker Logs">
             <LogStreamer event={event} logKey={event?.metadata?.id || ""}/>
+          </Tab>
+          <Tab eventKey="jobs" title="Jobs">
+            <JobTabs event={event}/>
           </Tab>
         </Tabs>
       </div>
@@ -151,7 +152,6 @@ class JobTabPane extends React.Component<JobTabPaneProps> {
     }
     return (
       <div>
-        <h3>{job.name}</h3>
         <Tabs defaultActiveKey="summary" className="mb-3" mountOnEnter={true}>
           <Tab eventKey="summary" title="Summary">
             <Placeholder/>
