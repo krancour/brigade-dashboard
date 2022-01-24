@@ -2,12 +2,6 @@ body {
   padding-bottom: 80px;
 }
 
-.box {
-  border: 1px solid blue;
-  margin: 6px;
-  padding: 8px;
-}
-
 .spinner-wrapper {
   text-align: center;
 }

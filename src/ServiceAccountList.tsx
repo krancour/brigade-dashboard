@@ -1,10 +1,13 @@
 import React from "react"
 
+import Table from "react-bootstrap/Table"
+
 import { Link } from "react-router-dom"
+
+import moment from "moment"
 
 import { authn, meta } from "@brigadecore/brigade-sdk"
 
-import Box from "./Box"
 import getClient from "./Client"
 import LockIcon from "./LockIcon"
 import withPagingControl from "./PagingControl"
@@ -31,9 +34,14 @@ class ServiceAccountListItem extends React.Component<ServiceAccountListItemProps
     const serviceAccount = this.props.serviceAccount
     const linkTo = "/service-accounts/" + serviceAccount.metadata.id
     return (
-      <Box>
-        <LockIcon locked={serviceAccount.locked ? true : false}/>&nbsp;&nbsp;<Link to={linkTo}>{this.props.serviceAccount.metadata.id}</Link>
-      </Box>
+      <tr>
+        <td>
+          <LockIcon locked={serviceAccount.locked ? true : false}/>&nbsp;&nbsp;
+          <Link to={linkTo}>{this.props.serviceAccount.metadata.id}</Link>
+        </td>
+        <td>{this.props.serviceAccount.description}</td>
+        <td>{moment(this.props.serviceAccount.metadata.created).fromNow(true)}</td>
+      </tr>
     )
   }
 }
@@ -42,19 +50,27 @@ interface ServiceAccountListProps {
   items: authn.ServiceAccount[]
 }
 
-// TODO: Make this use a table
 class ServiceAccountList extends React.Component<ServiceAccountListProps> {
 
   render(): React.ReactElement {
     const serviceAccounts = this.props.items
     return (
-      <div>
-        {
-          serviceAccounts.map((serviceAccount: authn.ServiceAccount) => (
-            <ServiceAccountListItem key={serviceAccount.metadata.id} serviceAccount={serviceAccount}/>
-          ))
-        }
-      </div>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Name</th>
+            <th>Age</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            serviceAccounts.map((serviceAccount: authn.ServiceAccount) => (
+              <ServiceAccountListItem key={serviceAccount.metadata.id} serviceAccount={serviceAccount}/>
+            ))
+          }
+        </tbody>
+      </Table>
     )
   }
 

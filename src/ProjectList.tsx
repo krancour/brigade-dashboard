@@ -1,10 +1,13 @@
 import React from "react"
 
+import Table from "react-bootstrap/Table"
+
 import { Link } from "react-router-dom"
+
+import moment from "moment"
 
 import { core, meta } from "@brigadecore/brigade-sdk"
 
-import Box from "./Box"
 import getClient from "./Client"
 import withPagingControl from "./PagingControl"
 import Spinner from "./Spinner"
@@ -42,15 +45,21 @@ class ProjectListItem extends React.Component<ProjectListItemProps, ProjectListI
 
   render(): React.ReactElement {
     const ready = this.state.ready
-    if (!ready) {
-      return <Box><Spinner/></Box>
-    }
     const linkTo = "/projects/" + this.props.project.metadata.id
     return (
-      <Box>
-        <WorkerPhaseIcon phase={this.state.lastEventWorkerPhase}/>&nbsp;&nbsp;
-        <Link to={linkTo}>{this.props.project.metadata.id}</Link>
-      </Box>
+      <tr>
+        <td>
+          {
+            ready ? 
+              <WorkerPhaseIcon phase={this.state.lastEventWorkerPhase}/>    
+            :
+              <Spinner/>
+          }&nbsp;&nbsp;
+          <Link to={linkTo}>{this.props.project.metadata.id}</Link>
+        </td>
+        <td>{this.props.project.description}</td>
+        <td>{moment(this.props.project.metadata.created).fromNow(true)}</td>
+      </tr>
     )
   }
 
@@ -60,19 +69,27 @@ interface ProjectListProps {
   items: core.Project[]
 }
 
-// TODO: Make this use a table
 class ProjectList extends React.Component<ProjectListProps> {
 
   render(): React.ReactElement {
     const projects = this.props.items
     return (
-      <div>
-        {
-          projects.map((project: core.Project) => (
-            <ProjectListItem key={project.metadata.id} project={project}/>
-          ))
-        }
-      </div>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Age</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            projects.map((project: core.Project) => (
+              <ProjectListItem key={project.metadata.id} project={project}/>
+            ))
+          }
+        </tbody>
+      </Table>
     )
   }
 

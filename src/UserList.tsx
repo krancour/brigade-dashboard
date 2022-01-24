@@ -1,10 +1,13 @@
 import React from "react"
 
+import Table from "react-bootstrap/Table"
+
 import { Link } from "react-router-dom"
+
+import moment from "moment"
 
 import { authn, meta } from "@brigadecore/brigade-sdk"
 
-import Box from "./Box"
 import getClient from "./Client"
 import LockIcon from "./LockIcon"
 import withPagingControl from "./PagingControl"
@@ -21,9 +24,14 @@ class UserListItem extends React.Component<UserListItemProps> {
     const user = this.props.user
     const linkTo = "/users/" + this.props.user.metadata.id
     return (
-      <Box>
-        <LockIcon locked={user.locked ? true : false}/>&nbsp;&nbsp;<Link to={linkTo}>{this.props.user.metadata.id}</Link>
-      </Box>
+      <tr>
+        <td>
+          <LockIcon locked={user.locked ? true : false}/>&nbsp;&nbsp;
+          <Link to={linkTo}>{this.props.user.metadata.id}</Link>
+        </td>
+        <td>{this.props.user.name}</td>
+        <td>{moment(this.props.user.metadata.created).fromNow()}</td>
+      </tr>
     )
   }
 }
@@ -32,19 +40,27 @@ interface UserListProps {
   items: authn.User[]
 }
 
-// TODO: Make this use a table
 class UserList extends React.Component<UserListProps> {
 
   render(): React.ReactElement {
     const users = this.props.items
     return (
-      <div>
-        {
-          users.map((user: authn.User) => (
-            <UserListItem key={user.metadata.id} user={user}/>
-          ))
-        }
-      </div>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Name</th>
+            <th>First Seen</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            users.map((user: authn.User) => (
+              <UserListItem key={user.metadata.id} user={user}/>
+            ))
+          }
+        </tbody>
+      </Table>
     )
   }
 
