@@ -1,5 +1,6 @@
 import React from "react"
 
+import Card from "react-bootstrap/Card"
 import Tab from "react-bootstrap/Tab"
 import Tabs from "react-bootstrap/Tabs"
 
@@ -71,7 +72,13 @@ interface ProjectSummaryProps {
 class ProjectSummary extends React.Component<ProjectSummaryProps> {
 
   render(): React.ReactElement {
-    return <Placeholder/>
+    return (
+      <Card>
+        <Card.Body>
+          Placeholder
+        </Card.Body>
+      </Card>
+    )
   }
 
 }

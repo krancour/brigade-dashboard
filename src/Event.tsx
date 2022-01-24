@@ -1,6 +1,7 @@
 import React from "react"
 
 import Alert from "react-bootstrap/Alert"
+import Card from "react-bootstrap/Card"
 import Col from "react-bootstrap/Col"
 import Nav from "react-bootstrap/Nav"
 import Row from "react-bootstrap/Row"
@@ -14,7 +15,6 @@ import { core } from "@brigadecore/brigade-sdk"
 import getClient from "./Client"
 import JobPhaseIcon from "./JobPhaseIcon"
 import LogStreamer from "./LogStreamer"
-import Placeholder from "./Placeholder"
 import Spinner from "./Spinner"
 import YAMLViewer from "./YAMLViewer"
 
@@ -81,7 +81,13 @@ interface EventSummaryProps {
 class EventSummary extends React.Component<EventSummaryProps> {
 
   render(): React.ReactElement {
-    return <Placeholder/>
+    return (
+      <Card>
+        <Card.Body>
+          Placeholder
+        </Card.Body>
+      </Card>
+    )
   }
 
 }
@@ -154,7 +160,11 @@ class JobTabPane extends React.Component<JobTabPaneProps> {
       <div>
         <Tabs defaultActiveKey="summary" className="mb-3" mountOnEnter={true}>
           <Tab eventKey="summary" title="Summary">
-            <Placeholder/>
+            <Card>
+              <Card.Body>
+                Placeholder
+              </Card.Body>
+            </Card>
           </Tab>
           <Tab eventKey="yaml" title="YAML">
             <YAMLViewer object={job}/>

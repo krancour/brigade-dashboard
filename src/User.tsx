@@ -1,5 +1,6 @@
 import React from "react"
 
+import Card from "react-bootstrap/Card"
 import Tab from "react-bootstrap/Tab"
 import Tabs from "react-bootstrap/Tabs"
 
@@ -46,7 +47,11 @@ class User extends React.Component<UserProps, UserState> {
             <UserSummary user={user}/>
           </Tab>
           <Tab eventKey="permissions" title="Permissions">
-            <Placeholder/>
+            <Card>
+              <Card.Body>
+                Placeholder
+              </Card.Body>
+            </Card>
           </Tab>
         </Tabs>
       </div>
@@ -67,7 +72,13 @@ interface UserSummaryProps {
 class UserSummary extends React.Component<UserSummaryProps> {
 
   render(): React.ReactElement {
-    return <Placeholder/>
+    return (
+      <Card>
+        <Card.Body>
+          Placeholder
+        </Card.Body>
+      </Card>
+    )
   }
 
 }
