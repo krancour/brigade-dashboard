@@ -1,4 +1,4 @@
-import { faCheck } from "@fortawesome/free-solid-svg-icons"
+import { faCheck, faClock, faPlay, faQuestion, faTimes } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import React from "react"
@@ -15,31 +15,31 @@ export default class WorkerPhaseIcon extends React.Component<WorkerPhaseIconProp
     let icon = faCheck
     switch(this.props.phase) {
       case core.WorkerPhase.Aborted:
-        icon = faCheck
+        icon = faTimes
         break
       case core.WorkerPhase.Canceled:
-        icon = faCheck
+        icon = faTimes
         break
       case core.WorkerPhase.Failed:
-        icon = faCheck
+        icon = faTimes
         break
       case core.WorkerPhase.Pending:
-        icon = faCheck
+        icon = faClock
         break
       case core.WorkerPhase.Running:
-        icon = faCheck
+        icon = faPlay
         break
       case core.WorkerPhase.SchedulingFailed:
-        icon = faCheck
+        icon = faTimes
         break
       case core.WorkerPhase.Starting:
-        icon = faCheck
+        icon = faPlay
         break
       case core.WorkerPhase.Succeeded:
         icon = faCheck
         break
       case core.WorkerPhase.TimedOut:
-        icon = faCheck
+        icon = faTimes
         break
     }
     return <FontAwesomeIcon icon={icon}/>
