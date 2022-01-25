@@ -10,6 +10,7 @@ import { core } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
 import EventList from "./EventList"
+import ProjectPermissionsList from "./ProjectPermissionsList"
 import Spinner from "./Spinner"
 import YAMLViewer from "./YAMLViewer"
 
@@ -43,7 +44,7 @@ class Project extends React.Component<ProjectProps, ProjectState> {
     return (
       <div>
         <h1>{project?.metadata.id}</h1>
-        <Tabs defaultActiveKey="summary" className="mb-3">
+        <Tabs defaultActiveKey="summary" className="mb-3" mountOnEnter={true}>
           <Tab eventKey="summary" title="Summary">
             <ProjectSummary project={project}/>
             <h2>Events</h2>
@@ -53,11 +54,7 @@ class Project extends React.Component<ProjectProps, ProjectState> {
             <YAMLViewer object={project}/>
           </Tab>
           <Tab eventKey="permissions" title="Permissions">
-            <Card>
-              <Card.Body>
-                Placeholder
-              </Card.Body>
-            </Card>
+            <ProjectPermissionsList projectID={project.metadata.id}/>
           </Tab>
         </Tabs>
       </div>
@@ -88,3 +85,4 @@ class ProjectSummary extends React.Component<ProjectSummaryProps> {
   }
 
 }
+

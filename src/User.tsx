@@ -41,7 +41,7 @@ class User extends React.Component<UserProps, UserState> {
     return (
       <div>
         <h1>{user?.metadata.id}</h1>
-        <Tabs defaultActiveKey="summary" className="mb-3">
+        <Tabs defaultActiveKey="summary" className="mb-3" mountOnEnter={true}>
           <Tab eventKey="summary" title="Summary">
             <UserSummary user={user}/>
           </Tab>

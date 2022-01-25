@@ -41,7 +41,7 @@ class ServiceAccount extends React.Component<ServiceAccountProps, ServiceAccount
     return (
       <div>
         <h1>{serviceAccount?.metadata.id}</h1>
-        <Tabs defaultActiveKey="summary" className="mb-3">
+        <Tabs defaultActiveKey="summary" className="mb-3" mountOnEnter={true}>
           <Tab eventKey="summary" title="Summary">
             <ServiceAccountSummary serviceAccount={serviceAccount}/>
           </Tab>
