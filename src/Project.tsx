@@ -10,7 +10,6 @@ import { core } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
 import EventList from "./EventList"
-import Placeholder from "./Placeholder"
 import Spinner from "./Spinner"
 import YAMLViewer from "./YAMLViewer"
 

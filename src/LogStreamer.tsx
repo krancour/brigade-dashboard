@@ -13,7 +13,7 @@ interface LogStreamerProps {
 
 export default class LogStreamer extends React.Component<LogStreamerProps> {
 
-  logStream: any // TODO: https://github.com/brigadecore/brigade-sdk-for-js/issues/55
+  logStream?: core.LogEntryStream
   logBoxID: string
 
   constructor(props: LogStreamerProps) {

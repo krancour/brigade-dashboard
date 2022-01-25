@@ -9,7 +9,6 @@ import { useParams } from "react-router-dom"
 import { authn } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
-import Placeholder from "./Placeholder"
 import Spinner from "./Spinner"
 
 interface UserProps {
