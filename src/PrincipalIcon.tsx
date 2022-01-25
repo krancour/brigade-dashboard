@@ -4,9 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React from "react"
 
 import { authz } from "@brigadecore/brigade-sdk"
+import libAuthz from "@brigadecore/brigade-sdk/dist/lib/authz"
 
 interface PrincipalIconProps {
-  principalType: any // TODO: SDK needs to export authz.PrincipalType
+  principalType: libAuthz.PrincipalType
 }
 
 export default class PrincipalIcon extends React.Component<PrincipalIconProps> {
