@@ -1,6 +1,6 @@
 import React from "react"
 
-import Card from "react-bootstrap/Card"
+import SystemPermissionsList from "./SystemPermissionsList"
 
 export default class SystemPermissions extends React.Component {
 
@@ -8,11 +8,7 @@ export default class SystemPermissions extends React.Component {
     return (
       <div>
         <h1>System Permissions</h1>
-        <Card>
-          <Card.Body>
-            Placeholder
-          </Card.Body>
-        </Card>
+        <SystemPermissionsList/>
       </div>
     )
   }

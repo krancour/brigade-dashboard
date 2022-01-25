@@ -2,7 +2,7 @@ import React from "react"
 
 import Table from "react-bootstrap/Table"
 
-import { core, meta } from "@brigadecore/brigade-sdk"
+import { core } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
 import NextButton from "./components/NextButton"
