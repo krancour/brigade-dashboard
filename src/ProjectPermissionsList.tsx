@@ -1,11 +1,18 @@
+import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+
 import React from "react"
 
+import Button from "react-bootstrap/Button"
 import Table from "react-bootstrap/Table"
 
-import { core } from "@brigadecore/brigade-sdk"
+import { core, meta } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
 import PrincipalIcon from "./PrincipalIcon"
+import Spinner from "./Spinner"
+
+const permissionsListPageSize = 20
 
 interface ProjectPermissionsListItemProps {
   projectRoleAssignment: core.ProjectRoleAssignment
@@ -18,6 +25,7 @@ class ProjectPermissionsListItem extends React.Component<ProjectPermissionsListI
       <tr>
         <td>
           <PrincipalIcon principalType={this.props.projectRoleAssignment.principal.type}/>&nbsp;&nbsp;
+          {/* TODO: Make this link to the user or service account */}
           {this.props.projectRoleAssignment.principal.id}
         </td>
         <td>{this.props.projectRoleAssignment.role}</td>
@@ -32,7 +40,10 @@ interface ProjectPermissionsListProps {
 }
 
 interface ProjectPermissionsListState {
-  projectRoleAssignments: core.ProjectRoleAssignment[]
+  prevContinueVals: string[]
+  currentContinueVal: string,
+  items: core.ProjectRoleAssignment[]
+  nextContinueVal?: string
 }
 
 export default class ProjectPermissionsList extends React.Component<ProjectPermissionsListProps, ProjectPermissionsListState> {
@@ -40,34 +51,97 @@ export default class ProjectPermissionsList extends React.Component<ProjectPermi
   constructor(props: ProjectPermissionsListProps) {
     super(props)
     this.state = {
-      projectRoleAssignments: []
+      prevContinueVals: [],
+      currentContinueVal: "",
+      items: []
     }
   }
 
   async componentDidMount(): Promise<void> {
+    const page = await getClient().core().projects().authz().roleAssignments().list(
+      this.props.projectID,
+      {},
+      {
+        continue: "",
+        limit: permissionsListPageSize
+      }
+    )
     this.setState({
-      projectRoleAssignments: (await getClient().core().projects().authz().roleAssignments().list(this.props.projectID)).items
+      items: page.items,
+      nextContinueVal: page.metadata.continue === "" ? undefined : page.metadata.continue
     })
   }
 
-  render(): React.ReactElement {
-    const projectRoleAssignments = this.state.projectRoleAssignments
-    return (
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Principal</th>
-            <th>Role</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            projectRoleAssignments.map((projectRoleAssignment: core.ProjectRoleAssignment) => (
-              <ProjectPermissionsListItem projectRoleAssignment={projectRoleAssignment}/>
-            ))
+    fetchPreviousPage = async () => {
+      const prevContinueVals = this.state.prevContinueVals
+      if (prevContinueVals.length > 0) {
+        const currentContinueVal = prevContinueVals.pop() || ""
+        const page = await getClient().core().projects().authz().roleAssignments().list(
+          this.props.projectID, {}, {
+            continue: currentContinueVal,
+            limit: permissionsListPageSize
           }
-        </tbody>
-      </Table>
+        )
+        this.setState({
+          prevContinueVals: prevContinueVals,
+          currentContinueVal: currentContinueVal,
+          items: page.items,
+          nextContinueVal: page.metadata.continue === "" ? undefined : page.metadata.continue
+        })
+      }
+    }
+
+    fetchNextPage = async () => {
+      let nextContinueVal = this.state.nextContinueVal
+      if (nextContinueVal) {
+        const prevContinueVals = this.state.prevContinueVals
+        prevContinueVals.push(this.state.currentContinueVal)
+        const currentContinueVal = nextContinueVal
+        const page = await getClient().core().projects().authz().roleAssignments().list(
+          this.props.projectID, {}, {
+            continue: currentContinueVal,
+            limit: permissionsListPageSize
+          }
+        )
+        this.setState({
+          prevContinueVals: prevContinueVals,
+          currentContinueVal: currentContinueVal,
+          items: page.items,
+          nextContinueVal: page.metadata.continue === "" ? undefined : page.metadata.continue
+        })
+      }
+    }
+
+  render(): React.ReactElement {
+    const projectRoleAssignments = this.state.items
+    if (projectRoleAssignments.length == 0) {
+      return <Spinner/>
+    }
+    const hasPrev = this.state.prevContinueVals.length > 0
+    const hasMore = this.state.nextContinueVal ? true : false
+    return (
+      <div>
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>Principal</th>
+              <th>Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              projectRoleAssignments.map((projectRoleAssignment: core.ProjectRoleAssignment) => (
+                <ProjectPermissionsListItem 
+                  key={projectRoleAssignment.principal.type + ":" + projectRoleAssignment.principal.id + ":" + projectRoleAssignment.role}
+                  projectRoleAssignment={projectRoleAssignment}
+                />
+              ))
+            }
+          </tbody>
+        </Table>
+        { hasPrev && <Button onClick={this.fetchPreviousPage}><FontAwesomeIcon icon={faChevronLeft}/> Previous</Button> }
+        { hasMore && <Button onClick={this.fetchNextPage}>Next <FontAwesomeIcon icon={faChevronRight}/></Button> }
+      </div>
     )
   }
 

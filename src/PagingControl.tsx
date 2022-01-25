@@ -47,8 +47,6 @@ export default function withPagingControl(WrappedComponent: typeof React.Compone
       })
     }
 
-    // TODO: There might be weird state shenanigans that go on here. Refer back
-    // to the documentation to see how to handle this.
     fetchPreviousPage = async () => {
       const prevContinueVals = this.state.prevContinueVals
       if (prevContinueVals.length > 0) {
@@ -63,8 +61,6 @@ export default function withPagingControl(WrappedComponent: typeof React.Compone
       }
     }
 
-    // TODO: There might be weird state shenanigans that go on here. Refer back
-    // to the documentation to see how to handle this.
     fetchNextPage = async () => {
       let nextContinueVal = this.state.nextContinueVal
       if (nextContinueVal) {

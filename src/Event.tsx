@@ -113,8 +113,7 @@ class JobTabs extends React.Component<JobTabsProps> {
               {
                 jobs.map((job: core.Job) => (
                   <Nav.Item>
-                    {/* TODO: Fix use of any below after https://github.com/brigadecore/brigade-sdk-for-js/pull/59 is taken care of and SDK v2.1.0 is released. */}
-                    <Nav.Link eventKey={job.name}><JobPhaseIcon phase={(job as any).status?.phase}/>&nbsp;&nbsp;{job.name}</Nav.Link>
+                    <Nav.Link eventKey={job.name}><JobPhaseIcon phase={job.status?.phase}/>&nbsp;&nbsp;{job.name}</Nav.Link>
                   </Nav.Item>
                 ))
               }
