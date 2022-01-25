@@ -11,8 +11,8 @@ import { core } from "@brigadecore/brigade-sdk"
 import getClient from "./Client"
 import EventList from "./EventList"
 import ProjectPermissionsList from "./ProjectPermissionsList"
-import Spinner from "./Spinner"
-import YAMLViewer from "./YAMLViewer"
+import Spinner from "./components/Spinner"
+import YAMLViewer from "./components/YAMLViewer"
 
 interface ProjectProps {
   id: string

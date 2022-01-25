@@ -1,16 +1,14 @@
-import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-
 import React from "react"
 
-import Button from "react-bootstrap/Button"
 import Table from "react-bootstrap/Table"
 
 import { core, meta } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
+import NextButton from "./components/NextButton"
+import PreviousButton from "./components/PreviousButton"
 import PrincipalIcon from "./PrincipalIcon"
-import Spinner from "./Spinner"
+import Spinner from "./components/Spinner"
 
 const permissionsListPageSize = 20
 
@@ -139,8 +137,8 @@ export default class ProjectPermissionsList extends React.Component<ProjectPermi
             }
           </tbody>
         </Table>
-        { hasPrev && <Button onClick={this.fetchPreviousPage}><FontAwesomeIcon icon={faChevronLeft}/> Previous</Button> }
-        { hasMore && <Button onClick={this.fetchNextPage}>Next <FontAwesomeIcon icon={faChevronRight}/></Button> }
+        { hasPrev && <PreviousButton onClick={this.fetchPreviousPage}/> }
+        { hasMore && <NextButton onClick={this.fetchNextPage}/> }
       </div>
     )
   }

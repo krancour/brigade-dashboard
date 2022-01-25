@@ -14,9 +14,9 @@ import { core } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
 import JobPhaseIcon from "./JobPhaseIcon"
-import LogStreamer from "./LogStreamer"
-import Spinner from "./Spinner"
-import YAMLViewer from "./YAMLViewer"
+import LogStreamer from "./components/LogStreamer"
+import Spinner from "./components/Spinner"
+import YAMLViewer from "./components/YAMLViewer"
 
 interface EventProps {
   id: string

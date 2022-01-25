@@ -1,11 +1,8 @@
-import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-
 import React from "react"
 
-import Button from "react-bootstrap/Button"
-
-import Spinner from "./Spinner"
+import NextButton from "./components/NextButton"
+import PreviousButton from "./components/PreviousButton"
+import Spinner from "./components/Spinner"
 
 interface Pageable {
   items: unknown[]
@@ -87,8 +84,8 @@ export default function withPagingControl(WrappedComponent: typeof React.Compone
       return (
         <div>
           <WrappedComponent items={items}/>
-          { hasPrev && <Button onClick={this.fetchPreviousPage}><FontAwesomeIcon icon={faChevronLeft}/> Previous</Button> }
-          { hasMore && <Button onClick={this.fetchNextPage}>Next <FontAwesomeIcon icon={faChevronRight}/></Button> }
+          { hasPrev && <PreviousButton onClick={this.fetchPreviousPage}/> }
+          { hasMore && <NextButton onClick={this.fetchNextPage}/> }
         </div>
       )
     }

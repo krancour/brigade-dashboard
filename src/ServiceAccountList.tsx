@@ -9,7 +9,7 @@ import moment from "moment"
 import { authn, meta } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
-import LockIcon from "./LockIcon"
+import LockIcon from "./components/LockIcon"
 import withPagingControl from "./PagingControl"
 
 const serviceAccountListPageSize = 20
