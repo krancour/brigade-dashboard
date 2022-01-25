@@ -52,6 +52,13 @@ class Project extends React.Component<ProjectProps, ProjectState> {
           <Tab eventKey="yaml" title="YAML">
             <YAMLViewer object={project}/>
           </Tab>
+          <Tab eventKey="permissions" title="Permissions">
+            <Card>
+              <Card.Body>
+                Placeholder
+              </Card.Body>
+            </Card>
+          </Tab>
         </Tabs>
       </div>
     )

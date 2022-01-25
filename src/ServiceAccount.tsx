@@ -45,7 +45,14 @@ class ServiceAccount extends React.Component<ServiceAccountProps, ServiceAccount
           <Tab eventKey="summary" title="Summary">
             <ServiceAccountSummary serviceAccount={serviceAccount}/>
           </Tab>
-          <Tab eventKey="permissions" title="Permissions">
+          <Tab eventKey="system-permissions" title="System Permissions">
+            <Card>
+              <Card.Body>
+                Placeholder
+              </Card.Body>
+            </Card>
+          </Tab>
+          <Tab eventKey="project-permissions" title="Project Permissions">
             <Card>
               <Card.Body>
                 Placeholder
