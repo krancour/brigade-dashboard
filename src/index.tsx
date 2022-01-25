@@ -12,6 +12,7 @@ import Project from "./Project"
 import Projects from "./Projects"
 import ServiceAccount from "./ServiceAccount"
 import ServiceAccounts from "./ServiceAccounts"
+import SystemPermissions from "./SystemPermissions"
 import User from "./User"
 import Users from "./Users"
 
@@ -31,6 +32,7 @@ ReactDOM.render(
           <Route path="users/:id" element={<User/>}/>
           <Route path="service-accounts" element={<ServiceAccounts/>}/>
           <Route path="service-accounts/:id" element={<ServiceAccount/>}/>
+          <Route path="system-permissions" element={<SystemPermissions/>}/>
           <Route path="*" element={<h1>404</h1>}/>
         </Route>
       </Routes>

@@ -73,6 +73,9 @@ export default class App extends React.Component<AppProps, AppState> {
                   <LinkContainer to="/service-accounts">
                     <Nav.Link>Service Accounts</Nav.Link>
                   </LinkContainer>
+                  <LinkContainer to="/system-permissions">
+                    <Nav.Link>System Permissions</Nav.Link>
+                  </LinkContainer>
                 </Nav>
                 <LoginControl loggedIn={loggedIn} onLogin={this.handleLogin} onLogout={this.handleLogout}/>
               </Navbar.Collapse>
