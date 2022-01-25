@@ -12,7 +12,7 @@ import getClient from "./Client"
 import LockIcon from "./LockIcon"
 import withPagingControl from "./PagingControl"
 
-const userListPageSize = 10
+const userListPageSize = 20
 
 interface UserListItemProps {
   user: authn.User

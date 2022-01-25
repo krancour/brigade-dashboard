@@ -12,7 +12,7 @@ import getClient from "./Client"
 import LockIcon from "./LockIcon"
 import withPagingControl from "./PagingControl"
 
-const serviceAccountListPageSize = 10
+const serviceAccountListPageSize = 20
 
 interface ServiceAccountListItemProps {
   serviceAccount: authn.ServiceAccount

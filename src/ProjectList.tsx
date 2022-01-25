@@ -13,7 +13,7 @@ import withPagingControl from "./PagingControl"
 import Spinner from "./Spinner"
 import WorkerPhaseIcon from "./WorkerPhaseIcon"
 
-const projectListPageSize = 10
+const projectListPageSize = 20
 
 interface ProjectListItemProps {
   project: core.Project

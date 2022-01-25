@@ -12,7 +12,7 @@ import getClient from "./Client"
 import withPagingControl from "./PagingControl"
 import WorkerPhaseIcon from "./WorkerPhaseIcon"
 
-const eventListPageSize = 10
+const eventListPageSize = 20
 
 interface EventListItemProps {
   event: core.Event
