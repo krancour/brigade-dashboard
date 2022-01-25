@@ -6,10 +6,11 @@ import Tabs from "react-bootstrap/Tabs"
 
 import { useParams } from "react-router-dom"
 
-import { authn } from "@brigadecore/brigade-sdk"
+import { authn, authz } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
 import Spinner from "./components/Spinner"
+import SystemPermissionsList from "./SystemPermissionsList"
 
 interface UserProps {
   id: string
@@ -46,11 +47,8 @@ class User extends React.Component<UserProps, UserState> {
             <UserSummary user={user}/>
           </Tab>
           <Tab eventKey="system-permissions" title="System Permissions">
-            <Card>
-              <Card.Body>
-                Placeholder
-              </Card.Body>
-            </Card>
+          {/* TODO: Would be good to find a way to suppress the principal column here */}
+          <SystemPermissionsList selector={{principal: {type: authz.PrincipalTypeUser, id: this.props.id}}}/>
           </Tab>
           <Tab eventKey="project-permissions" title="Project Permissions">
             <Card>
