@@ -3,16 +3,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import React from "react"
 
+import Spinner from "react-bootstrap/Spinner"
+
 import { core } from "@brigadecore/brigade-sdk"
 
 interface WorkerPhaseIconProps {
-  phase?: core.WorkerPhase
+  phase?: core.WorkerPhase | null
 }
 
 export default class WorkerPhaseIcon extends React.Component<WorkerPhaseIconProps> {
 
   render(): React.ReactElement {
-    let icon = faCheck
+    if (this.props.phase === undefined) {
+      return <Spinner animation="border" size="sm"/>
+    }
+    let icon = faQuestion
     switch(this.props.phase) {
       case core.WorkerPhase.Aborted:
         icon = faTimes

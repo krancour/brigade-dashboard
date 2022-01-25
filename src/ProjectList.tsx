@@ -10,7 +10,6 @@ import { core, meta } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
 import withPagingControl from "./PagingControl"
-import Spinner from "./Spinner"
 import WorkerPhaseIcon from "./WorkerPhaseIcon"
 
 const projectListPageSize = 20
@@ -20,17 +19,14 @@ interface ProjectListItemProps {
 }
 
 interface ProjectListItemState {
-  lastEventWorkerPhase?: core.WorkerPhase
-  ready: boolean
+  lastEventWorkerPhase?: core.WorkerPhase | null
 }
 
 class ProjectListItem extends React.Component<ProjectListItemProps, ProjectListItemState> {
 
   constructor(props: ProjectListItemProps) {
     super(props)
-    this.state = {
-      ready: false
-    }
+    this.state = {}
   }
 
   async componentDidMount(): Promise<void> {
@@ -38,23 +34,16 @@ class ProjectListItem extends React.Component<ProjectListItemProps, ProjectListI
       projectID: this.props.project.metadata.id
     })
     this.setState({
-      lastEventWorkerPhase: events.items?.length > 0 ? events.items[0].worker?.status.phase : undefined,
-      ready: true,
+      lastEventWorkerPhase: events.items?.length > 0 ? events.items[0].worker?.status.phase : null,
     })
   }
 
   render(): React.ReactElement {
-    const ready = this.state.ready
     const linkTo = "/projects/" + this.props.project.metadata.id
     return (
       <tr>
         <td>
-          {
-            ready ? 
-              <WorkerPhaseIcon phase={this.state.lastEventWorkerPhase}/>    
-            :
-              <Spinner/>
-          }&nbsp;&nbsp;
+          <WorkerPhaseIcon phase={this.state.lastEventWorkerPhase}/>&nbsp;&nbsp;
           <Link to={linkTo}>{this.props.project.metadata.id}</Link>
         </td>
         <td>{this.props.project.description}</td>
