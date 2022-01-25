@@ -9,7 +9,7 @@ import moment from "moment"
 import { core, meta } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
-import withPagingControl from "./PagingControl"
+import withPagingControl from "./components/PagingControl"
 import WorkerPhaseIcon from "./WorkerPhaseIcon"
 
 const projectListPageSize = 20

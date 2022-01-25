@@ -1,8 +1,8 @@
 import React from "react"
 
-import NextButton from "./components/NextButton"
-import PreviousButton from "./components/PreviousButton"
-import Spinner from "./components/Spinner"
+import NextButton from "./NextButton"
+import PreviousButton from "./PreviousButton"
+import Spinner from "./Spinner"
 
 interface Pageable {
   items: unknown[]

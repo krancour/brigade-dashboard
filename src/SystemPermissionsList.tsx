@@ -8,7 +8,7 @@ import PrincipalIcon from "./PrincipalIcon"
 import { authz, meta } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
-import withPagingControl from "./PagingControl"
+import withPagingControl from "./components/PagingControl"
 
 const permissionsListPageSize = 20
 

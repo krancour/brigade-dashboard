@@ -1,6 +1,6 @@
 import React from "react"
 
-import logo from "./logo.png"
+import logo from "./assets/logo.png"
 
 export default class Home extends React.Component {
 
