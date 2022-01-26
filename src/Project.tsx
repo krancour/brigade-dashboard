@@ -85,4 +85,3 @@ class ProjectSummary extends React.Component<ProjectSummaryProps> {
   }
 
 }
-

@@ -8,7 +8,7 @@ import PrincipalIcon from "./PrincipalIcon"
 import { authz, meta } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
-import withPagingControl from "./components/PagingControl"
+import withPagingControl, { PagingControlProps } from "./components/PagingControl"
 
 const permissionsListPageSize = 20
 
@@ -34,51 +34,41 @@ class SystemPermissionsListItem extends React.Component<SystemPermissionsListIte
 
 }
 
-interface SystemPermissionsListProps {
-  items: libAuthz.RoleAssignment[]
+interface SystemPermissionsListProps extends PagingControlProps {
+  selector?: authz.RoleAssignmentsSelector
 }
 
 class SystemPermissionsList extends React.Component<SystemPermissionsListProps> {
 
-  constructor(props: SystemPermissionsListProps) {
-    super(props)
-    this.state = {
-      prevContinueVals: [],
-      currentContinueVal: "",
-      items: []
-    }
-  }
-
   render(): React.ReactElement {
-    const roleAssignments = this.props.items
+    const roleAssignments = this.props.items as libAuthz.RoleAssignment[]
     return (
-      <div>
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>Principal</th>
-              <th>Role</th>
-              <th>Scope</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              roleAssignments.map((roleAssignment: libAuthz.RoleAssignment) => (
-                <SystemPermissionsListItem 
-                  key={roleAssignment.principal.type + ":" + roleAssignment.principal.id + ":" + roleAssignment.role}
-                  roleAssignment={roleAssignment}
-                />
-              ))
-            }
-          </tbody>
-        </Table>
-      </div>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Principal</th>
+            <th>Role</th>
+            <th>Scope</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            roleAssignments.map((roleAssignment: libAuthz.RoleAssignment) => (
+              <SystemPermissionsListItem 
+                key={roleAssignment.principal.type + ":" + roleAssignment.principal.id + ":" + roleAssignment.role}
+                roleAssignment={roleAssignment}
+              />
+            ))
+          }
+        </tbody>
+      </Table>
     )
   }
 
 }
 
-export default withPagingControl(SystemPermissionsList, (continueVal: string, selector: authz.RoleAssignmentsSelector): Promise<meta.List<libAuthz.RoleAssignment>>  => {
+export default withPagingControl(SystemPermissionsList, (props: any, continueVal: string): Promise<meta.List<libAuthz.RoleAssignment>>  => {
+  const selector = props.selector as authz.RoleAssignmentsSelector
   return getClient().authz().roleAssignments().list(selector, {
     continue: continueVal,
     limit: permissionsListPageSize

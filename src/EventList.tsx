@@ -9,7 +9,7 @@ import { core, meta } from "@brigadecore/brigade-sdk"
 import moment from "moment"
 
 import getClient from "./Client"
-import withPagingControl from "./components/PagingControl"
+import withPagingControl, { PagingControlProps } from "./components/PagingControl"
 import WorkerPhaseIcon from "./WorkerPhaseIcon"
 
 const eventListPageSize = 20
@@ -37,14 +37,14 @@ class EventListItem extends React.Component<EventListItemProps> {
   }
 }
 
-interface EventListProps {
-  items: core.Event[]
+interface EventListProps extends PagingControlProps {
+  selector?: core.EventsSelector
 }
 
 class EventList extends React.Component<EventListProps> {
 
   render(): React.ReactElement {
-    const events = this.props.items
+    const events = this.props.items as core.Event[]
     return (
       <Table striped bordered hover>
         <thead>
@@ -69,7 +69,8 @@ class EventList extends React.Component<EventListProps> {
 
 }
 
-export default withPagingControl(EventList, (continueVal: string, selector: core.EventsSelector): Promise<meta.List<core.Event>>  => {
+export default withPagingControl(EventList, (props: any, continueVal: string): Promise<meta.List<core.Event>>  => {
+  const selector = props.selector as core.EventsSelector
   return getClient().core().events().list(selector, {
     continue: continueVal,
     limit: eventListPageSize

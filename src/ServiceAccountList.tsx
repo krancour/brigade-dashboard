@@ -10,7 +10,7 @@ import { authn, meta } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
 import LockIcon from "./components/LockIcon"
-import withPagingControl from "./components/PagingControl"
+import withPagingControl, { PagingControlProps } from "./components/PagingControl"
 
 const serviceAccountListPageSize = 20
 
@@ -46,14 +46,12 @@ class ServiceAccountListItem extends React.Component<ServiceAccountListItemProps
   }
 }
 
-interface ServiceAccountListProps {
-  items: authn.ServiceAccount[]
-}
+interface ServiceAccountListProps extends PagingControlProps {}
 
 class ServiceAccountList extends React.Component<ServiceAccountListProps> {
 
   render(): React.ReactElement {
-    const serviceAccounts = this.props.items
+    const serviceAccounts = this.props.items as authn.ServiceAccount[]
     return (
       <Table striped bordered hover>
         <thead>
@@ -76,7 +74,7 @@ class ServiceAccountList extends React.Component<ServiceAccountListProps> {
 
 }
 
-export default withPagingControl(ServiceAccountList, (continueVal: string): Promise<meta.List<authn.ServiceAccount>>  => {
+export default withPagingControl(ServiceAccountList, (props: any, continueVal: string): Promise<meta.List<authn.ServiceAccount>>  => {
   return getClient().authn().serviceAccounts().list({}, {
     continue: continueVal,
     limit: serviceAccountListPageSize
