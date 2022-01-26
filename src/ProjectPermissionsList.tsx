@@ -5,7 +5,7 @@ import Table from "react-bootstrap/Table"
 import { core, meta } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
-import withPagingControl, { PagingControlProps } from "./components/PagingControl"
+import withPagingControl from "./components/PagingControl"
 import PrincipalIcon from "./PrincipalIcon"
 
 const permissionsListPageSize = 20
@@ -31,14 +31,18 @@ class ProjectPermissionsListItem extends React.Component<ProjectPermissionsListI
 
 }
 
-interface ProjectPermissionsListProps extends PagingControlProps {
+interface ProjectPermissionsListProps {
   projectID: string
 }
 
-class ProjectPermissionsList extends React.Component<ProjectPermissionsListProps> {
-
-  render(): React.ReactElement {
-    const projectRoleAssignments = this.props.items as core.ProjectRoleAssignment[]
+export default withPagingControl(
+  (props: ProjectPermissionsListProps, continueVal: string): Promise<meta.List<core.ProjectRoleAssignment>>  => {
+    return getClient().core().projects().authz().roleAssignments().list(props.projectID, {}, {
+      continue: continueVal,
+      limit: permissionsListPageSize
+    })
+  },
+  (projectRoleAssignments: core.ProjectRoleAssignment[]): React.ReactElement => {
     return (
       <Table striped bordered hover>
         <thead>
@@ -60,13 +64,4 @@ class ProjectPermissionsList extends React.Component<ProjectPermissionsListProps
       </Table>
     )
   }
-
-}
-
-export default withPagingControl(ProjectPermissionsList, (props: any, continueVal: string): Promise<meta.List<core.ProjectRoleAssignment>>  => {
-  const projectID = props.projectID as string
-  return getClient().core().projects().authz().roleAssignments().list(projectID, {}, {
-    continue: continueVal,
-    limit: permissionsListPageSize
-  })
-})
+)

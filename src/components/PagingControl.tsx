@@ -4,30 +4,29 @@ import NextButton from "./NextButton"
 import PreviousButton from "./PreviousButton"
 import Spinner from "./Spinner"
 
-interface Page {
-  items: unknown[]
+interface Page<T> {
+  items: T[]
   metadata: {
     continue?: string
   }
 }
 
-export interface PagingControlProps {
-  items: unknown[]
-}
-
-interface PagingControlState {
+interface PagingControlState<T> {
   prevContinueVals: string[]
   currentContinueVal: string,
-  items: unknown[]
+  items: T[]
   nextContinueVal?: string
 }
 
 // TODO: Need to make this thing auto-refresh
-export default function withPagingControl(Component: typeof React.Component, fetch: (props: unknown, continueVal: string) => Promise<Page>): typeof React.Component {
+export default function withPagingControl<T, T1>(
+  fetch: (props: T, continueVal: string) => Promise<Page<T1>>,
+  render: (items: T1[]) => React.ReactElement
+) {
 
-  return class extends React.Component<PagingControlProps, PagingControlState> {
+  return class extends React.Component<T, PagingControlState<T1>> {
     
-    constructor(props: PagingControlProps) {
+    constructor(props: T) {
       super(props)
       this.state = {
         prevContinueVals: [],
@@ -83,7 +82,7 @@ export default function withPagingControl(Component: typeof React.Component, fet
       const hasMore = this.state.nextContinueVal ? true : false
       return (
         <div>
-          <Component items={items}/>
+          { render(items) }
           { hasPrev && <PreviousButton onClick={this.fetchPreviousPage}/> }
           { hasMore && <NextButton onClick={this.fetchNextPage}/> }
         </div>

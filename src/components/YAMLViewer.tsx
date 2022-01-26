@@ -8,11 +8,11 @@ import style from "react-syntax-highlighter/dist/esm/styles/hljs/sunburst"
 
 SyntaxHighlighter.registerLanguage('yaml', yamlSyntax)
 
-interface YAMLViewerProps {
-  object: any
+interface YAMLViewerProps<T> {
+  object: T
 }
 
-export default class YAMLViewer extends React.Component<YAMLViewerProps> {
+export default class YAMLViewer<T> extends React.Component<YAMLViewerProps<T>> {
 
   render(): React.ReactElement {
     return (

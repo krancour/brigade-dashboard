@@ -8,7 +8,7 @@ import PrincipalIcon from "./PrincipalIcon"
 import { authz, meta } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
-import withPagingControl, { PagingControlProps } from "./components/PagingControl"
+import withPagingControl from "./components/PagingControl"
 
 const permissionsListPageSize = 20
 
@@ -34,14 +34,18 @@ class SystemPermissionsListItem extends React.Component<SystemPermissionsListIte
 
 }
 
-interface SystemPermissionsListProps extends PagingControlProps {
+interface SystemPermissionsListProps {
   selector?: authz.RoleAssignmentsSelector
 }
 
-class SystemPermissionsList extends React.Component<SystemPermissionsListProps> {
-
-  render(): React.ReactElement {
-    const roleAssignments = this.props.items as libAuthz.RoleAssignment[]
+export default withPagingControl(
+  (props: SystemPermissionsListProps, continueVal: string): Promise<meta.List<libAuthz.RoleAssignment>>  => {
+    return getClient().authz().roleAssignments().list(props.selector, {
+      continue: continueVal,
+      limit: permissionsListPageSize
+    })
+  },
+  (roleAssignments: libAuthz.RoleAssignment[]): React.ReactElement => {
     return (
       <Table striped bordered hover>
         <thead>
@@ -64,13 +68,4 @@ class SystemPermissionsList extends React.Component<SystemPermissionsListProps> 
       </Table>
     )
   }
-
-}
-
-export default withPagingControl(SystemPermissionsList, (props: any, continueVal: string): Promise<meta.List<libAuthz.RoleAssignment>>  => {
-  const selector = props.selector as authz.RoleAssignmentsSelector
-  return getClient().authz().roleAssignments().list(selector, {
-    continue: continueVal,
-    limit: permissionsListPageSize
-  })
-})
+)

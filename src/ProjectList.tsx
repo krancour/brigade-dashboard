@@ -9,7 +9,7 @@ import moment from "moment"
 import { core, meta } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
-import withPagingControl, { PagingControlProps } from "./components/PagingControl"
+import withPagingControl from "./components/PagingControl"
 import WorkerPhaseIcon from "./WorkerPhaseIcon"
 
 const projectListPageSize = 20
@@ -54,12 +54,16 @@ class ProjectListItem extends React.Component<ProjectListItemProps, ProjectListI
 
 }
 
-interface ProjectListProps extends PagingControlProps {}
+interface ProjectListProps {}
 
-class ProjectList extends React.Component<ProjectListProps> {
-
-  render(): React.ReactElement {
-    const projects = this.props.items as core.Project[]
+export default withPagingControl(
+  (props: ProjectListProps, continueVal: string): Promise<meta.List<core.Project>>  => {
+    return getClient().core().projects().list({}, {
+      continue: continueVal,
+      limit: projectListPageSize
+    })
+  },
+  (projects: core.Project[]): React.ReactElement => {
     return (
       <Table striped bordered hover>
         <thead>
@@ -79,12 +83,4 @@ class ProjectList extends React.Component<ProjectListProps> {
       </Table>
     )
   }
-
-}
-
-export default withPagingControl(ProjectList, (props: any, continueVal: string): Promise<meta.List<core.Project>>  => {
-  return getClient().core().projects().list({}, {
-    continue: continueVal,
-    limit: projectListPageSize
-  })
-})
+)

@@ -10,7 +10,7 @@ import { authn, meta } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
 import LockIcon from "./components/LockIcon"
-import withPagingControl, { PagingControlProps } from "./components/PagingControl"
+import withPagingControl from "./components/PagingControl"
 
 const userListPageSize = 20
 
@@ -36,12 +36,16 @@ class UserListItem extends React.Component<UserListItemProps> {
   }
 }
 
-interface UserListProps extends PagingControlProps {}
+interface UserListProps {}
 
-class UserList extends React.Component<UserListProps> {
-
-  render(): React.ReactElement {
-    const users = this.props.items as authn.User[]
+export default withPagingControl(
+  (props: UserListProps, continueVal: string): Promise<meta.List<authn.User>>  => {
+    return getClient().authn().users().list({}, {
+      continue: continueVal,
+      limit: userListPageSize
+    })
+  },
+  (users: authn.User[]): React.ReactElement => {
     return (
       <Table striped bordered hover>
         <thead>
@@ -61,12 +65,4 @@ class UserList extends React.Component<UserListProps> {
       </Table>
     )
   }
-
-}
-
-export default withPagingControl(UserList, (props: any, continueVal: string): Promise<meta.List<authn.User>>  => {
-  return getClient().authn().users().list({}, {
-    continue: continueVal,
-    limit: userListPageSize
-  })
-})
+)
