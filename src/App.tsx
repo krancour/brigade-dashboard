@@ -56,7 +56,9 @@ export default class App extends React.Component<AppProps, AppState> {
           <Navbar bg="dark" variant="dark" expand="lg">
             <Container>
               <LinkContainer to="/">
-                <Navbar.Brand>Brigade Dashboard</Navbar.Brand>
+                <Navbar.Brand>
+                  <img src="/images/logo-dark.png" height="40"/>
+                </Navbar.Brand>
               </LinkContainer>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
