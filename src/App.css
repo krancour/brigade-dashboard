@@ -21,3 +21,9 @@ pre.log-box {
   justify-content: center;
   align-items: center;
 }
+
+.nav-pills .nav-link.active {
+  color: #0d6efd !important;
+  border: 1px solid #0d6efd !important;
+  background-color: #ffffff !important;
+}
