@@ -75,7 +75,7 @@ class UserSummary extends React.Component<UserSummaryProps> {
 
   render(): React.ReactElement {
     return (
-      <Card>
+      <Card bg="light">
         <Card.Header>
           <LockIcon locked={this.props.user?.locked ? true : false}/>&nbsp;&nbsp;
           {this.props.user?.metadata.id}

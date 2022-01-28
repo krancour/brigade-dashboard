@@ -75,7 +75,7 @@ class ServiceAccountSummary extends React.Component<ServiceAccountSummaryProps> 
 
   render(): React.ReactElement {
     return (
-      <Card>
+      <Card bg="light">
         <Card.Header>
           <LockIcon locked={this.props.serviceAccount?.locked ? true : false}/>&nbsp;&nbsp;
           {this.props.serviceAccount?.metadata.id}
