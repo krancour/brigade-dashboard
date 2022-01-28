@@ -1,4 +1,4 @@
-## Default values for kashti
+## Default values for kashti-tng
 ## This is a YAML-formatted file.
 ## Declare variables to be passed into your templates.
 
@@ -16,10 +16,10 @@ replicas: 1
 ## the default value or otherwise setting this inaccurately may result in
 ## invalid routing rules or untrusted certificates (untrusted beyond merely
 ## having been self-signed).
-host: kashti.example.com
+host: kashti-tng.example.com
 
 image:
-  repository: brigadecore/kashti
+  repository: brigadecore/kashti-tng
   ## tag should only be specified if you want to override Chart.appVersion
   ## The default tag is the value of .Chart.AppVersion
   # tag:
