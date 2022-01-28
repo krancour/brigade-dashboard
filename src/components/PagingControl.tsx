@@ -83,8 +83,10 @@ export default function withPagingControl<T, T1>(
       return (
         <div>
           { render(items) }
-          { hasPrev && <PreviousButton onClick={this.fetchPreviousPage}/> }
-          { hasMore && <NextButton onClick={this.fetchNextPage}/> }
+          <div className="paging-controls">
+            { hasPrev && <PreviousButton onClick={this.fetchPreviousPage}/> }
+            { hasMore && <NextButton onClick={this.fetchNextPage}/> }
+          </div>
         </div>
       )
     }

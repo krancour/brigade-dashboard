@@ -32,3 +32,12 @@ pre.log-box {
   border: 1px solid #0d6efd !important;
   background-color: #ffffff !important;
 }
+
+.paging-controls {
+  text-align: center;
+}
+
+.paging-controls button {
+  margin-left: 20px;
+  margin-right: 20px;
+}
