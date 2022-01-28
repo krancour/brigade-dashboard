@@ -21,7 +21,7 @@ interface PagingControlState<T> {
 // TODO: Need to make this thing auto-refresh
 export default function withPagingControl<T, T1>(
   fetch: (props: T, continueVal: string) => Promise<Page<T1>>,
-  render: (items: T1[]) => React.ReactElement
+  render: (items: T1[], props: T) => React.ReactElement
 ) {
 
   return class extends React.Component<T, PagingControlState<T1>> {
@@ -82,7 +82,7 @@ export default function withPagingControl<T, T1>(
       const hasMore = this.state.nextContinueVal ? true : false
       return (
         <div>
-          { render(items) }
+          { render(items, this.props) }
           <div className="paging-controls">
             { hasPrev && <PreviousButton onClick={this.fetchPreviousPage}/> }
             { hasMore && <NextButton onClick={this.fetchNextPage}/> }

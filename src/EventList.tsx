@@ -16,6 +16,7 @@ const eventListPageSize = 20
 
 interface EventListItemProps {
   event: core.Event
+  suppressProjectColumn?: boolean
 }
 
 class EventListItem extends React.Component<EventListItemProps> {
@@ -28,7 +29,7 @@ class EventListItem extends React.Component<EventListItemProps> {
           <WorkerPhaseIcon phase={event.worker?.status.phase}/>&nbsp;&nbsp;
           <Link to={"/events/" + event.metadata?.id}>{this.props.event.metadata?.id}</Link>
         </td>
-        <td><Link to={"/projects/" + event.projectID}>{this.props.event.projectID}</Link></td>
+        { this.props.suppressProjectColumn ? null : <td><Link to={"/projects/" + event.projectID}>{this.props.event.projectID}</Link></td> }
         <td>{this.props.event.source}</td>
         <td>{this.props.event.type}</td>
         <td>{moment(this.props.event.metadata?.created).fromNow(true)}</td>
@@ -48,13 +49,14 @@ export default withPagingControl(
       limit: eventListPageSize
     })
   },
-  (events: core.Event[]): React.ReactElement => {
+  (events: core.Event[], props: EventListProps): React.ReactElement => {
+    const suppressProjectColumn = props.selector?.projectID ? true : false
     return (
       <Table striped bordered hover>
         <thead>
           <tr>
             <th>ID</th>
-            <th>Project</th>
+            { suppressProjectColumn ? null : <th>Project</th> }
             <th>Source</th>
             <th>Type</th>
             <th>Age</th>
@@ -63,7 +65,7 @@ export default withPagingControl(
         <tbody>
           {
             events.map((event: core.Event) => (
-              <EventListItem key={event.metadata?.id} event={event}/>
+              <EventListItem key={event.metadata?.id} event={event} suppressProjectColumn={suppressProjectColumn}/>
             ))
           }
         </tbody>
