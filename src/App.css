@@ -47,6 +47,10 @@ pre.log-box {
   margin-bottom: 20px;
 }
 
+.card-text {
+  margin-top: 15px;
+}
+
 ul.links {
   list-style-type: none;
   padding-left: 5px;
