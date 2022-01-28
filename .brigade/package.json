@@ -1,0 +1,6 @@
+{
+  "name": "kashti-tng",
+  "dependencies": {
+    "@brigadecore/brigadier": "^2.2.0"
+  }
+}
