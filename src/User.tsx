@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom"
 import { authn, authz } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
+import ComingSoon from "./components/ComingSoon"
 import LockIcon from "./components/LockIcon"
 import Spinner from "./components/Spinner"
 import SystemPermissionsList from "./SystemPermissionsList"
@@ -52,11 +53,7 @@ class User extends React.Component<UserProps, UserState> {
           <SystemPermissionsList selector={{principal: {type: authz.PrincipalTypeUser, id: this.props.id}}}/>
           </Tab>
           <Tab eventKey="project-permissions" title="Project Permissions">
-            <Card>
-              <Card.Body>
-                Placeholder
-              </Card.Body>
-            </Card>
+            <ComingSoon/>
           </Tab>
         </Tabs>
       </div>

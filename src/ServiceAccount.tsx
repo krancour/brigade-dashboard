@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom"
 import { authn, authz } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
+import ComingSoon from "./components/ComingSoon"
 import LockIcon from "./components/LockIcon"
 import Spinner from "./components/Spinner"
 import SystemPermissionsList from "./SystemPermissionsList"
@@ -52,11 +53,7 @@ class ServiceAccount extends React.Component<ServiceAccountProps, ServiceAccount
             <SystemPermissionsList selector={{principal: {type: authz.PrincipalTypeServiceAccount, id: this.props.id}}}/>
           </Tab>
           <Tab eventKey="project-permissions" title="Project Permissions">
-            <Card>
-              <Card.Body>
-                Placeholder
-              </Card.Body>
-            </Card>
+            <ComingSoon/>
           </Tab>
         </Tabs>
       </div>

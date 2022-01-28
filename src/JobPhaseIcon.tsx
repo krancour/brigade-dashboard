@@ -1,7 +1,7 @@
-import React from "react"
-
 import { faCheck, faClock, faPlay, faQuestion, faTimes } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+
+import React from "react"
 
 import { core } from "@brigadecore/brigade-sdk"
 
