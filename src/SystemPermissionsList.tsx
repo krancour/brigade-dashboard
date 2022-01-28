@@ -16,13 +16,39 @@ interface SystemPermissionsListItemProps {
   roleAssignment: libAuthz.RoleAssignment
 }
 
-class SystemPermissionsListItem extends React.Component<SystemPermissionsListItemProps> {
+interface SystemPermissionsListItemState {
+  locked: boolean | null
+}
+
+class SystemPermissionsListItem extends React.Component<SystemPermissionsListItemProps, SystemPermissionsListItemState> {
+
+  constructor(props: SystemPermissionsListItemProps) {
+    super(props)
+    this.state = {
+      locked: null
+    }
+  }
+
+  async componentDidMount(): Promise<void> {
+    let locked: boolean | null = null
+    switch (this.props.roleAssignment.principal.type) {
+      case authz.PrincipalTypeServiceAccount:
+        locked = (await getClient().authn().serviceAccounts().get(this.props.roleAssignment.principal.id)).locked? true : false
+        break
+      case authz.PrincipalTypeUser:
+        locked = (await getClient().authn().users().get(this.props.roleAssignment.principal.id)).locked? true : false
+        break
+    }
+    this.setState({
+      locked: locked
+    })
+  }
 
   render(): React.ReactElement {
     return (
       <tr>
         <td>
-          <PrincipalIcon principalType={this.props.roleAssignment.principal.type}/>&nbsp;&nbsp;
+          <PrincipalIcon principalType={this.props.roleAssignment.principal.type} locked={this.state.locked}/>&nbsp;&nbsp;
           {/* TODO: Make this link to the user or service account */}
           {this.props.roleAssignment.principal.id}
         </td>
