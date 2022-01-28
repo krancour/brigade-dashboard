@@ -26,9 +26,8 @@ class BlogCard extends React.Component<InjectionRSSProps> {
 
 }
 
-// TODO: Don't use cors-anywhere
 export default rssEnhancer(
   BlogCard, 
-  "https://cors-anywhere.herokuapp.com/https://blog.brigade.sh/index.xml",
+  "https://blog.brigade.sh/index.xml",
   url => ({ input: url, init: { headers: { "Origin": window.location.origin } } })
 )
