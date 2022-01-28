@@ -22,7 +22,7 @@ ifdef DOCKER_ORG
 	DOCKER_ORG := $(DOCKER_ORG)/
 endif
 
-DOCKER_IMAGE_NAME := $(DOCKER_REGISTRY)$(DOCKER_ORG)kashti
+DOCKER_IMAGE_NAME := $(DOCKER_REGISTRY)$(DOCKER_ORG)kashti-tng
 
 ifdef VERSION
 	MUTABLE_DOCKER_TAG := latest
@@ -41,7 +41,7 @@ ifdef HELM_ORG
 	HELM_ORG := $(HELM_ORG)/
 endif
 
-HELM_CHART_NAME := $(HELM_REGISTRY)$(HELM_ORG)kashti
+HELM_CHART_NAME := $(HELM_REGISTRY)$(HELM_ORG)kashti-tng
 
 ################################################################################
 # Tests                                                                        #
@@ -50,7 +50,7 @@ HELM_CHART_NAME := $(HELM_REGISTRY)$(HELM_ORG)kashti
 .PHONY: lint-chart
 lint-chart:
 	$(HELM_DOCKER_CMD) sh -c ' \
-		cd charts/kashti && \
+		cd charts/kashti-tng && \
 		helm dep up && \
 		helm lint . \
 	'
@@ -85,10 +85,10 @@ push:
 publish-chart:
 	$(HELM_DOCKER_CMD) sh	-c ' \
 		helm registry login $(HELM_REGISTRY) -u $(HELM_USERNAME) -p $${HELM_PASSWORD} && \
-		cd charts/kashti && \
+		cd charts/kashti-tng && \
 		helm dep up && \
 		helm package . --version $(VERSION) --app-version $(VERSION) && \
-		helm push kashti-$(VERSION).tgz oci://$(HELM_REGISTRY)$(HELM_ORG) \
+		helm push kashti-tng-$(VERSION).tgz oci://$(HELM_REGISTRY)$(HELM_ORG) \
 	'
 
 ################################################################################
@@ -113,11 +113,11 @@ IMAGE_PULL_POLICY ?= Always
 
 .PHONY: hack-deploy
 hack-deploy:
-	helm dep up charts/kashti && \
-	helm upgrade kashti charts/kashti \
+	helm dep up charts/kashti-tng && \
+	helm upgrade kashti-tng charts/kashti-tng \
 		--install \
 		--create-namespace \
-		--namespace kashti \
+		--namespace kashti-tng \
 		--timeout 60s \
 		--set image.repository=$(DOCKER_IMAGE_NAME) \
 		--set image.tag=$(IMMUTABLE_DOCKER_TAG) \

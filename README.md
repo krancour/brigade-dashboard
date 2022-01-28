@@ -9,7 +9,7 @@ Your mileage may vary:
 
 ```console
 $ helm install kashti-tng \
-    charts/kashti \
+    charts/kashti-tng \
     --create-namespace \
     --namespace kashti-tng \
     --wait \
