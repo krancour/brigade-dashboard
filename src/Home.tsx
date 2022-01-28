@@ -9,6 +9,8 @@ import BlogCard from "./home/BlogCard"
 import ContributeCard from "./home/ContributeCard"
 import ResourcesCard from "./home/ResourcesCard"
 
+import logo from "./images/logo.png"
+
 export default class Home extends React.Component {
 
   render(): React.ReactElement {
@@ -16,7 +18,7 @@ export default class Home extends React.Component {
       <Container>
         <Row>
           <Col className="splash">
-            <img src="/images/logo.png"/>
+            <img src={logo}/>
           </Col>
         </Row>
         <Row>

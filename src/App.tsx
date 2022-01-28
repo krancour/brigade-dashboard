@@ -13,7 +13,8 @@ import * as consts from "./Consts"
 import Home from "./Home"
 import LoginControl from "./LoginControl"
 
-import './App.css'
+import "./App.css"
+import logoDark from "./images/logo-dark.png"
 
 interface AppProps {}
 
@@ -57,7 +58,7 @@ export default class App extends React.Component<AppProps, AppState> {
             <Container>
               <LinkContainer to="/">
                 <Navbar.Brand>
-                  <img src="/images/logo-dark.png" height="40"/>
+                  <img src={logoDark} height="40"/>
                 </Navbar.Brand>
               </LinkContainer>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
