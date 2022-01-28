@@ -1,15 +1,15 @@
-import { faGithub, faSlack, faYoutube } from "@fortawesome/free-brands-svg-icons"
+import { faGithub, faSlack, faTwitter, faYoutube } from "@fortawesome/free-brands-svg-icons"
 import { faBlog, faBook } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import React from "react"
 
-import { Link } from "react-router-dom"
-
 import Card from "react-bootstrap/Card"
 import Col from "react-bootstrap/Col"
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
+
+import BlogCard from "./BlogCard"
 
 export default class Home extends React.Component {
 
@@ -23,14 +23,7 @@ export default class Home extends React.Component {
         </Row>
         <Row>
           <Col>
-            <Card bg="light">
-              <Card.Header>
-                Placeholder
-              </Card.Header>
-              <Card.Body>
-                Placeholder
-              </Card.Body>
-            </Card>
+            <BlogCard/>
             <Card bg="light">
               <Card.Header>
                 Placeholder
@@ -79,6 +72,11 @@ export default class Home extends React.Component {
                     <FontAwesomeIcon icon={faSlack}/>
                     &nbsp;&nbsp;
                     <a href="https://slack.brigade.sh/" target="_blank">Slack Channel</a>
+                  </li>
+                  <li>
+                    <FontAwesomeIcon icon={faTwitter}/>
+                    &nbsp;&nbsp;
+                    <a href="https://twitter.com/brigadecore/" target="_blank">Twitter Channel</a>
                   </li>
                 </ul>
               </Card.Body>

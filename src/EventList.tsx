@@ -1,3 +1,5 @@
+import moment from "moment"
+
 import React from "react"
 
 import Table from "react-bootstrap/Table"
@@ -5,8 +7,6 @@ import Table from "react-bootstrap/Table"
 import { Link } from "react-router-dom"
 
 import { core, meta } from "@brigadecore/brigade-sdk"
-
-import moment from "moment"
 
 import getClient from "./Client"
 import withPagingControl from "./components/PagingControl"

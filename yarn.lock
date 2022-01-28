@@ -7352,6 +7352,11 @@ react-router@6.2.1:
   dependencies:
     history "^5.2.0"
 
+react-rss@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-rss/-/react-rss-2.0.0.tgz#85029d357203be1e5b5abb5ea93e11c684b544f1"
+  integrity sha512-AakIoE27rQ2OxuTziZXmaYY9Klj9yHpV7GisokmzzSp8K3Ln/YwvPV6ZWF8fq82+NYwPPRe4VrK4FKqeBBo0VQ==
+
 react-scripts@5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/react-scripts/-/react-scripts-5.0.0.tgz#6547a6d7f8b64364ef95273767466cc577cb4b60"

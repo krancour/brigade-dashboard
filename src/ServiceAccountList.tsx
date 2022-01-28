@@ -1,10 +1,10 @@
+import moment from "moment"
+
 import React from "react"
 
 import Table from "react-bootstrap/Table"
 
 import { Link } from "react-router-dom"
-
-import moment from "moment"
 
 import { authn, meta } from "@brigadecore/brigade-sdk"
 
