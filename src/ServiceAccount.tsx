@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom"
 import { authn, authz } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
+import LockIcon from "./components/LockIcon"
 import Spinner from "./components/Spinner"
 import SystemPermissionsList from "./SystemPermissionsList"
 
@@ -78,6 +79,10 @@ class ServiceAccountSummary extends React.Component<ServiceAccountSummaryProps> 
   render(): React.ReactElement {
     return (
       <Card>
+        <Card.Header>
+          <LockIcon locked={this.props.serviceAccount?.locked ? true : false}/>&nbsp;&nbsp;
+          {this.props.serviceAccount?.metadata.id}
+        </Card.Header>
         <Card.Body>
           Placeholder
         </Card.Body>

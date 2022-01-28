@@ -77,6 +77,7 @@ class ProjectSummary extends React.Component<ProjectSummaryProps> {
   render(): React.ReactElement {
     return (
       <Card>
+        <Card.Header>{this.props.project?.metadata.id}</Card.Header>
         <Card.Body>
           Placeholder
         </Card.Body>

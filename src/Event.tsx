@@ -83,6 +83,7 @@ class EventSummary extends React.Component<EventSummaryProps> {
   render(): React.ReactElement {
     return (
       <Card>
+        <Card.Header>{this.props.event?.metadata?.id}</Card.Header>
         <Card.Body>
           Placeholder
         </Card.Body>
@@ -160,6 +161,7 @@ class JobTabPane extends React.Component<JobTabPaneProps> {
         <Tabs defaultActiveKey="summary" className="mb-3" mountOnEnter={true}>
           <Tab eventKey="summary" title="Summary">
             <Card>
+              <Card.Header>{this.props.job.name}</Card.Header>
               <Card.Body>
                 Placeholder
               </Card.Body>
