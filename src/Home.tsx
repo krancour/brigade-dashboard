@@ -3,6 +3,7 @@ import React from "react"
 import Card from "react-bootstrap/Card"
 import Col from "react-bootstrap/Col"
 import Container from "react-bootstrap/Container"
+import Image from 'react-bootstrap/Image'
 import Row from "react-bootstrap/Row"
 
 import BlogCard from "./home/BlogCard"
@@ -18,7 +19,7 @@ export default class Home extends React.Component {
       <Container>
         <Row>
           <Col className="splash">
-            <img src={logo}/>
+            <Image src={logo} fluid/>
           </Col>
         </Row>
         <Row>
