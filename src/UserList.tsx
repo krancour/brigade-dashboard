@@ -47,7 +47,7 @@ export default withPagingControl(
   },
   (users: authn.User[]): React.ReactElement => {
     return (
-      <Table striped bordered hover>
+      <Table striped bordered hover responsive>
         <thead>
           <tr>
             <th>Username</th>

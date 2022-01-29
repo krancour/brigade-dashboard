@@ -79,7 +79,7 @@ export default withPagingControl(
   (roleAssignments: libAuthz.RoleAssignment[], props: SystemPermissionsListProps): React.ReactElement => {
     const suppressPrincipalColumn = props.selector?.principal ? true : false
     return (
-      <Table striped bordered hover>
+      <Table striped bordered hover responsive>
         <thead>
           <tr>
             { suppressPrincipalColumn ? null : <th>Principal</th> }

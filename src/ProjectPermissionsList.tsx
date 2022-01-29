@@ -70,7 +70,7 @@ export default withPagingControl(
   },
   (projectRoleAssignments: core.ProjectRoleAssignment[]): React.ReactElement => {
     return (
-      <Table striped bordered hover>
+      <Table striped bordered hover responsive>
         <thead>
           <tr>
             <th>Principal</th>
