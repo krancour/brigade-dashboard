@@ -121,10 +121,6 @@ const publishChartJob = (event: Event, version: string) => {
 
 events.on("brigade.sh/github", "ci:pipeline_requested", async event => {
   await buildJob(event).run()
-  if (event.worker?.git?.ref == "main") {
-    // Push "edge" images
-    await pushJob(event).run()
-  }
 })
 
 // This event indicates a specific job is to be re-run.
