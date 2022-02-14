@@ -2,6 +2,8 @@ import React from "react"
 
 import Table from "react-bootstrap/Table"
 
+import { Link } from "react-router-dom"
+
 import libAuthz from "@brigadecore/brigade-sdk/dist/lib/authz"
 
 import PrincipalIcon from "./PrincipalIcon"
@@ -48,13 +50,15 @@ class SystemPermissionsListItem extends React.Component<SystemPermissionsListIte
   }
 
   render(): React.ReactElement {
+    const linkTo = this.props.roleAssignment.principal.type == authz.PrincipalTypeServiceAccount ? 
+      "/service-accounts/" + this.props.roleAssignment.principal.id :
+      "/users/" + this.props.roleAssignment.principal.id
     return (
       <tr>
         { this.props.suppressPrincipalColumn ? null : (
             <td>
               <PrincipalIcon principalType={this.props.roleAssignment.principal.type} locked={this.state.locked}/>&nbsp;&nbsp;
-              {/* TODO: Make this link to the user or service account */}
-              {this.props.roleAssignment.principal.id}
+              <Link to={linkTo}>{this.props.roleAssignment.principal.id}</Link>
             </td>
         )}
         <td>{this.props.roleAssignment.role}</td>

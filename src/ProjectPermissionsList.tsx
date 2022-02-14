@@ -2,6 +2,8 @@ import React from "react"
 
 import Table from "react-bootstrap/Table"
 
+import { Link } from "react-router-dom"
+
 import { authz, core, meta } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
@@ -45,19 +47,21 @@ class ProjectPermissionsListItem extends React.Component<ProjectPermissionsListI
   }
   
   render(): React.ReactElement {
+    const principalLink = this.props.projectRoleAssignment.principal.type == authz.PrincipalTypeServiceAccount ? 
+      "/service-accounts/" + this.props.projectRoleAssignment.principal.id :
+      "/users/" + this.props.projectRoleAssignment.principal.id
+    const projectLink = "/projects/" + this.props.projectRoleAssignment.projectID
     return (
       <tr>
         { this.props.suppressPrincipalColumn ? null : (
           <td>
             <PrincipalIcon principalType={this.props.projectRoleAssignment.principal.type} locked={this.state.locked}/>&nbsp;&nbsp;
-            {/* TODO: Make this link to the user or service account */}
-            {this.props.projectRoleAssignment.principal.id}
+            <Link to={principalLink}>{this.props.projectRoleAssignment.principal.id}</Link>
           </td>
         )}
         { this.props.suppressProjectColumn ? null : (
           <td>
-            {/* TODO: Make this link to the project */}
-            {this.props.projectRoleAssignment.projectID}
+            <Link to={projectLink}>{this.props.projectRoleAssignment.projectID}</Link>
           </td>
         )}
         <td>{this.props.projectRoleAssignment.role}</td>
