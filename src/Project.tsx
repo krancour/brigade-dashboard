@@ -11,6 +11,7 @@ import { core } from "@brigadecore/brigade-sdk"
 import getClient from "./Client"
 import EventList from "./EventList"
 import ProjectPermissionsList from "./ProjectPermissionsList"
+import SecretsList from "./SecretsList"
 import Spinner from "./components/Spinner"
 import YAMLViewer from "./components/YAMLViewer"
 
@@ -52,6 +53,9 @@ class Project extends React.Component<ProjectProps, ProjectState> {
           </Tab>
           <Tab eventKey="yaml" title="YAML">
             <YAMLViewer object={project}/>
+          </Tab>
+          <Tab eventKey="secrets" title="Secrets">
+            <SecretsList projectID={project.metadata.id}/>
           </Tab>
           <Tab eventKey="permissions" title="Permissions">
             <ProjectPermissionsList projectID={project.metadata.id}/>
