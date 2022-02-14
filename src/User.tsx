@@ -9,8 +9,8 @@ import { useParams } from "react-router-dom"
 import { authn, authz } from "@brigadecore/brigade-sdk"
 
 import getClient from "./Client"
-import ComingSoon from "./components/ComingSoon"
 import LockIcon from "./components/LockIcon"
+import ProjectPermissionsList from "./ProjectPermissionsList"
 import Spinner from "./components/Spinner"
 import SystemPermissionsList from "./SystemPermissionsList"
 
@@ -49,11 +49,10 @@ class User extends React.Component<UserProps, UserState> {
             <UserSummary user={user}/>
           </Tab>
           <Tab eventKey="system-permissions" title="System Permissions">
-          {/* TODO: Would be good to find a way to suppress the principal column here */}
-          <SystemPermissionsList selector={{principal: {type: authz.PrincipalTypeUser, id: this.props.id}}}/>
+            <SystemPermissionsList selector={{principal: {type: authz.PrincipalTypeUser, id: this.props.id}}}/>
           </Tab>
           <Tab eventKey="project-permissions" title="Project Permissions">
-            <ComingSoon/>
+            <ProjectPermissionsList selector={{principal: {type: authz.PrincipalTypeUser, id: this.props.id}}}/>
           </Tab>
         </Tabs>
       </div>

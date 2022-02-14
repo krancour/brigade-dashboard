@@ -12,6 +12,8 @@ const permissionsListPageSize = 20
 
 interface ProjectPermissionsListItemProps {
   projectRoleAssignment: core.ProjectRoleAssignment
+  suppressPrincipalColumn?: boolean
+  suppressProjectColumn?: boolean
 }
 
 interface ProjectPermissionsListItemState {
@@ -45,11 +47,19 @@ class ProjectPermissionsListItem extends React.Component<ProjectPermissionsListI
   render(): React.ReactElement {
     return (
       <tr>
-        <td>
-          <PrincipalIcon principalType={this.props.projectRoleAssignment.principal.type} locked={this.state.locked}/>&nbsp;&nbsp;
-          {/* TODO: Make this link to the user or service account */}
-          {this.props.projectRoleAssignment.principal.id}
-        </td>
+        { this.props.suppressPrincipalColumn ? null : (
+          <td>
+            <PrincipalIcon principalType={this.props.projectRoleAssignment.principal.type} locked={this.state.locked}/>&nbsp;&nbsp;
+            {/* TODO: Make this link to the user or service account */}
+            {this.props.projectRoleAssignment.principal.id}
+          </td>
+        )}
+        { this.props.suppressProjectColumn ? null : (
+          <td>
+            {/* TODO: Make this link to the project */}
+            {this.props.projectRoleAssignment.projectID}
+          </td>
+        )}
         <td>{this.props.projectRoleAssignment.role}</td>
       </tr>
     )
@@ -58,22 +68,26 @@ class ProjectPermissionsListItem extends React.Component<ProjectPermissionsListI
 }
 
 interface ProjectPermissionsListProps {
-  projectID: string
+  projectID?: string
+  selector?: core.ProjectRoleAssignmentsSelector
 }
 
 export default withPagingControl(
   (props: ProjectPermissionsListProps, continueVal: string): Promise<meta.List<core.ProjectRoleAssignment>>  => {
-    return getClient().core().projects().authz().roleAssignments().list(props.projectID, {}, {
+    return getClient().core().projects().authz().roleAssignments().list(props.projectID || "", props.selector, {
       continue: continueVal,
       limit: permissionsListPageSize
     })
   },
-  (projectRoleAssignments: core.ProjectRoleAssignment[]): React.ReactElement => {
+  (projectRoleAssignments: core.ProjectRoleAssignment[], props: ProjectPermissionsListProps): React.ReactElement => {
+    const suppressPrincipalColumn = props.selector?.principal ? true : false
+    const suppressProjectColumn = props.projectID ? true : false
     return (
       <Table striped bordered hover responsive>
         <thead>
           <tr>
-            <th>Principal</th>
+            { suppressPrincipalColumn ? null : <th>Principal</th> }
+            { suppressProjectColumn ? null : <th>Project</th> }
             <th>Role</th>
           </tr>
         </thead>
@@ -81,8 +95,10 @@ export default withPagingControl(
           {
             projectRoleAssignments.map((projectRoleAssignment: core.ProjectRoleAssignment) => (
               <ProjectPermissionsListItem 
-                key={projectRoleAssignment.principal.type + ":" + projectRoleAssignment.principal.id + ":" + projectRoleAssignment.role}
+                key={projectRoleAssignment.principal.type + ":" + projectRoleAssignment.principal.id + ":" + projectRoleAssignment.projectID + ":" + projectRoleAssignment.role}
                 projectRoleAssignment={projectRoleAssignment}
+                suppressPrincipalColumn={suppressPrincipalColumn}
+                suppressProjectColumn={suppressProjectColumn}
               />
             ))
           }

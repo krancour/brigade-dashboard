@@ -75,6 +75,9 @@ export default function withPagingControl<T, T1>(
 
     render(): React.ReactElement {
       const items = this.state.items
+      if (!items) {
+        return <div/>
+      }
       if (items.length === 0) {
         return <Spinner/>
       }

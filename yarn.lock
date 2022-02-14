@@ -1060,10 +1060,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@brigadecore/brigade-sdk@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@brigadecore/brigade-sdk/-/brigade-sdk-2.2.0.tgz#7118165aa332c62032d7526af84cee0b03119549"
-  integrity sha512-aQn/fgefzK9jolex+mMqEzLhgzZE53kQqufjp488OPmkjbe29a880MBIX3jyWuxxp6v0ZtBs0LhEky7CBeNWVg==
+"@brigadecore/brigade-sdk@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@brigadecore/brigade-sdk/-/brigade-sdk-2.3.0.tgz#d1f71962f0cf41c84052a658ddec1b0fe738b6b6"
+  integrity sha512-SqeojR9dkqiH8pHXvzgRsTmINY8Zi2Ourcr8H6KJGS2XziO1RRk6vY+frYf3eTpdKhNTlQFLXospC+skGiIgug==
   dependencies:
     axios "^0.21.2"
     event-source-polyfill "^1.0.22"
