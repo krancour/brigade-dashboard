@@ -1,7 +1,10 @@
+import moment from "moment"
+
 import React from "react"
 
 import Card from "react-bootstrap/Card"
 import Tab from "react-bootstrap/Tab"
+import Table from "react-bootstrap/Table"
 import Tabs from "react-bootstrap/Tabs"
 
 import { useParams } from "react-router-dom"
@@ -67,20 +70,33 @@ export default function RoutedServiceAccount(): React.ReactElement {
 }
 
 interface ServiceAccountSummaryProps {
-  serviceAccount?: authn.ServiceAccount
+  serviceAccount: authn.ServiceAccount
 }
 
 class ServiceAccountSummary extends React.Component<ServiceAccountSummaryProps> {
 
   render(): React.ReactElement {
+    const serviceAccount = this.props.serviceAccount
     return (
-      <Card bg="light">
+      <Card border={serviceAccount.locked ? "danger" : "success"} bg="light">
         <Card.Header>
-          <LockIcon locked={this.props.serviceAccount?.locked ? true : false}/>&nbsp;&nbsp;
-          {this.props.serviceAccount?.metadata.id}
+          <LockIcon locked={serviceAccount.locked ? true : false}/>
+          &nbsp;&nbsp;
+          {serviceAccount?.metadata.id}
         </Card.Header>
         <Card.Body>
-          Placeholder
+          <Table borderless hover responsive>
+            <tbody>
+              <tr>
+                <th>Description</th>
+                <td>{serviceAccount.description}</td>
+              </tr>
+              <tr>
+                <th>Created</th>
+                <td>{moment(serviceAccount.metadata.created).format("YYYY-MM-DD HH:mm:ss Z")}</td>
+              </tr>
+            </tbody>
+          </Table>
         </Card.Body>
       </Card>
     )

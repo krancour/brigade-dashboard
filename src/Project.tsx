@@ -1,7 +1,10 @@
+import moment from "moment"
+
 import React from "react"
 
 import Card from "react-bootstrap/Card"
 import Tab from "react-bootstrap/Tab"
+import Table from "react-bootstrap/Table"
 import Tabs from "react-bootstrap/Tabs"
 
 import { useParams } from "react-router-dom"
@@ -73,17 +76,82 @@ export default function RoutedProject(): React.ReactElement {
 }
 
 interface ProjectSummaryProps {
-  project?: core.Project
+  project: core.Project
 }
 
 class ProjectSummary extends React.Component<ProjectSummaryProps> {
 
   render(): React.ReactElement {
+    const project = this.props.project
     return (
       <Card bg="light">
-        <Card.Header>{this.props.project?.metadata.id}</Card.Header>
+        <Card.Header>{project.metadata.id}</Card.Header>
         <Card.Body>
-          Placeholder
+          <Table borderless hover responsive>
+            <tbody>
+              <tr>
+                <th>Description</th>
+                <td>{project.description}</td>
+              </tr>
+              <tr>
+                <th>Created</th>
+                <td>{moment(project.metadata.created).utc().format("YYYY-MM-DD HH:mm:ss Z")}</td>
+              </tr>
+              {
+                project.spec.workerTemplate.container?.image ? (
+                  <tr>
+                    <th>Image</th>
+                    <td>{project.spec.workerTemplate.container?.image}</td>
+                  </tr>
+                ) : null
+              }
+              { 
+                project.spec.workerTemplate.git ? (
+                  <tr>
+                    <th>Git</th>
+                    <td>
+                      <Table borderless hover>
+                        <tbody>
+                          { 
+                            project.spec.workerTemplate.git.cloneURL ? (
+                              <tr>
+                                <th>Clone URL</th>
+                                <td>{project.spec.workerTemplate.git.cloneURL}</td>
+                              </tr>
+                            ) : null
+                          }
+                          {
+                            project.spec.workerTemplate.git.ref ? (
+                              <tr>
+                                <th>Ref</th>
+                                <td>{project.spec.workerTemplate.git.ref}</td>
+                              </tr>
+                            ) : null
+                          }
+                          {
+                            project.spec.workerTemplate.git.commit ? (
+                              <tr>
+                                <th>Commit</th>
+                                <td>{project.spec.workerTemplate.git.commit}</td>
+                              </tr>
+                            ) : null
+                          }
+                          {
+                            project.spec.workerTemplate.git.initSubmodules ? (
+                              <tr>
+                                <th>Initialize Submodules</th>
+                                <td>True</td>
+                              </tr>
+                            ) : null
+                          }
+                        </tbody>
+                      </Table>
+                    </td>
+                  </tr>
+                ) : null
+              }
+            </tbody>
+          </Table>
         </Card.Body>
       </Card>
     )

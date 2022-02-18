@@ -1,11 +1,15 @@
+import moment from "moment"
+
 import React from "react"
 
 import Alert from "react-bootstrap/Alert"
 import Card from "react-bootstrap/Card"
 import Col from "react-bootstrap/Col"
+import Container from "react-bootstrap/Container"
 import Nav from "react-bootstrap/Nav"
 import Row from "react-bootstrap/Row"
 import Tab from "react-bootstrap/Tab"
+import Table from "react-bootstrap/Table"
 import Tabs from "react-bootstrap/Tabs"
 
 import { useParams } from "react-router-dom"
@@ -16,6 +20,7 @@ import getClient from "./Client"
 import JobPhaseIcon from "./JobPhaseIcon"
 import LogStreamer from "./components/LogStreamer"
 import Spinner from "./components/Spinner"
+import WorkerPhaseIcon from "./WorkerPhaseIcon"
 import YAMLViewer from "./components/YAMLViewer"
 
 interface EventProps {
@@ -75,19 +80,205 @@ export default function RoutedEvent(): React.ReactElement {
 }
 
 interface EventSummaryProps {
-  event?: core.Event
+  event: core.Event
 }
 
 class EventSummary extends React.Component<EventSummaryProps> {
 
   render(): React.ReactElement {
+    const event = this.props.event
+    let phaseColor = "light"
+    switch(event.worker?.status.phase) {
+      case core.WorkerPhase.Aborted:
+        phaseColor = "danger"
+        break
+      case core.WorkerPhase.Canceled:
+        phaseColor = "danger"
+        break
+      case core.WorkerPhase.Failed:
+        phaseColor = "danger"
+        break
+      case core.WorkerPhase.Pending:
+        phaseColor = "warning"
+        break
+      case core.WorkerPhase.Running:
+        phaseColor = "warning"
+        break
+      case core.WorkerPhase.SchedulingFailed:
+        phaseColor = "danger"
+        break
+      case core.WorkerPhase.Starting:
+        phaseColor = "goldenrod"
+        break
+      case core.WorkerPhase.Succeeded:
+        phaseColor = "success"
+        break
+      case core.WorkerPhase.TimedOut:
+        phaseColor = "danger"
+        break
+    }
     return (
-      <Card bg="light">
-        <Card.Header>{this.props.event?.metadata?.id}</Card.Header>
-        <Card.Body>
-          Placeholder
-        </Card.Body>
-      </Card>
+      <Container>
+        <Row>
+          <Col>
+            <Card bg="light">
+              <Card.Header>{event.metadata?.id}</Card.Header>
+              <Card.Body>
+                <Table borderless hover>
+                  <tbody>
+                    <tr>
+                      <th>Project</th>
+                      <td>{event.projectID}</td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>{event.source}</td>
+                    </tr>
+                    <tr>
+                      <th>Type</th>
+                      <td>{event.type}</td>
+                    </tr>
+                    {
+                      event.qualifiers ? (
+                        <tr>
+                          <th>Qualifiers</th>
+                          <td>
+                            <Table borderless hover>
+                              <tbody>
+                                { 
+                                  Object.entries(event.qualifiers).map((entry: string[]) => (
+                                    <tr>
+                                      <th>{entry[0]}</th>
+                                      <td>{entry[1]}</td>
+                                    </tr>
+                                  ))
+                                }
+                              </tbody>
+                            </Table>
+                          </td>
+                        </tr>
+                      ) : null
+                    }
+                    {
+                      event.labels ? (
+                        <tr>
+                          <th>Labels</th>
+                          <td>
+                            <Table borderless hover>
+                              <tbody>
+                                { 
+                                  Object.entries(event.labels).map((entry: string[]) => (
+                                    <tr>
+                                      <th>{entry[0]}</th>
+                                      <td>{entry[1]}</td>
+                                    </tr>
+                                  ))
+                                }
+                              </tbody>
+                            </Table>
+                          </td>
+                        </tr>
+                      ) : null
+                    }
+                    { 
+                      event.git ? (
+                        <tr>
+                          <th>Git</th>
+                          <td>
+                            <Table borderless hover>
+                              <tbody>
+                                { 
+                                  event.git.cloneURL ? (
+                                    <tr>
+                                      <th>Clone URL</th>
+                                      <td>{event.git.cloneURL}</td>
+                                    </tr>
+                                  ) : null
+                                }
+                                {
+                                  event.git.ref ? (
+                                    <tr>
+                                      <th>Ref</th>
+                                      <td>{event.git.ref}</td>
+                                    </tr>
+                                  ) : null
+                                }
+                                {
+                                  event.git.commit ? (
+                                    <tr>
+                                      <th>Commit</th>
+                                      <td>{event.git.commit}</td>
+                                    </tr>
+                                  ) : null
+                                }
+                              </tbody>
+                            </Table>
+                          </td>
+                        </tr>
+                      ) : null
+                    }
+                    <tr>
+                      <th>Created</th>
+                      <td>
+                        {moment(event.metadata?.created).utc().format("YYYY-MM-DD HH:mm:ss Z")}
+                      </td>
+                    </tr>
+                  </tbody>
+                </Table>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col>
+            <Card border={phaseColor} bg="light">
+              <Card.Header>
+                <WorkerPhaseIcon phase={event.worker?.status.phase}/>
+                &nbsp;&nbsp;
+                Worker
+              </Card.Header>
+              <Card.Body>
+                <Table borderless hover>
+                  <tbody>  
+                    <tr>
+                      <th>Image</th>
+                      <td>{event.worker?.spec.container?.image || "DEFAULT"}</td>
+                    </tr>
+                    {
+                      event.worker?.status.started ? (
+                        <tr>
+                          <th>Started</th>
+                          <td>
+                            {moment(event.worker?.status.started).utc().format("YYYY-MM-DD HH:mm:ss Z")}
+                          </td>
+                        </tr>
+                      ) : null
+                    }
+                    {
+                      event.worker?.status.ended ? (
+                        <tr>
+                          <th>Ended</th>
+                          <td>
+                            {moment(event.worker?.status.ended).utc().format("YYYY-MM-DD HH:mm:ss Z")}
+                          </td>
+                        </tr>
+                      ) : null
+                    }
+                    {
+                      event.worker?.status.ended ? (
+                        <tr>
+                          <th>Duration</th>
+                          <td>
+                            {moment.duration(moment(event.worker?.status.ended).diff(moment(event.worker?.status.started))).humanize()}
+                          </td>
+                        </tr>
+                      ) : null
+                    }
+                  </tbody>
+                </Table>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     )
   }
 
@@ -160,12 +351,7 @@ class JobTabPane extends React.Component<JobTabPaneProps> {
       <div>
         <Tabs defaultActiveKey="summary" className="mb-3" mountOnEnter={true}>
           <Tab eventKey="summary" title="Summary">
-          <Card bg="light">
-              <Card.Header>{this.props.job.name}</Card.Header>
-              <Card.Body>
-                Placeholder
-              </Card.Body>
-            </Card>
+            <JobSummary job={job}/>
           </Tab>
           <Tab eventKey="yaml" title="YAML">
             <YAMLViewer object={job}/>
@@ -177,12 +363,12 @@ class JobTabPane extends React.Component<JobTabPaneProps> {
               </Tab>
             ) : null
           }
-          <Tab eventKey={job.name} title="Primary Container Logs">
+          <Tab eventKey={job.name} title={`${job.name} Logs`}>
             <LogStreamer event={event} jobName={job.name} logKey={job.name}/>
           </Tab>
           {
             Object.keys(job.spec.sidecarContainers || {}).map((containerName: string) => (
-              <Tab eventKey={containerName} title={`${containerName} logs`}>
+              <Tab eventKey={containerName} title={`${containerName} Logs`}>
                 <LogStreamer event={event} jobName={job.name} containerName={containerName} logKey={`${job.name}-${containerName}`}/>
               </Tab>
             ))
@@ -194,4 +380,118 @@ class JobTabPane extends React.Component<JobTabPaneProps> {
 
 }
 
+interface JobSummaryProps {
+  job: core.Job
+}
 
+class JobSummary extends React.Component<JobSummaryProps> {
+
+  render(): React.ReactElement {
+    const job = this.props.job
+    let phaseColor = "light"
+    switch(job.status?.phase) {
+      case core.JobPhase.Aborted:
+        phaseColor = "danger"
+        break
+      case core.JobPhase.Canceled:
+        phaseColor = "danger"
+        break
+      case core.JobPhase.Failed:
+        phaseColor = "danger"
+        break
+      case core.JobPhase.Pending:
+        phaseColor = "warning"
+        break
+      case core.JobPhase.Running:
+        phaseColor = "warning"
+        break
+      case core.JobPhase.SchedulingFailed:
+        phaseColor = "danger"
+        break
+      case core.JobPhase.Starting:
+        phaseColor = "goldenrod"
+        break
+      case core.JobPhase.Succeeded:
+        phaseColor = "success"
+        break
+      case core.JobPhase.TimedOut:
+        phaseColor = "danger"
+        break
+    }
+    return (
+      <div>
+        <Card border={phaseColor} bg="light">
+          <Card.Header>
+            <JobPhaseIcon phase={job.status?.phase}/>
+            &nbsp;&nbsp;
+            {job.name}
+          </Card.Header>
+          <Card.Body>
+            <Table borderless hover>
+              <tbody>
+                <tr>
+                  <th>Created</th>
+                  <td>Placeholder</td>
+                </tr>
+                {
+                  job.status?.started ? (
+                    <tr>
+                      <th>Started</th>
+                      <td>
+                        {moment(job.status?.started).utc().format("YYYY-MM-DD HH:mm:ss Z")}
+                      </td>
+                    </tr>
+                  ) : null
+                }
+                {
+                  job.status?.ended ? (
+                    <tr>
+                      <th>Ended</th>
+                      <td>
+                        {moment(job.status?.started).utc().format("YYYY-MM-DD HH:mm:ss Z")}
+                      </td>
+                    </tr>
+                  ) : null
+                }
+                {
+                  job.status?.ended ? (
+                    <tr>
+                      <th>Duration</th>
+                      <td>
+                        {moment.duration(moment(job.status?.ended).diff(moment(job.status?.started))).humanize()}
+                      </td>
+                    </tr>
+                  ) : null
+                }
+              </tbody>
+            </Table>
+          </Card.Body>
+        </Card>
+        <h2>Containers</h2>
+        <Table striped bordered hover responsive>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Image</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{job.name} (primary container)</td>
+              <td>{job.spec.primaryContainer.image}</td>
+            </tr>
+            {
+              Object.entries(job.spec.sidecarContainers || {}).map((entry: any[]) => (
+                <tr>
+                  <td>{entry[0]}</td>
+                  <td>{(entry[1] as core.ContainerSpec).image}</td>
+                </tr>
+              ))
+            }
+          </tbody>         
+        </Table>
+      </div>
+    )
+  }
+
+}

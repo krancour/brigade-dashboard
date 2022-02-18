@@ -1,7 +1,10 @@
+import moment from "moment"
+
 import React from "react"
 
 import Card from "react-bootstrap/Card"
 import Tab from "react-bootstrap/Tab"
+import Table from "react-bootstrap/Table"
 import Tabs from "react-bootstrap/Tabs"
 
 import { useParams } from "react-router-dom"
@@ -67,20 +70,33 @@ export default function RoutedUser(): React.ReactElement {
 }
 
 interface UserSummaryProps {
-  user?: authn.User
+  user: authn.User
 }
 
 class UserSummary extends React.Component<UserSummaryProps> {
 
   render(): React.ReactElement {
+    const user = this.props.user
     return (
-      <Card bg="light">
+      <Card border={user.locked ? "danger" : "success"} bg="light">
         <Card.Header>
-          <LockIcon locked={this.props.user?.locked ? true : false}/>&nbsp;&nbsp;
-          {this.props.user?.metadata.id}
+          <LockIcon locked={user.locked ? true : false}/>
+          &nbsp;&nbsp;
+          {user?.metadata.id}
         </Card.Header>
         <Card.Body>
-          Placeholder
+          <Table borderless hover responsive>
+            <tbody>
+              <tr>
+                <th>Name</th>
+                <td>{user.name}</td>
+              </tr>
+              <tr>
+                <th>First Login</th>
+                <td>{moment(user.metadata.created).format("YYYY-MM-DD HH:mm:ss Z")}</td>
+              </tr>
+            </tbody>
+          </Table>
         </Card.Body>
       </Card>
     )
