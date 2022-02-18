@@ -12,7 +12,7 @@ import Tab from "react-bootstrap/Tab"
 import Table from "react-bootstrap/Table"
 import Tabs from "react-bootstrap/Tabs"
 
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 
 import { core } from "@brigadecore/brigade-sdk"
 
@@ -128,7 +128,9 @@ class EventSummary extends React.Component<EventSummaryProps> {
                   <tbody>
                     <tr>
                       <th>Project</th>
-                      <td>{event.projectID}</td>
+                      <td>
+                        <Link to={"/projects/" + event.projectID}>{event.projectID}</Link>
+                      </td>
                     </tr>
                     <tr>
                       <th>Source</th>
@@ -191,7 +193,12 @@ class EventSummary extends React.Component<EventSummaryProps> {
                                   event.git.cloneURL ? (
                                     <tr>
                                       <th>Clone URL</th>
-                                      <td>{event.git.cloneURL}</td>
+                                      <td>
+                                        {event.git.cloneURL}
+                                        <Link to={event.git.cloneURL}>
+                                          {event.git.cloneURL}
+                                        </Link>
+                                      </td>
                                     </tr>
                                   ) : null
                                 }
