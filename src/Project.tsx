@@ -7,7 +7,7 @@ import Tab from "react-bootstrap/Tab"
 import Table from "react-bootstrap/Table"
 import Tabs from "react-bootstrap/Tabs"
 
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 
 import { core } from "@brigadecore/brigade-sdk"
 
@@ -116,7 +116,11 @@ class ProjectSummary extends React.Component<ProjectSummaryProps> {
                             project.spec.workerTemplate.git.cloneURL ? (
                               <tr>
                                 <th>Clone URL</th>
-                                <td>{project.spec.workerTemplate.git.cloneURL}</td>
+                                <td>
+                                  <Link to={project.spec.workerTemplate.git.cloneURL}>
+                                    {project.spec.workerTemplate.git.cloneURL}
+                                  </Link>
+                                </td>
                               </tr>
                             ) : null
                           }
