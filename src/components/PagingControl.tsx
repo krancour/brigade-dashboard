@@ -4,7 +4,7 @@ import NextButton from "./NextButton"
 import PreviousButton from "./PreviousButton"
 import Spinner from "./Spinner"
 
-import styles from "./PagingControl.module.css"
+import styles from "./PagingControl.module.scss"
 
 interface Page<T> {
   items: T[]

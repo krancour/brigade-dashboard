@@ -2,7 +2,7 @@ import React from "react"
 
 import BootstrapSpinner from "react-bootstrap/Spinner"
 
-import styles from "./Spinner.module.css"
+import styles from "./Spinner.module.scss"
 
 export default class Spinner extends React.Component {
 

@@ -6,7 +6,7 @@ import React from "react"
 
 import Card from "react-bootstrap/Card"
 
-import styles from "./ResourcesCard.module.css"
+import styles from "./ResourcesCard.module.scss"
 
 export default class ResourcesCard extends React.Component {
 

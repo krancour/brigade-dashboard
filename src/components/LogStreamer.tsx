@@ -4,7 +4,7 @@ import { core } from "@brigadecore/brigade-sdk"
 
 import getClient from "../Client"
 
-import styles from "./LogStreamer.module.css"
+import styles from "./LogStreamer.module.scss"
 
 interface LogStreamerProps {
   event: core.Event

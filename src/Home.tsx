@@ -11,7 +11,7 @@ import ContributeCard from "./home/ContributeCard"
 import ResourcesCard from "./home/ResourcesCard"
 
 import logo from "./images/logo.png"
-import styles from "./Home.module.css"
+import styles from "./Home.module.scss"
 
 export default class Home extends React.Component {
 

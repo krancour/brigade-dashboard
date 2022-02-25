@@ -13,7 +13,7 @@ import * as consts from "./Consts"
 import Home from "./Home"
 import LoginControl from "./LoginControl"
 
-import "./App.css"
+import "./App.scss"
 import logoDark from "./images/logo-dark.png"
 
 interface AppProps {}

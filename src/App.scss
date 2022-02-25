@@ -1,0 +1,24 @@
+body {
+  font-family: "Work Sans", "Helvetica Neue", Helvetica, Arial, Geneva, sans-serif !important;
+  padding-bottom: 80px;
+}
+
+h1, h2 {
+  margin-bottom: 20px !important;
+  margin-top: 20px !important;
+}
+
+.card {
+  margin-bottom: 20px;
+  margin-top: 20px;
+
+  .card-text {
+    margin-top: 15px;
+  }
+}
+
+.nav-pills .nav-link.active {
+  background-color: #ffffff !important;
+  border: 1px solid #0d6efd !important;
+  color: #0d6efd !important;
+}
