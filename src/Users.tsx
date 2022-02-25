@@ -7,7 +7,7 @@ export default class Users extends React.Component {
   render(): React.ReactElement {
     return (
       <div>
-        <h1>Users</h1>
+        <h1 className="page-heading">Users</h1>
         <UserList/>
       </div>
     )

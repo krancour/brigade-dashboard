@@ -33,7 +33,7 @@ ReactDOM.render(
           <Route path="service-accounts" element={<ServiceAccounts/>}/>
           <Route path="service-accounts/:id" element={<ServiceAccount/>}/>
           <Route path="system-permissions" element={<SystemPermissions/>}/>
-          <Route path="*" element={<h1>404</h1>}/>
+          <Route path="*" element={<h1 className="page-heading">404</h1>}/>
         </Route>
       </Routes>
     </BrowserRouter>

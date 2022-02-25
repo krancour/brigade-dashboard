@@ -26,14 +26,6 @@ export default class Home extends React.Component {
         <Row>
           <Col>
             <BlogCard/>
-            <Card bg="light">
-              <Card.Header>
-                Placeholder
-              </Card.Header>
-              <Card.Body>
-                Placeholder
-              </Card.Body>
-            </Card>
           </Col>
           <Col>
             <ResourcesCard/>

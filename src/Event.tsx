@@ -52,7 +52,7 @@ class Event extends React.Component<EventProps, EventState> {
     }
     return (
       <div>
-        <h1>{event?.metadata?.id}</h1>
+        <h1 className="page-heading">{event?.metadata?.id}</h1>
         <Tabs defaultActiveKey="summary" className="mb-3" mountOnEnter={true}>
           <Tab eventKey="summary" title="Summary">
             <EventSummary event={event}/>
@@ -474,7 +474,7 @@ class JobSummary extends React.Component<JobSummaryProps> {
             </Table>
           </Card.Body>
         </Card>
-        <h2>Containers</h2>
+        <h2 className="section-heading">Containers</h2>
         <Table striped bordered hover responsive>
           <thead>
             <tr>

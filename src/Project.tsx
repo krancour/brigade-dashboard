@@ -47,11 +47,11 @@ class Project extends React.Component<ProjectProps, ProjectState> {
     }
     return (
       <div>
-        <h1>{project?.metadata.id}</h1>
+        <h1 className="page-heading">{project?.metadata.id}</h1>
         <Tabs defaultActiveKey="summary" className="mb-3" mountOnEnter={true}>
           <Tab eventKey="summary" title="Summary">
             <ProjectSummary project={project}/>
-            <h2>Events</h2>
+            <h2 className="section-heading">Events</h2>
             <EventList selector={{projectID: project.metadata.id}}/>
           </Tab>
           <Tab eventKey="yaml" title="YAML">
