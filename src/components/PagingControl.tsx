@@ -4,6 +4,8 @@ import NextButton from "./NextButton"
 import PreviousButton from "./PreviousButton"
 import Spinner from "./Spinner"
 
+import styles from "./PagingControl.module.css"
+
 interface Page<T> {
   items: T[]
   metadata: {
@@ -86,7 +88,7 @@ export default function withPagingControl<T, T1>(
       return (
         <div>
           { render(items, this.props) }
-          <div className="paging-controls">
+          <div className={styles["paging-controls"]}>
             { hasPrev && <PreviousButton onClick={this.fetchPreviousPage}/> }
             { hasMore && <NextButton onClick={this.fetchNextPage}/> }
           </div>

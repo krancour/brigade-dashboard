@@ -4,6 +4,8 @@ import { core } from "@brigadecore/brigade-sdk"
 
 import getClient from "../Client"
 
+import styles from "./LogStreamer.module.css"
+
 interface LogStreamerProps {
   event: core.Event
   jobName?: string
@@ -49,7 +51,7 @@ export default class LogStreamer extends React.Component<LogStreamerProps> {
 
   render(): React.ReactElement {
     return (
-      <pre id={this.logBoxID} className="log-box"/>
+      <pre id={this.logBoxID} className={styles["log-box"]}/>
     )
   }
 

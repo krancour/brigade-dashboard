@@ -6,6 +6,8 @@ import React from "react"
 
 import Card from "react-bootstrap/Card"
 
+import styles from "./ResourcesCard.module.css"
+
 export default class ResourcesCard extends React.Component {
 
   render(): React.ReactElement {
@@ -15,7 +17,7 @@ export default class ResourcesCard extends React.Component {
           Resources
         </Card.Header>
         <Card.Body>
-          <ul className="links">
+          <ul className={styles.links}>
             <li>
               <FontAwesomeIcon icon={faBook}/>
               &nbsp;&nbsp;

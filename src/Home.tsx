@@ -11,6 +11,7 @@ import ContributeCard from "./home/ContributeCard"
 import ResourcesCard from "./home/ResourcesCard"
 
 import logo from "./images/logo.png"
+import styles from "./Home.module.css"
 
 export default class Home extends React.Component {
 
@@ -18,7 +19,7 @@ export default class Home extends React.Component {
     return (
       <Container>
         <Row>
-          <Col className="splash">
+          <Col className={styles.splash}>
             <Image src={logo} fluid/>
           </Col>
         </Row>
