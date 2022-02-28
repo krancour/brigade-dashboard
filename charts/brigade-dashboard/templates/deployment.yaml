@@ -2,18 +2,18 @@
 {{- $tlsKey := "" }}
 {{- if .Values.tls.enabled }}
   {{- if .Values.tls.generateSelfSignedCert }}
-    {{- $data := (lookup "v1" "Secret" .Release.Namespace (printf "%s-cert" (include "kashti.fullname" . ))).data }}
+    {{- $data := (lookup "v1" "Secret" .Release.Namespace (printf "%s-cert" (include "dashboard.fullname" . ))).data }}
     {{- if $data }}
       # Reuse the existing cert and key
       {{- $tlsCert = index $data "tls.crt" }}
       {{- $tlsKey = index $data "tls.key" }}
     {{- else }}
       # Generate a new cert and key
-      {{- $altName1 := include "kashti.fullname" . }}
-      {{- $altName2 := printf "%s.%s" (include "kashti.fullname" .) .Release.Namespace }}
-      {{- $altName3 := printf "%s.%s.svc" (include "kashti.fullname" .) .Release.Namespace }}
-      {{- $altName4 := printf "%s.%s.svc.cluster" (include "kashti.fullname" .) .Release.Namespace }}
-      {{- $altName5 := printf "%s.%s.svc.cluster.local" (include "kashti.fullname" .) .Release.Namespace }}
+      {{- $altName1 := include "dashboard.fullname" . }}
+      {{- $altName2 := printf "%s.%s" (include "dashboard.fullname" .) .Release.Namespace }}
+      {{- $altName3 := printf "%s.%s.svc" (include "dashboard.fullname" .) .Release.Namespace }}
+      {{- $altName4 := printf "%s.%s.svc.cluster" (include "dashboard.fullname" .) .Release.Namespace }}
+      {{- $altName5 := printf "%s.%s.svc.cluster.local" (include "dashboard.fullname" .) .Release.Namespace }}
       {{- $cert := genSelfSignedCert .Values.host nil (list .Values.host $altName1 $altName2 $altName3 $altName4 $altName5) 3650 }}
       {{- $tlsCert = b64enc $cert.Cert }}
       {{- $tlsKey = b64enc $cert.Key }}
@@ -29,9 +29,9 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ include "kashti.fullname" . }}-cert
+  name: {{ include "dashboard.fullname" . }}-cert
   labels:
-    {{- include "kashti.labels" . | nindent 4 }}
+    {{- include "dashboard.labels" . | nindent 4 }}
 type: Opaque
 data:
   tls.crt: {{ $tlsCert }}
@@ -41,20 +41,20 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "kashti.fullname" . }}
+  name: {{ include "dashboard.fullname" . }}
   labels:
-    {{- include "kashti.labels" . | nindent 4 }}
+    {{- include "dashboard.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
-      {{- include "kashti.selectorLabels" . | nindent 6 }}
-      {{- include "kashti.labels" . | nindent 6 }}
+      {{- include "dashboard.selectorLabels" . | nindent 6 }}
+      {{- include "dashboard.labels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "kashti.selectorLabels" . | nindent 8 }}
-        {{- include "kashti.labels" . | nindent 8 }}
+        {{- include "dashboard.selectorLabels" . | nindent 8 }}
+        {{- include "dashboard.labels" . | nindent 8 }}
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- if and .Values.tls.enabled (or .Values.tls.generateSelfSignedCert .Values.tls.cert) }}
@@ -63,7 +63,7 @@ spec:
         {{- end }}
     spec:
       containers:
-      - name: kashti
+      - name: dashboard
         image: {{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         volumeMounts:
@@ -98,11 +98,11 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: {{ include "kashti.fullname" . }}
+          name: {{ include "dashboard.fullname" . }}
       {{- if .Values.tls.enabled }}
       - name: cert
         secret:
-          secretName: {{ include "kashti.fullname" . }}-cert
+          secretName: {{ include "dashboard.fullname" . }}-cert
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

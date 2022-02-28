@@ -2,19 +2,19 @@
 apiVersion: brigade.sh/v2
 kind: Project
 metadata:
-  id: kashti-tng
-description: "Kashti: The Next Generation"
+  id: brigade-dashboard
+description: "A web-based dashboard for Brigade v2"
 spec:
   eventSubscriptions:
   - source: brigade.sh/github
     qualifiers:
-      repo: brigadecore/kashti-tng
+      repo: brigadecore/brigade-dashboard
     types:
     - ci:pipeline_requested
     - ci:job_requested
     - cd:pipeline_requested
   workerTemplate:
     git:
-      cloneURL: https://github.com/brigadecore/kashti-tng.git
+      cloneURL: https://github.com/brigadecore/brigade-dashboard.git
     jobPolicies:
       allowPrivileged: true

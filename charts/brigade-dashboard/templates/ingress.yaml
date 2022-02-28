@@ -4,9 +4,9 @@
 apiVersion: {{ template "networking.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: {{ include "kashti.fullname" . }}
+  name: {{ include "dashboard.fullname" . }}
   labels:
-    {{- include "kashti.labels" . | nindent 4 }}
+    {{- include "dashboard.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -24,7 +24,7 @@ spec:
         path: /
         backend:
           service:
-            name: {{ include "kashti.fullname" . }}
+            name: {{ include "dashboard.fullname" . }}
             port:
               {{- if .Values.tls.enabled }}
               number: 443
@@ -33,7 +33,7 @@ spec:
               {{- end }}
       {{- else }}
       - backend:
-          serviceName: {{ include "kashti.fullname" . }}
+          serviceName: {{ include "dashboard.fullname" . }}
           {{- if .Values.tls.enabled }}
           servicePort: 443
           {{- else }}
@@ -44,6 +44,6 @@ spec:
   tls:
   - hosts:
     - {{ .Values.host }}
-    secretName: {{ include "kashti.fullname" . }}-ingress-cert
+    secretName: {{ include "dashboard.fullname" . }}-ingress-cert
   {{- end }}
 {{- end }}

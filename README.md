@@ -1,4 +1,4 @@
-# Kashti: TNG (A Brigade v2 Dashboard)
+# Brigade Dashboard)
 
 This is a _highly volatile prototype_ for a web-based, v2-compatible, Brigade
 dashboard.
@@ -8,10 +8,10 @@ dashboard.
 Your mileage may vary:
 
 ```console
-$ helm install kashti-tng \
-    charts/kashti-tng \
+$ helm install brigade-dashboard \
+    charts/brigade-dashboard \
     --create-namespace \
-    --namespace kashti-tng \
+    --namespace brigade-dashboard \
     --wait \
     --timeout 300s \
     --set image.repository=<image location> \
@@ -32,7 +32,7 @@ We have a slack channel!
 [Kubernetes/#brigade](https://kubernetes.slack.com/messages/C87MF1RFD) Feel free
 to join for any support questions or feedback, we are happy to help. To report
 an issue or to request a feature open an issue
-[here](https://github.com/brigadecore/kashti-tng/issues)
+[here](https://github.com/brigadecore/brigade-dashboard/issues)
 
 ## Code of Conduct
 

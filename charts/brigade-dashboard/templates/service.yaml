@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "kashti.fullname" . }}
+  name: {{ include "dashboard.fullname" . }}
   labels:
-    {{- include "kashti.labels" . | nindent 4 }}
+    {{- include "dashboard.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -20,5 +20,5 @@ spec:
     protocol: TCP
   {{- end }}
   selector:
-    {{- include "kashti.selectorLabels" . | nindent 8 }}
-    {{- include "kashti.labels" . | nindent 8 }}
+    {{- include "dashboard.selectorLabels" . | nindent 8 }}
+    {{- include "dashboard.labels" . | nindent 8 }}

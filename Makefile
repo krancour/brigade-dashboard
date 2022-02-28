@@ -22,7 +22,7 @@ ifdef DOCKER_ORG
 	DOCKER_ORG := $(DOCKER_ORG)/
 endif
 
-DOCKER_IMAGE_NAME := $(DOCKER_REGISTRY)$(DOCKER_ORG)kashti-tng
+DOCKER_IMAGE_NAME := $(DOCKER_REGISTRY)$(DOCKER_ORG)brigade-dashboard
 
 ifdef VERSION
 	MUTABLE_DOCKER_TAG := latest
@@ -41,7 +41,7 @@ ifdef HELM_ORG
 	HELM_ORG := $(HELM_ORG)/
 endif
 
-HELM_CHART_NAME := $(HELM_REGISTRY)$(HELM_ORG)kashti-tng
+HELM_CHART_NAME := $(HELM_REGISTRY)$(HELM_ORG)brigade-dashboard
 
 ################################################################################
 # Tests                                                                        #
@@ -50,7 +50,7 @@ HELM_CHART_NAME := $(HELM_REGISTRY)$(HELM_ORG)kashti-tng
 .PHONY: lint-chart
 lint-chart:
 	$(HELM_DOCKER_CMD) sh -c ' \
-		cd charts/kashti-tng && \
+		cd charts/brigade-dashboard && \
 		helm dep up && \
 		helm lint . \
 	'
@@ -86,10 +86,10 @@ push:
 publish-chart:
 	$(HELM_DOCKER_CMD) sh	-c ' \
 		helm registry login $(HELM_REGISTRY) -u $(HELM_USERNAME) -p $${HELM_PASSWORD} && \
-		cd charts/kashti-tng && \
+		cd charts/brigade-dashboard && \
 		helm dep up && \
 		helm package . --version $(VERSION) --app-version $(VERSION) && \
-		helm push kashti-tng-$(VERSION).tgz oci://$(HELM_REGISTRY)$(HELM_ORG) \
+		helm push brigade-dashboard-$(VERSION).tgz oci://$(HELM_REGISTRY)$(HELM_ORG) \
 	'
 
 ################################################################################
@@ -114,15 +114,19 @@ IMAGE_PULL_POLICY ?= Always
 
 .PHONY: hack-deploy
 hack-deploy:
-	helm dep up charts/kashti-tng && \
-	helm upgrade kashti-tng charts/kashti-tng \
+ifndef BRIGADE_API_ADDRESS
+	@echo "BRIGADE_API_ADDRESS must be defined" && false
+endif
+	helm dep up charts/brigade-dashboard && \
+	helm upgrade brigade-dashboard charts/brigade-dashboard \
 		--install \
 		--create-namespace \
-		--namespace kashti-tng \
+		--namespace brigade-dashboard \
 		--timeout 60s \
 		--set image.repository=$(DOCKER_IMAGE_NAME) \
 		--set image.tag=$(IMMUTABLE_DOCKER_TAG) \
-		--set image.pullPolicy=$(IMAGE_PULL_POLICY)
+		--set image.pullPolicy=$(IMAGE_PULL_POLICY) \
+		--set brigade.apiAddress=$(BRIGADE_API_ADDRESS)
 
 .PHONY: hack
 hack: hack-push hack-deploy

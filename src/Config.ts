@@ -1,1 +1,1 @@
-export const apiAddress = "https://api.brigade2.io"
+export const apiAddress = window.location.origin + "/api"

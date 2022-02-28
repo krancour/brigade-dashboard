@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "kashti.fullname" . }}
+  name: {{ include "dashboard.fullname" . }}
   labels:
-    {{- include "kashti.labels" . | nindent 4 }}
+    {{- include "dashboard.labels" . | nindent 4 }}
 data:
 
-  kashti.conf: |-
+  brigade-dashboard.conf: |-
     {{- if .Values.tls.enabled }}
     server {
         server_name               {{ .Values.host }};
@@ -31,7 +31,7 @@ data:
             rewrite    ^/api/(.*)$ /$1 break;
         }
         location / {
-          root   /usr/share/nginx/kashti;
+          root   /usr/share/nginx/brigade-dashboard;
           index  index.html index.htm;
           try_files $uri $uri/ /index.html;
         }
